@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:voting_system_mobile/screens/forgot_password_screen.dart';
 import 'package:voting_system_mobile/screens/register_screen.dart';
 import 'package:voting_system_mobile/utils/color_util.dart';
 import 'package:voting_system_mobile/widgets/custom_button.dart';
@@ -34,6 +35,7 @@ class _LoginState extends State<LoginPage> {
                     child: GestureDetector(
                         onTap: () {
                           // Todo: Implement 'forgot your password' link functionality
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPassword()));
                         },
                         child: Text('Forgot your Password?')),
                   ),

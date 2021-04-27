@@ -4,6 +4,8 @@ import 'package:voting_system_mobile/widgets/custom_button.dart';
 import 'package:voting_system_mobile/widgets/header_container.dart';
 import 'package:voting_system_mobile/widgets/text_input_container.dart';
 
+import 'login_screen.dart';
+
 class RegistrationPage extends StatefulWidget {
   static const String id = 'user_registration';
 
@@ -67,18 +69,15 @@ class _RegistrationState extends State<RegistrationPage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => RegistrationPage()));
+                      Navigator.pushNamed(context, LoginPage.id);
                     },
                     child: RichText(
                         text: TextSpan(children: [
                       TextSpan(
-                          text: "Don't have an account?",
+                          text: "Already have an account?",
                           style: TextStyle(color: Colors.black)),
                       TextSpan(
-                          text: " Register",
+                          text: " Login",
                           style: TextStyle(color: purpleColors))
                     ])),
                   )
