@@ -23,50 +23,73 @@ class _RegistrationState extends State<RegistrationPage> {
     String dropDownValue = roles.first;
 
     return Scaffold(
-        body: Container(
-          padding: EdgeInsets.only(bottom: 30.0),
-        child: Column(
-        children: <Widget>[
-          HeaderContainer(queryHeight: 0.3),
-          Expanded(
-            child: Container(
+        body: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.only(bottom: 30.0),
+          child: Column(
+          children: <Widget>[
+            HeaderContainer(queryHeight: 0.3, title: 'Register',),
+            Container(
               margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
               child: Column(
                 children: <Widget>[
-                  TextInput(hintText: "Full Name", icon: Icons.person),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                          child: TextInput(hintText: 'First Name',icon: Icons.person)
+                      ),
+                      Expanded(
+                          child: TextInput(hintText: 'Last Name',icon: Icons.person)
+                      )
+                    ],
+                  ),
                   TextInput(hintText: "Phone Number", icon: Icons.phone),
                   TextInput(hintText: "Email", icon: Icons.email),
                   TextInput(hintText: "Password", icon: Icons.vpn_key),
                   SizedBox(height: 5.0),
                   const Divider(indent: 2.0, color: Colors.black),
-                  DropdownButton<String>(
-                    value: dropDownValue,
-                    icon: const Icon(Icons.arrow_downward),
-                    iconSize: 24,
-                    elevation: 16,
-                    onChanged: (value){
-                      setState(() {
-                        dropDownValue = value;
-                      });
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      border: Border.all(color: tealColors)
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: dropDownValue,
+                        hint: Text("Select your role"),
+                        icon: const Icon(Icons.arrow_downward),
+                        iconSize: 24,
+                        elevation: 16,
+                        isExpanded: true,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold
+                        ),
+                        onChanged: (newValue){
+                          setState(() {
+                            dropDownValue = newValue;
+                          });
+                        },
+                        items: roles.map<DropdownMenuItem<String>>(
+                          (String value) {
+                            return DropdownMenuItem(
+                                value: value,
+                              child: Center(child: Text(value, style: TextStyle(color: Colors.black, fontSize: 18.0))),
+                            );
+                          },
+                        ).toList(),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 40.0),
+                  Center(
+                      child: CustomButton(
+                    title: 'Register',
+                    onPressed: () {
+                      // Todo: implement register button
                     },
-                    items: roles.map<DropdownMenuItem<String>>(
-                      (String value) {
-                        return DropdownMenuItem(
-                            value: value,
-                          child: Text(value),
-                        );
-                      },
-                    ).toList(),
-                  ),
-                  Expanded(
-                    child: Center(
-                        child: CustomButton(
-                      title: 'Register',
-                      onPressed: () {
-                        // Todo: implement register button
-                      },
-                    )),
-                  ),
+                  )),
+                  SizedBox(height: 30.0),
                   GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(context, LoginPage.id);
@@ -78,15 +101,15 @@ class _RegistrationState extends State<RegistrationPage> {
                           style: TextStyle(color: Colors.black)),
                       TextSpan(
                           text: " Login",
-                          style: TextStyle(color: purpleColors))
+                          style: TextStyle(color: tealColors))
                     ])),
                   )
                 ],
               ),
-            ),
-          )
-        ],
+            )
+          ],
       ),
-    ));
+    ),
+        ));
   }
 }

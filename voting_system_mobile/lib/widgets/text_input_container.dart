@@ -6,8 +6,9 @@ class TextInput extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
   final IconData icon;
+  final bool obscureText;
 
-  TextInput({this.controller, this.hintText, this.icon});
+  TextInput({this.controller, this.hintText, this.icon, this.obscureText});
 
   @override
   Widget build(BuildContext context) {
@@ -15,19 +16,21 @@ class TextInput extends StatelessWidget {
       margin: EdgeInsets.only(top: 10.0),
       decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(10.0))),
+          borderRadius: BorderRadius.all(Radius.circular(10.0),),),
       padding: EdgeInsets.only(left: 10.0),
       child: TextFormField(
+        obscureText: obscureText != null ? obscureText : false,
         controller: controller,
         decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: purpleColors),
+              borderSide: BorderSide(color: tealColors),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: purpleColors),
+              borderSide: BorderSide(color: tealColors),
             ),
             hintText: hintText,
-            prefixIcon: Icon(icon)),
+            prefixIcon: Icon(icon)
+        ),
       ),
     );
   }
