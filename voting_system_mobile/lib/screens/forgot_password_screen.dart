@@ -17,13 +17,16 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     return Scaffold(
       body: Column(
         children: <Widget>[
-          HeaderContainer(queryHeight: 0.4),
+          HeaderContainer(queryHeight: 0.4, title: 'Reset Password'),
           Expanded(
             child: Container(
               margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 40.0),
               child: Column(
                 children: <Widget>[
-                  TextInput(icon: Icons.email, hintText: 'Email'),
+                  TextInput(
+                      icon: Icons.email,
+                      hintText: 'Email',
+                  ),
                   SizedBox(height: 20.0),
                   CustomButton(
                     onPressed: (){

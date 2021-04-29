@@ -14,14 +14,13 @@ class CustomButton extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         width: double.infinity,
-        height: 40.0,
+        height: 45.0,
         decoration: BoxDecoration(
           gradient: LinearGradient(
               colors: [tealColors, tealLightColor],
               end: Alignment.centerLeft,
               begin: Alignment.centerRight),
-          borderRadius:
-          BorderRadius.all(Radius.circular(10.0)),
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
         alignment: Alignment.center,
         child: Text(
@@ -31,7 +30,7 @@ class CustomButton extends StatelessWidget {
               fontSize: 20.0,
               fontWeight: FontWeight.bold,
               letterSpacing: 2.0),
-        ),
+        )
       ),
     );
   }
