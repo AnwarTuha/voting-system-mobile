@@ -28,9 +28,10 @@ class _RegistrationState extends State<RegistrationPage> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  String _url = "http://localhost:8089/signup";
+  String _url = "https://localhost:8089/signup";
 
   Future save() async {
+
     var response =
         await http.post(Uri.http(_url, ""), headers: <String, String>{
       'Context-Type': 'applications/json;charSet=UTF-8'
@@ -61,11 +62,11 @@ class _RegistrationState extends State<RegistrationPage> {
         child: Column(
           children: <Widget>[
             HeaderContainer(
-              queryHeight: 0.2,
+              queryHeight: 0.3,
               title: 'Sign Up',
             ),
             Container(
-              margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 50.0),
+              margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 30.0),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -156,10 +157,10 @@ class _RegistrationState extends State<RegistrationPage> {
 
                         _formKey.currentState.save();
 
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => SelectOrganization()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SelectOrganization()));
 
                         print(user.firstName);
                         print(user.lastName);

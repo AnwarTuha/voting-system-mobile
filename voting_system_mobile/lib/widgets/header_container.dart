@@ -10,6 +10,9 @@ class HeaderContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final size = MediaQuery.of(context).size;
+
     return Container(
       height: MediaQuery.of(context).size.height * queryHeight,
       decoration: BoxDecoration(
@@ -38,7 +41,7 @@ class HeaderContainer extends StatelessWidget {
                 style: TextStyle(
                     color: Colors.white,
                     letterSpacing: 2.0,
-                    fontSize: 40.0,
+                    fontSize: 30.0,
                     fontWeight: FontWeight.w300
                 ),
               )
