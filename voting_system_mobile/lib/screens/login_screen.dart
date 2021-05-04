@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:voting_system_mobile/classes/user.dart';
 import 'package:voting_system_mobile/screens/forgot_password_screen.dart';
 import 'package:voting_system_mobile/screens/register_screen.dart';
 import 'package:voting_system_mobile/utils/color_util.dart';
 import 'package:voting_system_mobile/widgets/custom_button.dart';
 import 'package:voting_system_mobile/widgets/header_container.dart';
 import 'package:voting_system_mobile/widgets/text_input_container.dart';
+import 'package:voting_system_mobile/classes/validator.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   static const String id = 'user_login';
@@ -14,54 +17,29 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginState extends State<LoginPage> {
+
   String _email;
   String _password;
+  String _url = "http://localhost:8089/signin";
+
+  Future save() async {
+    var response = await http.post(Uri.http(_url, ""),
+        headers: <String, String>{
+          'Context-Type': 'applications/json;charSet=UTF-8'
+        },
+        body: <String, String>{
+          'email': user.email,
+          'password': user.password
+        });
+
+    //Todo: Do something with the response
+
+  }
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  String validateEmail(String email){
-
-    /* Validate Email from user input
-      :param email: String containing email of the user
-
-      :return bool: true if email is valid, false if it's not
-    * */
-
-    email = email.trim();
-
-    String regex = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-
-    RegExp regExp = new RegExp(regex);
-
-    if (email.isEmpty || !regExp.hasMatch(email)){
-      return 'Enter a valid email';
-    }
-
-    return null;
-  }
-
-  String validatePassword(String password){
-    /* Validate Password from user input
-      :param password: String containing password of the user
-    * */
-
-    /* the following regex validates the following
-      - Minimum 1 UpperCase
-      - Minimum 1 lowerCase
-      - Minimum 1 Numeric Number
-      - Minimum 1 Special Character
-      - Common Allowed Characters ( ! @ # $ & * ~ )
-    * */
-    String  pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
-
-    RegExp regExp = new RegExp(pattern);
-
-    if (!regExp.hasMatch(password)){
-      return 'Please enter a valid password';
-    }
-
-    return null;
-  }
+  User user = User(email: '', password: '');
+  Validator validator = Validator();
 
   @override
   Widget build(BuildContext context) {
@@ -75,51 +53,53 @@ class _LoginState extends State<LoginPage> {
               Container(
                 margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
                 child: Form(
-                  key: _formKey,
+                    key: _formKey,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         TextInput(
+                            controller: TextEditingController(text: user.email),
                             hintText: "Email",
                             icon: Icons.email,
-                            validate: validateEmail,
-                            onSaved: (value){
-                              _email = value;
-                            },
-                        ),
+                            validate: validator.validateEmail,
+                            onChanged: (email) {
+                              user.email = email;
+                            }
+                            ),
                         TextInput(
-                            hintText: "Password",
-                            icon: Icons.vpn_key,
-                            obscureText: true,
-                            validate: validatePassword,
-                            onSaved: (value){
-                              _password = value;
-                            },
+                          hintText: "Password",
+                          icon: Icons.vpn_key,
+                          obscureText: true,
+                          onChanged: (password) {
+                            user.password = password;
+                          },
+                          validate: validator.validatePassword,
                         ),
                         Container(
                           margin: EdgeInsets.only(top: 25.0),
                           alignment: Alignment.centerRight,
                           child: GestureDetector(
                             onTap: () {
-                              // Todo: Implement 'forgot your password' link functionality
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => ForgotPassword()),
-                            );
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ForgotPassword()),
+                              );
                             },
                             child: Text(
                               'Forgot your Password?',
-                              style: TextStyle(color: tealColors, fontSize: 18.0),
+                              style:
+                                  TextStyle(color: tealColors, fontSize: 18.0),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
                         SizedBox(height: 40.0),
                         Center(
                           child: CustomButton(
                             title: 'Login',
                             onPressed: () {
                               // Todo: implement login functionality here
-                              if(!_formKey.currentState.validate()){
+                              if (!_formKey.currentState.validate()) {
                                 return;
                               }
 
@@ -133,24 +113,23 @@ class _LoginState extends State<LoginPage> {
                         SizedBox(height: 75.0),
                         GestureDetector(
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => RegistrationPage()));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => RegistrationPage()));
                           },
                           child: RichText(
-                              text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: "Don't have an account?",
-                                      style: TextStyle(color: Colors.black)
-                                    ),
-                                    TextSpan(
-                                      text: " Sign Up",
-                                      style: TextStyle(color: tealColors)
-                                    )
-                                  ])
-                          ),
-                    )
-                  ],
-                )),
+                              text: TextSpan(children: [
+                            TextSpan(
+                                text: "Don't have an account?",
+                                style: TextStyle(color: Colors.black)),
+                            TextSpan(
+                                text: " Sign Up",
+                                style: TextStyle(color: tealColors))
+                          ])),
+                        )
+                      ],
+                    )),
               )
             ],
           ),

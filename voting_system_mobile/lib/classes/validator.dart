@@ -1,29 +1,47 @@
+import 'package:voting_system_mobile/utils/constants_util.dart';
+
 class Validator{
-  final String email;
-  final String password;
-  final String firstName;
-  final String lastName;
-  final String phoneNumber;
+  String validatePhoneNumber(String phoneNumber){
+    phoneNumber = phoneNumber.trim();
 
-  Validator({this.email, this.password, this.firstName, this.lastName, this.phoneNumber});
+    String regex = kRegExpPhoneNumber;
+    RegExp regExp = RegExp(regex);
 
-  bool validateEmail(){
+    if (phoneNumber.isEmpty | !regExp.hasMatch(phoneNumber)){
+      return 'Enter a valid phone number';
+    }
 
+    return null;
+  }
+
+  String validateName(String name){
+    name = name.trim();
+    if (name.isEmpty || name.length < 3){
+      return 'Enter a valid name';
+    }
+
+    return null;
+  }
+
+  String validateEmail(String email) {
     /* Validate Email from user input
       :param email: String containing email of the user
 
       :return bool: true if email is valid, false if it's not
     * */
 
-    String emailTrimmed = email.trim();
-    String regex = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    email = email.trim();
 
+    String regex = kRegExpEmail;
     RegExp regExp = new RegExp(regex);
 
-    return email.isNotEmpty && regExp.hasMatch(emailTrimmed);
-  }
+    if (email.isEmpty || !regExp.hasMatch(email)) {
+      return 'Enter a valid email';
+    }
 
-  bool validatePassword(){
+    return null;
+  }
+  String validatePassword(String password) {
     /* Validate Password from user input
       :param password: String containing password of the user
     * */
@@ -35,11 +53,14 @@ class Validator{
       - Minimum 1 Special Character
       - Common Allowed Characters ( ! @ # $ & * ~ )
     * */
-    String  pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+    String pattern = kRegExpPassword;
 
     RegExp regExp = new RegExp(pattern);
 
-    return regExp.hasMatch(password);
-  }
+    if (!regExp.hasMatch(password)) {
+      return 'Please enter a valid password';
+    }
 
+    return null;
+  }
 }

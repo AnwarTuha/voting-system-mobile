@@ -11,7 +11,7 @@ class _DashBoardState extends State<DashBoard> {
     return Scaffold(
       body: Container(
         child: Center(
-          child: Text('Dash Board')
+          child: Text('Welcome User')
         ),
       ),
     );

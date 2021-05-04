@@ -5,7 +5,6 @@ import 'package:voting_system_mobile/screens/login_screen.dart';
 import 'package:voting_system_mobile/utils/color_util.dart';
 
 class SplashPage extends StatefulWidget {
-
   static const String id = 'splash_screen';
 
   @override
@@ -13,17 +12,14 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     // Timer function will exit splash screen after 4000 milliseconds
-    Timer(const Duration(milliseconds: 4000), (){
+    Timer(const Duration(milliseconds: 4000), () {
       Navigator.pushReplacementNamed(context, LoginPage.id);
     });
-
   }
 
   @override
@@ -33,19 +29,17 @@ class _SplashPageState extends State<SplashPage> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
               colors: [tealColors, tealLightColor],
-            end: Alignment.bottomCenter,
-            begin: Alignment.topCenter
-          ),
+              end: Alignment.bottomCenter,
+              begin: Alignment.topCenter),
         ),
         child: Center(
           child: Text(
-              'Votion',
+            'Votion',
             style: TextStyle(
-              color: Colors.white,
-              letterSpacing: 2.0,
-              fontSize: 75.0,
-              fontWeight: FontWeight.bold
-            ),
+                color: Colors.white,
+                letterSpacing: 2.0,
+                fontSize: 75.0,
+                fontWeight: FontWeight.bold),
           ),
         ),
       ),
