@@ -20,8 +20,7 @@ class TextInput extends StatelessWidget {
       this.hintText,
       this.icon,
       this.obscureText,
-      this.textInputType
-      });
+      this.textInputType});
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +39,6 @@ class TextInput extends StatelessWidget {
         keyboardType: textInputType,
         obscureText: obscureText != null ? obscureText : false,
         decoration: InputDecoration(
-            errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                borderSide: BorderSide(color: Colors.red)),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(10.0)),
               borderSide: BorderSide(color: tealColors),
@@ -51,8 +47,11 @@ class TextInput extends StatelessWidget {
               borderRadius: BorderRadius.all(Radius.circular(10.0)),
               borderSide: BorderSide(color: tealColors),
             ),
+            errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                borderSide: BorderSide(color: Colors.red)),
             hintText: hintText,
-            prefixIcon: Icon(icon)),
+            prefixIcon: Icon(icon, color: tealColors)),
       ),
     );
   }

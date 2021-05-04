@@ -2,6 +2,7 @@ import 'package:country_code_picker/country_code.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:voting_system_mobile/classes/user.dart';
+import 'package:voting_system_mobile/screens/select_organization_screen.dart';
 import 'package:voting_system_mobile/utils/color_util.dart';
 import 'package:voting_system_mobile/widgets/custom_button.dart';
 import 'package:voting_system_mobile/widgets/header_container.dart';
@@ -19,14 +20,10 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class _RegistrationState extends State<RegistrationPage> {
-  String _firstName = '';
-  String _lastName = '';
-  String _phoneNumber;
-  String _email;
-  String _password;
-  String _countryCode = 'et';
+  String _countryCodeInit = 'et';
+  String _countryCode = '+251';
 
-  User user = User(email: '', password: '', phoneNumber: '', fullName: '');
+  User user = User(email: '', password: '', phoneNumber: '', firstName: '', lastName: '');
   Validator validator = Validator();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -34,21 +31,20 @@ class _RegistrationState extends State<RegistrationPage> {
   String _url = "http://localhost:8089/signup";
 
   Future save() async {
-    var response = await http.post(Uri.http(_url, ""),
-        headers: <String, String>{
-          'Context-Type': 'applications/json;charSet=UTF-8'
-        },
-        body: <String, String>{
+    var response =
+        await http.post(Uri.http(_url, ""), headers: <String, String>{
+      'Context-Type': 'applications/json;charSet=UTF-8'
+    }, body: <String, String>{
           'email': user.email,
           'password': user.password,
           'phoneNumber': user.phoneNumber,
-          'fullName': user.fullName
-        });
+          'firstName': user.firstName,
+          'lastName': user.lastName
+    });
 
     print(response.body);
 
     //Todo: Do something with the response
-
   }
 
   @override
@@ -78,14 +74,13 @@ class _RegistrationState extends State<RegistrationPage> {
                       children: <Widget>[
                         Expanded(
                             child: TextInput(
-                          hintText: 'First Name',
-                          icon: Icons.person,
-                          textInputType: TextInputType.name,
-                          validate: validator.validateName,
-                          onSaved: (firstName) {
-                            _firstName += firstName;
-                          }
-                        )),
+                                hintText: 'First Name',
+                                icon: Icons.person,
+                                textInputType: TextInputType.name,
+                                validate: validator.validateName,
+                                onSaved: (firstName) {
+                                  user.firstName += firstName;
+                                })),
                         Expanded(
                             child: TextInput(
                           hintText: 'Last Name',
@@ -93,7 +88,7 @@ class _RegistrationState extends State<RegistrationPage> {
                           textInputType: TextInputType.name,
                           validate: validator.validateName,
                           onSaved: (lastName) {
-                            _lastName += lastName;
+                            user.lastName += lastName;
                           },
                         ))
                       ],
@@ -101,20 +96,20 @@ class _RegistrationState extends State<RegistrationPage> {
                     Row(
                       children: <Widget>[
                         Expanded(
-                            flex: 1,
-                            child: CountryCodePicker(
-                              initialSelection: _countryCode,
-                              onChanged: (value){
-                                _countryCode = value.dialCode.toString();
-                                print(_countryCode);
-                              },
-                              textStyle: TextStyle(
-                                fontSize: 18.0,
-                                color: tealColors,
-                              ),
-                              alignLeft: false,
-                              showFlagMain: false,
+                          flex: 1,
+                          child: CountryCodePicker(
+                            initialSelection: _countryCodeInit,
+                            onChanged: (value) {
+                              _countryCode = value.dialCode;
+                              print(_countryCode);
+                            },
+                            textStyle: TextStyle(
+                              fontSize: 18.0,
+                              color: tealColors,
                             ),
+                            alignLeft: false,
+                            showFlagMain: false,
+                          ),
                         ),
                         Expanded(
                           flex: 4,
@@ -124,7 +119,7 @@ class _RegistrationState extends State<RegistrationPage> {
                             textInputType: TextInputType.phone,
                             validate: validator.validatePhoneNumber,
                             onSaved: (phoneNumber) {
-                              _phoneNumber = _countryCode + phoneNumber;
+                              user.phoneNumber = _countryCode + phoneNumber;
                             },
                           ),
                         ),
@@ -135,8 +130,8 @@ class _RegistrationState extends State<RegistrationPage> {
                       icon: Icons.email,
                       textInputType: TextInputType.emailAddress,
                       validate: validator.validateEmail,
-                      onSaved: (value) {
-                        _email = value;
+                      onSaved: (email) {
+                        user.email = email;
                       },
                     ),
                     TextInput(
@@ -144,8 +139,8 @@ class _RegistrationState extends State<RegistrationPage> {
                       obscureText: true,
                       icon: Icons.vpn_key,
                       validate: validator.validatePassword,
-                      onSaved: (value) {
-                        _password = value;
+                      onSaved: (password) {
+                        user.password = password;
                       },
                     ),
                     SizedBox(height: 40.0),
@@ -161,13 +156,19 @@ class _RegistrationState extends State<RegistrationPage> {
 
                         _formKey.currentState.save();
 
-                        print(_firstName);
-                        print(_lastName);
-                        print(_email);
-                        print(_password);
-                        print(_phoneNumber);
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => SelectOrganization()));
+
+                        print(user.firstName);
+                        print(user.lastName);
+                        print(user.email);
+                        print(user.password);
+                        print(user.phoneNumber);
                         print(_countryCode);
 
+                        print(_formKey.currentState);
                       },
                     )),
                     SizedBox(height: 30.0),

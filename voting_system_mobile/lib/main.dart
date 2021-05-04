@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:voting_system_mobile/screens/forgot_password_screen.dart';
 import 'package:voting_system_mobile/screens/login_screen.dart';
 import 'package:voting_system_mobile/screens/register_screen.dart';
+import 'package:voting_system_mobile/screens/select_organization_screen.dart';
 import 'package:voting_system_mobile/screens/splash_screen.dart';
 
 void main() {
@@ -18,7 +19,8 @@ class VotingSystem extends StatelessWidget {
         SplashPage.id: (context) => SplashPage(),
         LoginPage.id: (context) => LoginPage(),
         RegistrationPage.id: (context) => RegistrationPage(),
-        ForgotPassword.id: (context) => ForgotPassword()
+        ForgotPassword.id: (context) => ForgotPassword(),
+        SelectOrganization.id:(context) => SelectOrganization()
       },
     );
   }
