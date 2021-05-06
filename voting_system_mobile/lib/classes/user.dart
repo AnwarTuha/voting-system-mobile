@@ -4,6 +4,7 @@ class User {
   String email;
   String password;
   String phoneNumber;
+  String userName;
 
-  User({this.firstName, this.lastName, this.email, this.password, this.phoneNumber});
+  User({this.firstName, this.lastName, this.email, this.password, this.phoneNumber, this.userName});
 }

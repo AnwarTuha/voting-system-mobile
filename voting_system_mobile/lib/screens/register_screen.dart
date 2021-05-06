@@ -1,6 +1,7 @@
-import 'package:country_code_picker/country_code.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:voting_system_mobile/classes/auth_service.dart';
 import 'package:voting_system_mobile/classes/user.dart';
 import 'package:voting_system_mobile/screens/select_organization_screen.dart';
 import 'package:voting_system_mobile/utils/color_util.dart';
@@ -30,6 +31,8 @@ class _RegistrationState extends State<RegistrationPage> {
 
   String _url = "https://localhost:8089/signup";
 
+  String token;
+
   Future save() async {
 
     var response =
@@ -50,11 +53,6 @@ class _RegistrationState extends State<RegistrationPage> {
 
   @override
   Widget build(BuildContext context) {
-    // temporary roles
-    List<String> roles = ['Janitor', 'Secretary', 'President'];
-
-    String dropDownValue = roles.first;
-
     return Scaffold(
         body: SingleChildScrollView(
       child: Container(
@@ -62,7 +60,7 @@ class _RegistrationState extends State<RegistrationPage> {
         child: Column(
           children: <Widget>[
             HeaderContainer(
-              queryHeight: 0.3,
+              queryHeight: 0.2,
               title: 'Sign Up',
             ),
             Container(
@@ -93,6 +91,14 @@ class _RegistrationState extends State<RegistrationPage> {
                           },
                         ))
                       ],
+                    ),
+                    TextInput(
+                      hintText: 'User name',
+                      icon: Icons.person,
+                      textInputType: TextInputType.name,
+                      onSaved: (userName){
+                        user.userName = userName;
+                      },
                     ),
                     Row(
                       children: <Widget>[
@@ -157,10 +163,9 @@ class _RegistrationState extends State<RegistrationPage> {
 
                         _formKey.currentState.save();
 
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SelectOrganization()));
+                        AuthService().register(user.email, user.password, user.firstName, user.lastName, user.phoneNumber, user.userName).then((value){
+                          print(value);
+                        });
 
                         print(user.firstName);
                         print(user.lastName);
@@ -168,8 +173,6 @@ class _RegistrationState extends State<RegistrationPage> {
                         print(user.password);
                         print(user.phoneNumber);
                         print(_countryCode);
-
-                        print(_formKey.currentState);
                       },
                     )),
                     SizedBox(height: 30.0),

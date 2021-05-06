@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:voting_system_mobile/classes/auth_service.dart';
 import 'package:voting_system_mobile/classes/user.dart';
 import 'package:voting_system_mobile/screens/forgot_password_screen.dart';
 import 'package:voting_system_mobile/screens/register_screen.dart';
@@ -7,6 +8,7 @@ import 'package:voting_system_mobile/widgets/custom_button.dart';
 import 'package:voting_system_mobile/widgets/header_container.dart';
 import 'package:voting_system_mobile/widgets/text_input_container.dart';
 import 'package:voting_system_mobile/classes/validator.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
@@ -20,10 +22,10 @@ class _LoginState extends State<LoginPage> {
 
   String _email;
   String _password;
-  String _url = "http://localhost:8089/signin";
+  String token;
 
   Future save() async {
-    var response = await http.post(Uri.http(_url, ""),
+    var response = await http.post(Uri.http("", ""),
         headers: <String, String>{
           'Context-Type': 'applications/json;charSet=UTF-8'
         },
@@ -31,7 +33,6 @@ class _LoginState extends State<LoginPage> {
           'email': user.email,
           'password': user.password
         });
-
     //Todo: Do something with the response
 
   }
@@ -49,7 +50,7 @@ class _LoginState extends State<LoginPage> {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              HeaderContainer(queryHeight: 0.4, title: 'Login'),
+              HeaderContainer(queryHeight: 0.2, title: 'Login'),
               Container(
                 margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
                 child: Form(
@@ -104,6 +105,19 @@ class _LoginState extends State<LoginPage> {
                               }
 
                               _formKey.currentState.save();
+                              // AuthService().login(_email, _password).then((value){
+                              //   if (value.data['success']){
+                              //     token = value.data['token'];
+                              //     Fluttertoast.showToast(
+                              //         msg: 'Welcome back',
+                              //         toastLength: Toast.LENGTH_SHORT,
+                              //         gravity: ToastGravity.BOTTOM,
+                              //         backgroundColor: Colors.white,
+                              //         textColor: tealColors,
+                              //         fontSize: 16.0
+                              //     );
+                              //   }
+                              // });
 
                               print(_email);
                               print(_password);
