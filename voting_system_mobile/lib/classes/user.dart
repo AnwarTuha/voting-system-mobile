@@ -7,4 +7,7 @@ class User {
   String userName;
 
   User({this.firstName, this.lastName, this.email, this.password, this.phoneNumber, this.userName});
+
+
+
 }

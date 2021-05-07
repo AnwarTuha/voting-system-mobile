@@ -19,7 +19,7 @@ class HeaderContainer extends StatelessWidget {
               end: Alignment.bottomCenter,
               begin: Alignment.topCenter),
           borderRadius:
-          BorderRadius.only(bottomLeft: Radius.circular(100.0))),
+          BorderRadius.only(bottomLeft: Radius.circular(50.0))),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
