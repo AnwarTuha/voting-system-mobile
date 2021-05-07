@@ -182,6 +182,8 @@ class _RegistrationState extends State<RegistrationPage> {
                                     MaterialPageRoute(
                                         builder: (context) => LoginPage()));
                               } else {
+                                print(response.user);
+                                print(response.error);
                                 final snackBar = SnackBar(
                                   content: Text("Error: ${response.error}"),
                                 );
@@ -189,8 +191,6 @@ class _RegistrationState extends State<RegistrationPage> {
                                     .showSnackBar(snackBar);
                               }
                             });
-
-                            print(requestModel.toJson());
                           }
                         },
                       )),

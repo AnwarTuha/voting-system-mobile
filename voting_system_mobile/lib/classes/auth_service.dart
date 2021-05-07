@@ -26,11 +26,10 @@ class AuthService {
     String url = "$kBaseUrl/register";
     final response =
         await http.post(Uri.parse(url), body: registerRequestModel.toJson());
-
+    Map<String, dynamic> mappedResponse = json.decode(response.body)["user"];
+    print("Response from server(Mapped): $mappedResponse");
     if (response.statusCode == 200) {
-      return RegisterResponseModel.fromJson(
-        new Map<String, dynamic>.from(json.decode(response.body)["user"]),
-      );
+      return RegisterResponseModel.fromJson(mappedResponse);
     } else {
       throw Exception("Failed to Register: ${response.statusCode}");
     }
