@@ -1,12 +1,12 @@
 class RegisterResponseModel {
-  final String token;
+  final String user;
   final String error;
 
-  RegisterResponseModel({this.token, this.error});
+  RegisterResponseModel({this.user, this.error});
 
   factory RegisterResponseModel.fromJson(Map<String, dynamic> json) {
     return RegisterResponseModel(
-        token: json["token"] != null ? json["token"] : "",
+        user: json["user"] != null ? json["user"] : "",
         error: json["error"] != null ? json["error"] : "");
   }
 }

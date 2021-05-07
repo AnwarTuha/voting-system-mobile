@@ -171,7 +171,7 @@ class _RegistrationState extends State<RegistrationPage> {
                                 isApiCallprocess = false;
                               });
 
-                              if (response.token.isNotEmpty) {
+                              if (response.user.isNotEmpty) {
                                 final snackBar = SnackBar(
                                   content: Text('Sign up Successful!'),
                                 );

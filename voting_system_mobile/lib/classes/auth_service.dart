@@ -25,9 +25,11 @@ class AuthService {
         await http.post(Uri.parse(url), body: registerRequestModel.toJson());
 
     if (response.statusCode == 200 || response.statusCode == 400) {
-      return RegisterResponseModel.fromJson(json.decode(response.body));
+      return RegisterResponseModel.fromJson(
+        new Map<String, dynamic>.from(json.decode(response.body)["user"]),
+      );
     } else {
-      throw Exception('Failed to Register');
+      throw Exception("Failed to Register: ${response.statusCode}");
     }
   }
 }
