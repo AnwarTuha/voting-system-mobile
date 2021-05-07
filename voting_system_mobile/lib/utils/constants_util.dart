@@ -4,4 +4,4 @@ const kRegExpEmail = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\"
 
 const kRegExpPassword = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
 
-const String kBaseUrl = "http://192.168.0.101:5000/api/Voters";
+const String kBaseUrl = "http://10.0.2.2:5000/api/Voters";

@@ -29,7 +29,7 @@ class HeaderContainer extends StatelessWidget {
               style: TextStyle(
                   color: Colors.white,
                   letterSpacing: 2.0,
-                  fontSize: 40.0,
+                  fontSize: 45.0,
                   fontWeight: FontWeight.bold),
             ),
           ),
@@ -39,7 +39,7 @@ class HeaderContainer extends StatelessWidget {
                 style: TextStyle(
                     color: Colors.white,
                     letterSpacing: 2.0,
-                    fontSize: 30.0,
+                    fontSize: 35.0,
                     fontWeight: FontWeight.w300
                 ),
               )

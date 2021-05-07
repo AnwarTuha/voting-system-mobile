@@ -53,7 +53,7 @@ class _RegistrationState extends State<RegistrationPage> {
           child: Column(
             children: <Widget>[
               HeaderContainer(
-                queryHeight: 0.2,
+                queryHeight: 0.3,
                 title: 'Sign Up',
               ),
               Container(

@@ -45,7 +45,7 @@ class _LoginState extends State<LoginPage> {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              HeaderContainer(queryHeight: 0.2, title: 'Login'),
+              HeaderContainer(queryHeight: 0.3, title: 'Login'),
               Container(
                 margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
                 child: Form(
@@ -57,7 +57,7 @@ class _LoginState extends State<LoginPage> {
                           hintText: "Email",
                           icon: Icons.email,
                           validate: validator.validateEmail,
-                          onChanged: (input) {
+                          onSaved: (input) {
                             //user.email = email;
                             requestModel.email = input;
                           },
@@ -66,11 +66,10 @@ class _LoginState extends State<LoginPage> {
                           hintText: "Password",
                           icon: Icons.vpn_key,
                           obscureText: true,
-                          onChanged: (input) {
+                          onSaved: (input) {
                             //user.password = password;
                             requestModel.password = input;
                           },
-                          validate: validator.validatePassword,
                         ),
                         Container(
                           margin: EdgeInsets.only(top: 25.0),
@@ -97,7 +96,7 @@ class _LoginState extends State<LoginPage> {
                             onPressed: () {
                               if (validateAndSave()) {
                                 setState(() {
-                                  isApiCallProcess = false;
+                                  isApiCallProcess = true;
                                 });
                               }
 
@@ -109,9 +108,9 @@ class _LoginState extends State<LoginPage> {
                                   // stop progress indicator
                                   isApiCallProcess = false;
                                 });
-                                if (response.token.isNotEmpty) {
+                                if (response.user.isNotEmpty) {
                                   final snackBar = SnackBar(
-                                    content: Text('Sign up Successful!'),
+                                    content: Text('Sign in Successful!'),
                                   );
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(snackBar);
@@ -121,7 +120,7 @@ class _LoginState extends State<LoginPage> {
                                           builder: (context) => LoginPage()));
                                 } else {
                                   final snackBar = SnackBar(
-                                    content: Text("Error: ${response.error}"),
+                                    content: Text("Error: ${response.user}"),
                                   );
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(snackBar);
