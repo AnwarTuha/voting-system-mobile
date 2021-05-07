@@ -14,7 +14,7 @@ class AuthService {
     final response = await http.post(Uri.parse(url), body: loginRequestModel.toJson());
     if (response.statusCode == 200) {
       return LoginResponseModel.fromJson(
-        new Map<String, dynamic>.from(json.decode(response.body))
+        new Map<String, dynamic>.from(json.decode(response.body.toString()))
       );
     } else {
       throw Exception('Failed to login: ${response.statusCode}');

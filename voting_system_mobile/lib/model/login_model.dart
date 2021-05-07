@@ -5,6 +5,7 @@ class LoginResponseModel {
   LoginResponseModel({this.user, this.error});
 
   factory LoginResponseModel.fromJson(Map<String, dynamic> json) {
+    print(json);
     return LoginResponseModel(
         user: json["user"] != null ? json["user"] : "",
         error: json["error"] != null ? json["error"] : "");
