@@ -21,7 +21,6 @@ class User {
     phoneNumber: firstName ?? this.phoneNumber,
     userName: firstName ?? this.userName,
   );
-
   // prepare to receive data from server
   static User fromJson(Map<String, dynamic> json) => User(
     firstName: json['firstname'],

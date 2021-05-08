@@ -11,34 +11,27 @@ class AuthService {
   // Login service
   Future<LoginResponseModel> login(LoginRequestModel loginRequestModel) async {
     String url = "$kBaseUrl/login";
-    final response =
-        await http.post(Uri.parse(url), body: loginRequestModel.toJson());
+    final response = await http.post(Uri.parse(url), body: loginRequestModel.toJson());
     if (response.statusCode == 200) {
       return LoginResponseModel.fromJson(
-          new Map<String, dynamic>.from(json.decode(response.body.toString())));
+        new Map<String, dynamic>.from(json.decode(response.body.toString()))
+      );
     } else {
       throw Exception('Failed to login: ${response.statusCode}');
     }
   }
 
   // Register service
-  Future<RegisterResponseModel> register(
-      RegisterRequestModel registerRequestModel) async {
+  Future<RegisterResponseModel> register(RegisterRequestModel registerRequestModel) async {
     String url = "$kBaseUrl/register";
     final response =
         await http.post(Uri.parse(url), body: registerRequestModel.toJson());
-
-    print(json.decode(response.body));
-
+    Map<String, dynamic> mappedResponse = json.decode(response.body)["user"];
+    print("Response from server(Mapped): $mappedResponse");
     if (response.statusCode == 200) {
-      return RegisterResponseModel.fromJson(
-        new Map<String, dynamic>.from(json.decode(response.body)["user"]),
-      );
+      return RegisterResponseModel.fromJson(mappedResponse);
     } else {
-      // throw Exception("Failed to Register: ${response.statusCode}");
-      return RegisterResponseModel.fromJson(
-        new Map<String, dynamic>.from(json.decode(response.body)["error"]),
-      );
+      throw Exception("Failed to Register: ${response.statusCode}");
     }
   }
 }

@@ -10,6 +10,8 @@ import 'package:voting_system_mobile/widgets/text_input_container.dart';
 import 'package:voting_system_mobile/classes/validator.dart';
 import 'package:voting_system_mobile/model/login_model.dart';
 
+import '../utils/color_util.dart';
+
 class LoginPage extends StatefulWidget {
   static const String id = 'user_login';
 
@@ -128,6 +130,40 @@ class _LoginState extends State<LoginPage> {
                               });
                             },
                           ),
+                        ),
+                        SizedBox(
+                          height: 20.0,
+                        ),
+                        Divider(thickness: 2.0),
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              flex: 1,
+                              child: ElevatedButton(
+                                  onPressed: (){
+                                // Todo: implement sign in with linkedin
+                              },
+                                child: Row(
+                                  children: <Widget>[
+                                    Text('Linked In')
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: ElevatedButton(
+                                onPressed: (){
+                                  // Todo: implement sign in with google
+                                },
+                                child: Row(
+                                  children: <Widget>[
+                                    Text('Google')
+                                  ],
+                                ),
+                              ),
+                            )
+                          ],
                         ),
                         SizedBox(height: 75.0),
                         GestureDetector(

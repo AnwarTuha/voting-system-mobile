@@ -23,8 +23,6 @@ class _RegistrationState extends State<RegistrationPage> {
   String _countryCodeInit = 'et';
   String _countryCode = '+251';
 
-  User user = User(
-      email: '', password: '', phoneNumber: '', firstName: '', lastName: '');
   Validator validator = Validator();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -182,6 +180,8 @@ class _RegistrationState extends State<RegistrationPage> {
                                     MaterialPageRoute(
                                         builder: (context) => LoginPage()));
                               } else {
+                                print(response.user);
+                                print(response.error);
                                 final snackBar = SnackBar(
                                   content: Text("Error: ${response.error[2]}"),
                                 );
@@ -189,8 +189,6 @@ class _RegistrationState extends State<RegistrationPage> {
                                     .showSnackBar(snackBar);
                               }
                             });
-
-                            print(requestModel.toJson());
                           }
                         },
                       )),
