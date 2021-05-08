@@ -183,7 +183,7 @@ class _RegistrationState extends State<RegistrationPage> {
                                         builder: (context) => LoginPage()));
                               } else {
                                 final snackBar = SnackBar(
-                                  content: Text("Error: ${response.error}"),
+                                  content: Text("Error: ${response.error[2]}"),
                                 );
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(snackBar);
