@@ -9,7 +9,7 @@ import 'package:voting_system_mobile/utils/constants_util.dart';
 
 import '../model/login_model.dart';
 
-class AuthService {
+class RequestService {
 
   // Login service
   Future<LoginResponseModel> login(LoginRequestModel loginRequestModel) async {

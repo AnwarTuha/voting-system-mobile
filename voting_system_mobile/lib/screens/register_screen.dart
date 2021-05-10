@@ -160,7 +160,7 @@ class _RegistrationState extends State<RegistrationPage> {
                               isApiCallprocess = true;
                             });
 
-                            AuthService()
+                            RequestService()
                                 .register(requestModel)
                                 .then((response) {
                               setState(() {

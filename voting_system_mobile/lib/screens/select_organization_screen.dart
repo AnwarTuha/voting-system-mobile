@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:voting_system_mobile/classes/request_service.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
 import 'package:voting_system_mobile/widgets/header_container.dart';
 
@@ -19,6 +20,9 @@ class _SelectOrganizationState extends State<SelectOrganization> {
   @override
   void initState() {
     organizations.addAll(duplicateItems);
+    RequestService().fetchOrganizations().then((response){
+      print(response.orgId);
+    });
     super.initState();
   }
 

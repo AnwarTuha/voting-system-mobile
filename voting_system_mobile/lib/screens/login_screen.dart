@@ -105,7 +105,7 @@ class _LoginState extends State<LoginPage> {
                               }
 
                               // authenticate user
-                              AuthService()
+                              RequestService()
                                   .login(requestModel)
                                   .then((response) {
                                 setState(() {
