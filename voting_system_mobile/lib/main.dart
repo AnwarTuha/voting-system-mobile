@@ -4,8 +4,16 @@ import 'package:voting_system_mobile/screens/login_screen.dart';
 import 'package:voting_system_mobile/screens/register_screen.dart';
 import 'package:voting_system_mobile/screens/select_organization_screen.dart';
 import 'package:voting_system_mobile/screens/splash_screen.dart';
+import 'package:voting_system_mobile/utils/user_preferences.dart';
 
-void main() {
+Future<void> main() async {
+
+  // This is the glue that binds the framework to the Flutter engine.
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // initialize shared preferences
+  await UserPreferences.init();
+
   runApp(VotingSystem());
 }
 

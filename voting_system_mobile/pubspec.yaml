@@ -14,10 +14,20 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # sending and receiving user information from server
   http: ^0.13.2
+
+  # apple icon pack
   cupertino_icons: ^1.0.2
+
+  # country code picker for phones
   country_code_picker: ^2.0.1
+
+  # font and icon packs
   font_awesome: ^5.10.1
+
+  # store and load data to/from device
+  shared_preferences: ^2.0.5
 
 dev_dependencies:
   flutter_test:

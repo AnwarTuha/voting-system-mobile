@@ -1,11 +1,12 @@
 class User {
+  final String id;
   final String firstName;
   final String lastName;
   final String email;
   final String phoneNumber;
   final String userName;
 
-  User({this.firstName, this.lastName, this.email, this.phoneNumber, this.userName});
+  User({this.id, this.firstName, this.lastName, this.email, this.phoneNumber, this.userName});
 
   // copy user data to store on device
   User copy({
@@ -15,14 +16,17 @@ class User {
     String phoneNumber,
     String userName
   }) => User(
+    id: id ?? this.id,
     firstName: firstName ?? this.firstName,
     lastName: firstName ?? this.lastName,
     email: firstName ?? this.email,
     phoneNumber: firstName ?? this.phoneNumber,
     userName: firstName ?? this.userName,
   );
+
   // prepare to receive data from server
   static User fromJson(Map<String, dynamic> json) => User(
+    id: json['id'],
     firstName: json['firstname'],
     lastName: json['lastname'],
     email: json['email'],
@@ -31,6 +35,7 @@ class User {
   );
 
   Map<String, dynamic> toJson() => {
+    'id': firstName,
     'firstname': firstName,
     'lastname': lastName,
     'email': email,

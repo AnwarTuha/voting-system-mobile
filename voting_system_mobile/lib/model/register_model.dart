@@ -5,7 +5,6 @@ class RegisterResponseModel {
   RegisterResponseModel({this.user, this.error});
 
   factory RegisterResponseModel.fromJson(Map<String, dynamic> json) {
-    print(json["null"]);
     return RegisterResponseModel(
         user: json["user"] != null ? json["user"] : "",
         error: json["error"] != null ? json["error"] : "");

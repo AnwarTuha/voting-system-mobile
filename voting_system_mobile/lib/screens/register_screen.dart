@@ -1,7 +1,7 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:voting_system_mobile/classes/auth_service.dart';
-import 'package:voting_system_mobile/classes/user.dart';
+import 'file:///E:/android_apps/voting-system-mobile/voting_system_mobile/lib/model/user_model.dart';
 import 'package:voting_system_mobile/model/register_model.dart';
 import 'package:voting_system_mobile/utils/color_util.dart';
 import 'package:voting_system_mobile/widgets/custom_button.dart';

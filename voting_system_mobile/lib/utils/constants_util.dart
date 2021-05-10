@@ -6,4 +6,4 @@ const kRegExpEmail =
 const kRegExpPassword =
     r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
 
-const String kBaseUrl = "http://192.168.1.121:5000/api/Voters";
+const String kBaseUrl = "https://voting-system2.herokuapp.com/api/Voters";
