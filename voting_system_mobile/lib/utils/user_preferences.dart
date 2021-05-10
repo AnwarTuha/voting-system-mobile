@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:voting_system_mobile/model/user_model.dart';
-import 'package:voting_system_mobile/model/user_model.dart';
 
 class UserPreferences{
 

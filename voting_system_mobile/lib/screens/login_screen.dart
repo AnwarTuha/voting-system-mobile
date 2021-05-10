@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:voting_system_mobile/classes/auth_service.dart';
+import 'package:voting_system_mobile/classes/request_service.dart';
 import 'package:voting_system_mobile/screens/forgot_password_screen.dart';
 import 'package:voting_system_mobile/screens/register_screen.dart';
 import 'package:voting_system_mobile/screens/select_organization_screen.dart';
@@ -105,7 +105,7 @@ class _LoginState extends State<LoginPage> {
                               }
 
                               // authenticate user
-                              AuthService()
+                              RequestService()
                                   .login(requestModel)
                                   .then((response) {
                                 setState(() {
