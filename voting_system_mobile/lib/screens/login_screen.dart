@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:voting_system_mobile/classes/auth_service.dart';
+import 'package:voting_system_mobile/screens/dashboard_screen.dart';
 import 'package:voting_system_mobile/screens/forgot_password_screen.dart';
 import 'package:voting_system_mobile/screens/register_screen.dart';
 import 'package:voting_system_mobile/utils/color_util.dart';
@@ -87,7 +89,7 @@ class _LoginState extends State<LoginPage> {
                             child: Text(
                               'Forgot your Password?',
                               style:
-                                  TextStyle(color: tealColors, fontSize: 18.0),
+                                  TextStyle(color: tealColors, fontSize: 15.0),
                             ),
                           ),
                         ),
@@ -110,7 +112,7 @@ class _LoginState extends State<LoginPage> {
                                   // stop progress indicator
                                   isApiCallProcess = false;
                                 });
-                                if (response.user.isNotEmpty) {
+                                if (response.token.isNotEmpty) {
                                   final snackBar = SnackBar(
                                     content: Text('Sign in Successful!'),
                                   );
@@ -119,10 +121,11 @@ class _LoginState extends State<LoginPage> {
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => LoginPage()));
+                                          builder: (context) => DashBoard()));
                                 } else {
+                                  print(response.error);
                                   final snackBar = SnackBar(
-                                    content: Text("Error: ${response.user}"),
+                                    content: Text("Error: ${response.error}"),
                                   );
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(snackBar);
@@ -132,40 +135,52 @@ class _LoginState extends State<LoginPage> {
                           ),
                         ),
                         SizedBox(
-                          height: 20.0,
+                          height: 25.0,
                         ),
-                        Divider(thickness: 2.0),
-                        Row(
-                          children: <Widget>[
-                            Expanded(
-                              flex: 1,
-                              child: ElevatedButton(
-                                  onPressed: (){
-                                // Todo: implement sign in with linkedin
-                              },
-                                child: Row(
-                                  children: <Widget>[
-                                    Text('Linked In')
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 1,
-                              child: ElevatedButton(
-                                onPressed: (){
-                                  // Todo: implement sign in with google
+                        Divider(thickness: 1.0, color: tealLightColor),
+                        SizedBox(height: 15.0),
+                        Text('or Sign in using...', style: TextStyle(fontSize: 15.0),),
+                        Container(
+                          margin: EdgeInsets.all(10.0),
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                flex: 1,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(primary: tealColors),
+                                    onPressed: (){
+                                  // Todo: implement sign in with linkedin
                                 },
-                                child: Row(
-                                  children: <Widget>[
-                                    Text('Google')
-                                  ],
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children: <Widget>[
+                                      FaIcon(FontAwesomeIcons.linkedin),
+                                      Text('Linked In')
+                                    ],
+                                  ),
                                 ),
                               ),
-                            )
-                          ],
+                              SizedBox(width: 4.0),
+                              Expanded(
+                                flex: 1,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(primary: tealColors),
+                                  onPressed: (){
+                                    // Todo: implement sign in with google
+                                  },
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      children: <Widget>[
+                                        FaIcon(FontAwesomeIcons.google),
+                                        Text('Google')
+                                      ],
+                                    )
+                                ),
+                              )
+                            ],
+                          ),
                         ),
-                        SizedBox(height: 75.0),
+                        SizedBox(height: 25.0),
                         GestureDetector(
                           onTap: () {
                             Navigator.push(
@@ -177,10 +192,10 @@ class _LoginState extends State<LoginPage> {
                               text: TextSpan(children: [
                             TextSpan(
                                 text: "Don't have an account?",
-                                style: TextStyle(color: Colors.black)),
+                                style: TextStyle(color: Colors.black, fontSize: 15.0)),
                             TextSpan(
                                 text: " Sign Up",
-                                style: TextStyle(color: tealColors))
+                                style: TextStyle(color: tealColors, fontSize: 15.0))
                           ])),
                         )
                       ],

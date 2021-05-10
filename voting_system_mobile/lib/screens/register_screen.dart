@@ -1,7 +1,6 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:voting_system_mobile/classes/auth_service.dart';
-import 'file:///E:/android_apps/voting-system-mobile/voting_system_mobile/lib/model/user_model.dart';
 import 'package:voting_system_mobile/model/register_model.dart';
 import 'package:voting_system_mobile/utils/color_util.dart';
 import 'package:voting_system_mobile/widgets/custom_button.dart';
@@ -180,10 +179,8 @@ class _RegistrationState extends State<RegistrationPage> {
                                     MaterialPageRoute(
                                         builder: (context) => LoginPage()));
                               } else {
-                                print(response.user);
-                                print(response.error);
                                 final snackBar = SnackBar(
-                                  content: Text("Error: ${response.error[2]}"),
+                                  content: Text("Error: ${response.error}"),
                                 );
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(snackBar);

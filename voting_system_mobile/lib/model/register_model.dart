@@ -7,7 +7,7 @@ class RegisterResponseModel {
   factory RegisterResponseModel.fromJson(Map<String, dynamic> json) {
     return RegisterResponseModel(
         user: json["user"] != null ? json["user"] : "",
-        error: json["error"] != null ? json["error"] : "");
+        error: json["error"] != null ? json[["error"]]["details"]["messages"] : "");
   }
 }
 

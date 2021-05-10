@@ -23,8 +23,8 @@ dependencies:
   # country code picker for phones
   country_code_picker: ^2.0.1
 
-  # font and icon packs
-  font_awesome: ^5.10.1
+  # the font awesome icon pack
+  font_awesome_flutter: ^9.0.0
 
   # store and load data to/from device
   shared_preferences: ^2.0.5
