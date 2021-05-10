@@ -13,41 +13,31 @@ class AuthService {
     String url = "$kBaseUrl/login";
     var response;
     try {
-      response = await http.post(Uri.parse(url), body: loginRequestModel.toJson());
+      response =
+          await http.post(Uri.parse(url), body: loginRequestModel.toJson());
       return LoginResponseModel.fromJson(
-        new Map<String, dynamic>.from(json.decode(response.body.toString()))
-      );
+          new Map<String, dynamic>.from(json.decode(response.body.toString())));
     } catch (e) {
       return LoginResponseModel.fromJson(
-        new Map<String, dynamic>.from(jsonDecode(response.body)["error"]));
+          new Map<String, dynamic>.from(jsonDecode(response.body)["error"]));
     }
   }
 
   // Register service
-  Future<RegisterResponseModel> register(RegisterRequestModel registerRequestModel) async {
+  Future<RegisterResponseModel> register(
+      RegisterRequestModel registerRequestModel) async {
     String url = "$kBaseUrl/register";
     var response;
-    // final response =
-    //     await http.post(Uri.parse(url), body: registerRequestModel.toJson());
-    // Map<String, dynamic> mappedResponse = json.decode(response.body)["user"];
-    // print("Response from server(Mapped): $mappedResponse");
-    // if (response.statusCode == 200) {
-    //   return RegisterResponseModel.fromJson(mappedResponse);
-    // } else {
-    //   throw Exception("Failed to Register: ${response.statusCode}");
-    // }
 
-    try{
-      response = await http.post(Uri.parse(url), body: registerRequestModel.toJson());
+    try {
+      response =
+          await http.post(Uri.parse(url), body: registerRequestModel.toJson());
       return RegisterResponseModel.fromJson(
-        new Map<String, dynamic>.from(jsonDecode(response.body)["user"])
-      );
-    } catch (e){
+          new Map<String, dynamic>.from(jsonDecode(response.body)["user"]));
+    } catch (e) {
       print(response.body[0]);
-      return RegisterResponseModel.fromJson(
-        new Map<String, dynamic>.from(jsonDecode(response.body)["error"]["details"]["messages"])
-      );
+      return RegisterResponseModel.fromJson(new Map<String, dynamic>.from(
+          jsonDecode(response.body)["error"]["details"]["messages"]));
     }
-
   }
 }
