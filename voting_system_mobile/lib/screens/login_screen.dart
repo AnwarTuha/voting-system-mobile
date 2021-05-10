@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:voting_system_mobile/classes/auth_service.dart';
-import 'package:voting_system_mobile/screens/dashboard_screen.dart';
 import 'package:voting_system_mobile/screens/forgot_password_screen.dart';
 import 'package:voting_system_mobile/screens/register_screen.dart';
-import 'package:voting_system_mobile/utils/color_util.dart';
+import 'package:voting_system_mobile/screens/select_organization_screen.dart';
+import 'package:voting_system_mobile/utils/color_palette_util.dart';
 import 'package:voting_system_mobile/widgets/custom_button.dart';
 import 'package:voting_system_mobile/widgets/header_container.dart';
 import 'package:voting_system_mobile/widgets/progress_hud_modal.dart';
@@ -12,7 +12,7 @@ import 'package:voting_system_mobile/widgets/text_input_container.dart';
 import 'package:voting_system_mobile/classes/validator.dart';
 import 'package:voting_system_mobile/model/login_model.dart';
 
-import '../utils/color_util.dart';
+import '../utils/color_palette_util.dart';
 
 class LoginPage extends StatefulWidget {
   static const String id = 'user_login';
@@ -114,18 +114,18 @@ class _LoginState extends State<LoginPage> {
                                 });
                                 if (response.token.isNotEmpty) {
                                   final snackBar = SnackBar(
-                                    content: Text('Sign in Successful!'),
+                                    content: Text('Sign in Successful!')
                                   );
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(snackBar);
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => DashBoard()));
+                                          builder: (context) => SelectOrganization()));
                                 } else {
                                   print(response.error);
                                   final snackBar = SnackBar(
-                                    content: Text("Error: ${response.error}"),
+                                    content: Text("Error: ${response.error}", style: TextStyle(color: Colors.red),)
                                   );
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(snackBar);

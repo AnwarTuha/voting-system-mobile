@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:voting_system_mobile/utils/color_util.dart';
+import 'package:voting_system_mobile/utils/color_palette_util.dart';
 
 class TextInput extends StatelessWidget {
   final TextEditingController controller;

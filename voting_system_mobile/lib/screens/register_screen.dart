@@ -2,7 +2,7 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:voting_system_mobile/classes/auth_service.dart';
 import 'package:voting_system_mobile/model/register_model.dart';
-import 'package:voting_system_mobile/utils/color_util.dart';
+import 'package:voting_system_mobile/utils/color_palette_util.dart';
 import 'package:voting_system_mobile/widgets/custom_button.dart';
 import 'package:voting_system_mobile/widgets/header_container.dart';
 import 'package:voting_system_mobile/widgets/progress_hud_modal.dart';

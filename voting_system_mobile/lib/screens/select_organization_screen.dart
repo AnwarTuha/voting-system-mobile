@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:voting_system_mobile/utils/color_util.dart';
+import 'package:voting_system_mobile/utils/color_palette_util.dart';
 import 'package:voting_system_mobile/widgets/header_container.dart';
 
 class SelectOrganization extends StatefulWidget {
@@ -27,28 +27,6 @@ class _SelectOrganizationState extends State<SelectOrganization> {
 
     TextEditingController editingController = TextEditingController();
 
-    void filterSearchResults(String query){
-      List<String> dummySearchList = [];
-      dummySearchList.addAll(duplicateItems);
-      if (query.isNotEmpty){
-        dummySearchList.forEach((item) {
-          if (item.contains(query)){
-            dummySearchList.add(item);
-          }
-        });
-        setState(() {
-          items.clear();
-          items.addAll(dummySearchList);
-        });
-        return;
-      } else {
-        setState(() {
-          items.clear();
-          items.addAll(duplicateItems);
-        });
-      }
-    }
-
     return Scaffold(
       body: Container(
         padding: EdgeInsets.only(bottom: 30.0),
@@ -56,8 +34,8 @@ class _SelectOrganizationState extends State<SelectOrganization> {
           child: Column(
             children: <Widget>[
               HeaderContainer(
-                queryHeight: 0.3,
-                title: 'Choose Organization',
+                queryHeight: 0.25,
+                title: 'Where do you work?',
               ),
               Container(
                 margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 30.0),
@@ -65,29 +43,44 @@ class _SelectOrganizationState extends State<SelectOrganization> {
                   children: <Widget>[
                     TextField(
                       onChanged: (query){
-                        filterSearchResults(query);
+                        // Todo: filter organizations based on query
                       },
                       controller: editingController,
                       decoration: InputDecoration(
                         labelText: "Search",
                         hintText: "Search",
                         prefix: Icon(Icons.search),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: tealColors),
+                          borderRadius: BorderRadius.all(Radius.circular(10.0))
                         )
                       ),
                     ),
-                    ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: items.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            title: Text('${items[index]}'),
-                          );
-                        }
-                    ),
+                    SizedBox(height: 15.0),
+                    Card(
+                      color: Colors.white,
+                      elevation: 5.0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0)
+                      ),
+                      child: Container(
+                        padding: EdgeInsets.all(20.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              'Orange Digital Center',
+                              style: TextStyle(fontSize: 18.0, color: Colors.black),
+                            ),
+                            Icon(
+                              Icons.arrow_forward_ios,
+                              size: 25.0,
+                              color: tealColors,
+                            )
+                          ],
+                        ),
+                      ),
+                    )
                   ],
                 ),
               )
