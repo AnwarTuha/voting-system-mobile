@@ -27,15 +27,6 @@ class AuthService {
   Future<RegisterResponseModel> register(RegisterRequestModel registerRequestModel) async {
     String url = "$kBaseUrl/register";
     var response;
-    // final response =
-    //     await http.post(Uri.parse(url), body: registerRequestModel.toJson());
-    // Map<String, dynamic> mappedResponse = json.decode(response.body)["user"];
-    // print("Response from server(Mapped): $mappedResponse");
-    // if (response.statusCode == 200) {
-    //   return RegisterResponseModel.fromJson(mappedResponse);
-    // } else {
-    //   throw Exception("Failed to Register: ${response.statusCode}");
-    // }
 
     try{
       response = await http.post(Uri.parse(url), body: registerRequestModel.toJson());

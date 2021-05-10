@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:voting_system_mobile/utils/color_util.dart';
+import 'package:voting_system_mobile/utils/color_palette_util.dart';
 
 class CustomButton extends StatelessWidget {
 
