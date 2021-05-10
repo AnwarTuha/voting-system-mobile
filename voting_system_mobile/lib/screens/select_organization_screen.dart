@@ -14,11 +14,11 @@ class _SelectOrganizationState extends State<SelectOrganization> {
 
   final duplicateItems = List<String>.generate(20, (i) => "Item $i");
 
-  List items = [];
+  List organizations = [];
 
   @override
   void initState() {
-    items.addAll(duplicateItems);
+    organizations.addAll(duplicateItems);
     super.initState();
   }
 
@@ -47,12 +47,19 @@ class _SelectOrganizationState extends State<SelectOrganization> {
                       },
                       controller: editingController,
                       decoration: InputDecoration(
-                        labelText: "Search",
                         hintText: "Search",
                         prefix: Icon(Icons.search),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: tealColors),
                           borderRadius: BorderRadius.all(Radius.circular(10.0))
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(color: tealColors)
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide: BorderSide(color: Colors.red)
                         )
                       ),
                     ),
