@@ -2,6 +2,7 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:voting_system_mobile/classes/request_service.dart';
 import 'package:voting_system_mobile/model/register_model.dart';
+import 'package:voting_system_mobile/screens/select_organization_screen.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
 import 'package:voting_system_mobile/widgets/custom_button.dart';
 import 'package:voting_system_mobile/widgets/header_container.dart';
@@ -168,7 +169,7 @@ class _RegistrationState extends State<RegistrationPage> {
                                 isApiCallprocess = false;
                               });
 
-                              if (response.user.isNotEmpty) {
+                              if (response.user != null) {
                                 final snackBar = SnackBar(
                                   content: Text('Sign up Successful!'),
                                 );
@@ -177,10 +178,10 @@ class _RegistrationState extends State<RegistrationPage> {
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => LoginPage()));
+                                        builder: (context) => SelectOrganization()));
                               } else {
                                 final snackBar = SnackBar(
-                                  content: Text("Error: ${response.error}"),
+                                  content: Text("Error: ${response.error.errorMessage}"),
                                 );
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(snackBar);

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:voting_system_mobile/classes/request_service.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
 import 'package:voting_system_mobile/widgets/header_container.dart';
+import 'package:voting_system_mobile/widgets/organization_card.dart';
+import 'package:voting_system_mobile/widgets/progress_hud_modal.dart';
 
 class SelectOrganization extends StatefulWidget {
-
   static const String id = 'select_organization';
 
   @override
@@ -13,22 +14,28 @@ class SelectOrganization extends StatefulWidget {
 
 class _SelectOrganizationState extends State<SelectOrganization> {
 
-  final duplicateItems = List<String>.generate(20, (i) => "Item $i");
-
   List organizations = [];
+  bool inAsynchCall = true;
 
   @override
   void initState() {
-    organizations.addAll(duplicateItems);
-    RequestService().fetchOrganizations().then((response){
-      print(response.orgId);
+    // fetch organizations list
+    RequestService().fetchOrganizations().then((response) {
+      //organizations.add(response.organizations);
+      organizations.addAll(response);
+      setState(() {
+        inAsynchCall = false;
+      });
     });
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
+    return ProgressHUD(child: _uiSetup(context), inAsynchCall: inAsynchCall);
+  }
 
+  Widget _uiSetup(BuildContext context) {
     TextEditingController editingController = TextEditingController();
 
     return Scaffold(
@@ -41,58 +48,38 @@ class _SelectOrganizationState extends State<SelectOrganization> {
                 queryHeight: 0.25,
                 title: 'Where do you work?',
               ),
-              Container(
-                margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 30.0),
-                child: Column(
-                  children: <Widget>[
-                    TextField(
-                      onChanged: (query){
-                        // Todo: filter organizations based on query
-                      },
-                      controller: editingController,
-                      decoration: InputDecoration(
-                        hintText: "Search",
-                        prefix: Icon(Icons.search),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: tealColors),
-                          borderRadius: BorderRadius.all(Radius.circular(10.0))
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: tealColors)
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide: BorderSide(color: Colors.red)
-                        )
+              SingleChildScrollView(
+                child: Container(
+                  margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 30.0),
+                  child: Column(
+                    children: <Widget>[
+                      TextField(
+                        onChanged: (query) {
+                          // Todo: filter organizations based on query
+                        },
+                        controller: editingController,
+                        decoration: InputDecoration(
+                            hintText: "Search",
+                            prefix: Icon(Icons.search),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: tealColors),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0))),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0)),
+                                borderSide: BorderSide(color: tealColors)),
+                            errorBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0)),
+                                borderSide: BorderSide(color: Colors.red))),
                       ),
-                    ),
-                    SizedBox(height: 15.0),
-                    Card(
-                      color: Colors.white,
-                      elevation: 5.0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0)
-                      ),
-                      child: Container(
-                        padding: EdgeInsets.all(20.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              'Orange Digital Center',
-                              style: TextStyle(fontSize: 18.0, color: Colors.black),
-                            ),
-                            Icon(
-                              Icons.arrow_forward_ios,
-                              size: 25.0,
-                              color: tealColors,
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
+                      SizedBox(height: 10.0),
+                      Divider(height: 2.0, thickness: 2.0),
+                      SizedBox(height: 10.0),
+                      for (var organization in organizations) OrganizationCard(organizationId: organization.organizationId, organizationName: organization.organizationName)
+                    ],
+                  ),
                 ),
               )
             ],

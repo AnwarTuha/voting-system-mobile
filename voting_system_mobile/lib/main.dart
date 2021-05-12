@@ -4,7 +4,6 @@ import 'package:voting_system_mobile/screens/login_screen.dart';
 import 'package:voting_system_mobile/screens/register_screen.dart';
 import 'package:voting_system_mobile/screens/select_organization_screen.dart';
 import 'package:voting_system_mobile/screens/splash_screen.dart';
-import 'package:voting_system_mobile/utils/user_preferences.dart';
 
 Future<void> main() async {
 
@@ -12,7 +11,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // initialize shared preferences
-  await UserPreferences.init();
+  //await UserPreferences.init();
 
   runApp(VotingSystem());
 }

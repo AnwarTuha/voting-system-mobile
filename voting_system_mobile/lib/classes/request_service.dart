@@ -20,7 +20,7 @@ class RequestService {
           new Map<String, dynamic>.from(json.decode(response.body.toString())));
     } catch (e) {
       return LoginResponseModel.fromJson(
-          new Map<String, dynamic>.from(jsonDecode(response.body)["error"]));
+          new Map<String, dynamic>.from(jsonDecode(response.body)));
     }
   }
 
@@ -34,32 +34,24 @@ class RequestService {
       response =
           await http.post(Uri.parse(url), body: registerRequestModel.toJson());
       return RegisterResponseModel.fromJson(
-          new Map<String, dynamic>.from(jsonDecode(response.body)["user"]));
+          new Map<String, dynamic>.from(jsonDecode(response.body)));
     } catch (e) {
       print(response.body);
       return RegisterResponseModel.fromJson(new Map<String, dynamic>.from(
-          jsonDecode(response.body)["error"]["details"]["messages"]));
+          jsonDecode(response.body)));
     }
   }
 
   // Fetch Organization Service
 
-  Future<OrganizationResponseModel> fetchOrganizations() async {
+  Future<List<Organization>> fetchOrganizations() async {
     String url = "$kBaseUrl/Organizations";
     var response;
 
-    try {
-      response = await http.get(Uri.parse(url));
-      print(response.body);
-      return OrganizationResponseModel.fromJson(
-          new Map<String, dynamic>.from(jsonDecode(response.body)));
-    } catch (e) {
-      print(response.body);
-      return OrganizationResponseModel.fromJson(
-        new Map<String, dynamic>.from(
-          jsonDecode(response.body),
-        ),
-      );
-    }
+    response = await http.get(Uri.parse(url));
+    print("Success"+ response.body);
+    // return Organization.fromJson(
+    //     new Map<String, dynamic>.from(jsonDecode(response.body)));
+    return OrganizationFromJson(response.body);
   }
 }

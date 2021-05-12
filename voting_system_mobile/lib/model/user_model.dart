@@ -1,47 +1,19 @@
-class User {
-  final String id;
-  final String firstName;
-  final String lastName;
-  final String email;
-  final String phoneNumber;
-  final String userName;
+class User{
 
-  User({this.id, this.firstName, this.lastName, this.email, this.phoneNumber, this.userName});
+  String firstName;
+  String lastName;
+  String phoneNumber;
+  String userName;
+  String email;
+  String userId;
 
-  // copy user data to store on device
-  User copy({
-    String firstName,
-    String lastName,
-    String email,
-    String phoneNumber,
-    String userName
-  }) => User(
-    id: id ?? this.id,
-    firstName: firstName ?? this.firstName,
-    lastName: firstName ?? this.lastName,
-    email: firstName ?? this.email,
-    phoneNumber: firstName ?? this.phoneNumber,
-    userName: firstName ?? this.userName,
+  User({this.firstName, this.lastName, this.phoneNumber, this.userName, this.email, this.userId});
+
+  factory User.fromJson(Map<String, dynamic> json) => User(
+    firstName: json["firstname"] != null ? json["firstName"] : "",
+    lastName: json["lastname"] != null ? json["lastname"] : "",
+    phoneNumber: json["phone"] != null ? json["phone"] : "",
+    userName: json["username"] != null ? json["username"] : "",
+    userId: json["id"] != null ? json["id"] : ""
   );
-
-  // prepare to receive data from server
-  static User fromJson(Map<String, dynamic> json) => User(
-    id: json['id'],
-    firstName: json['firstname'],
-    lastName: json['lastname'],
-    email: json['email'],
-    phoneNumber: json['phone'],
-    userName: json['username']
-  );
-
-  Map<String, dynamic> toJson() => {
-    'id': firstName,
-    'firstname': firstName,
-    'lastname': lastName,
-    'email': email,
-    'phone': phoneNumber,
-    'username': userName
-  };
-
-
 }
