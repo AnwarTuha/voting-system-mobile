@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:voting_system_mobile/classes/request_service.dart';
+import 'package:voting_system_mobile/model/organization_model.dart';
 import 'package:voting_system_mobile/screens/dashboard_screen.dart';
 import 'package:voting_system_mobile/screens/forgot_password_screen.dart';
 import 'package:voting_system_mobile/screens/register_screen.dart';
+import 'package:voting_system_mobile/screens/profile_screen.dart';
+import 'package:voting_system_mobile/screens/select_organization_screen.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
 import 'package:voting_system_mobile/widgets/custom_button.dart';
 import 'package:voting_system_mobile/widgets/header_container.dart';
@@ -118,10 +121,18 @@ class _LoginState extends State<LoginPage> {
                                       content: Text('Sign in Successful!'));
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(snackBar);
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => DashBoard()));
+                                  if (response.orgId != null){
+                                    if (response.isComplete != false){
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => DashBoard()));
+                                    } else {
+                                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ProfilePage()));
+                                    }
+                                  } else {
+                                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SelectOrganization()));
+                                  }
                                 } else {
                                   final snackBar = SnackBar(
                                       content: Text(
