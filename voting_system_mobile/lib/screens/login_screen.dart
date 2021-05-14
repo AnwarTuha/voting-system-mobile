@@ -116,32 +116,7 @@ class _LoginState extends State<LoginPage> {
                                   // stop progress indicator
                                   isApiCallProcess = false;
                                 });
-                                if (response.token != "") {
-                                  final snackBar = SnackBar(
-                                      content: Text('Sign in Successful!'));
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
-                                  if (response.orgId != null){
-                                    if (response.isComplete != false){
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => DashBoard()));
-                                    } else {
-                                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ProfilePage()));
-                                    }
-                                  } else {
-                                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SelectOrganization()));
-                                  }
-                                } else {
-                                  final snackBar = SnackBar(
-                                      content: Text(
-                                    "Error: ${response.error.message}",
-                                    style: TextStyle(color: Colors.red),
-                                  ));
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
-                                }
+                                handleRoutes(response);
                               });
                             },
                           ),
@@ -226,6 +201,32 @@ class _LoginState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  void handleRoutes(response) {
+    if (response.token != "") {
+      final snackBar = SnackBar(content: Text('Sign in Successful!'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      if (response.orgId != "") {
+        if (response.isComplete != false) {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => DashBoard()));
+        } else {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => ProfilePage()));
+        }
+      } else {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => SelectOrganization()));
+      }
+    } else {
+      final snackBar = SnackBar(
+          content: Text(
+        "Error: ${response.error.message}",
+        style: TextStyle(color: Colors.red),
+      ));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
 
   bool validateAndSave() {

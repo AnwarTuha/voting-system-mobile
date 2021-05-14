@@ -26,7 +26,7 @@ class Organization {
         adminId: json["adminId"] != null ? json["adminId"] : "",
         phoneNumbers: List<String>.from(json["phone"].map((x) => x)),
         email: json["email"] != null ? json["email"] : "",
-        organizationId: json["id"] != null ? json["id"] : "");
+        organizationId: json["orgid"] != null ? json["orgid"] : "");
   }
 }
 
