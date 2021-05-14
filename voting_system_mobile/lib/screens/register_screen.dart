@@ -200,7 +200,7 @@ class _RegistrationState extends State<RegistrationPage> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              SelectOrganization()));
+                                              SelectOrganization(userId: response.user.userId)));
                                 } else {
                                   showError(response);
                                 }

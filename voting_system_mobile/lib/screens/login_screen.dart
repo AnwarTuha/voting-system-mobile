@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:voting_system_mobile/classes/request_service.dart';
 import 'package:voting_system_mobile/model/organization_model.dart';
+import 'package:voting_system_mobile/model/user_model.dart';
 import 'package:voting_system_mobile/screens/dashboard_screen.dart';
 import 'package:voting_system_mobile/screens/forgot_password_screen.dart';
 import 'package:voting_system_mobile/screens/register_screen.dart';
@@ -205,10 +206,11 @@ class _LoginState extends State<LoginPage> {
 
   void handleRoutes(response) {
     if (response.token != "") {
+      User user = setUserData(response);
       final snackBar = SnackBar(content: Text('Sign in Successful!'));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      if (response.orgId != "") {
-        if (response.isComplete != false) {
+      if (user.orgId != "") {
+        if (user.isComplete != false) {
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => DashBoard()));
         } else {
@@ -217,7 +219,7 @@ class _LoginState extends State<LoginPage> {
         }
       } else {
         Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => SelectOrganization()));
+            MaterialPageRoute(builder: (context) => SelectOrganization(userId: user.userId)));
       }
     } else {
       final snackBar = SnackBar(
@@ -227,6 +229,24 @@ class _LoginState extends State<LoginPage> {
       ));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
+  }
+
+  User setUserData(response){
+    User user = User();
+
+    user.isComplete = response.isComplete;
+    user.role = response.role;
+    user.userId = response.userId;
+    user.phoneNumber = response.phoneNumber;
+    user.lastName = response.lastName;
+    user.firstName = response.firstName;
+    user.email = response.email;
+    user.orgId = response.orgId;
+    user.token = response.token;
+    user.userName = response.userName;
+
+    return user;
+
   }
 
   bool validateAndSave() {

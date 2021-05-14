@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
+import 'package:voting_system_mobile/widgets/alert_dialog.dart';
 
 class OrganizationCard extends StatelessWidget {
   final String organizationName;
   final String organizationId;
+  final String userId;
+  final Function onPressed;
 
-  OrganizationCard({this.organizationName, this.organizationId});
+  OrganizationCard({this.organizationName, this.organizationId, this.onPressed, this.userId});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        showDialog(context: context, builder: (BuildContext context) => ShowAlertDialog(organizationName: organizationName));
         print(organizationId);
+        print(userId);
       },
       child: Card(
         color: Colors.white,

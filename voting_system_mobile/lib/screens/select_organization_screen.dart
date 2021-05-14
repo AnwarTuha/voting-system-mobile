@@ -7,6 +7,9 @@ import 'package:voting_system_mobile/widgets/text_input_container.dart';
 
 class SelectOrganization extends StatefulWidget {
   static const String id = 'select_organization';
+  final String userId;
+
+  SelectOrganization({@required this.userId});
 
   @override
   _SelectOrganizationState createState() => _SelectOrganizationState();
@@ -21,6 +24,7 @@ class _SelectOrganizationState extends State<SelectOrganization> {
     // fetch organizations list
     RequestService().fetchOrganizations().then((response) {
       organizations.addAll(response);
+      print(organizations.first.organizationId);
       setState(() {
         inAsynchCall = false;
       });
@@ -66,7 +70,9 @@ class _SelectOrganizationState extends State<SelectOrganization> {
                       for (var organization in organizations)
                         OrganizationCard(
                             organizationId: organization.organizationId,
-                            organizationName: organization.organizationName)
+                            organizationName: organization.organizationName,
+                            userId: widget.userId,
+                        )
                     ],
                   ),
                 ),

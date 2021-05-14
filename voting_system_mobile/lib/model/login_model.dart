@@ -1,15 +1,20 @@
 import 'dart:convert';
 
+import 'package:voting_system_mobile/model/user_model.dart';
+
 LoginResponseModel loginResponseModelFromJson(String str) =>
     LoginResponseModel.fromJson(json.decode(str));
 
 class LoginResponseModel {
+
+
   final String token;
   final String userId;
   final String orgId;
   final String userName;
   final String email;
-  final String fullName;
+  final String firstName;
+  final String lastName;
   final String phoneNumber;
   final String role;
 
@@ -17,11 +22,13 @@ class LoginResponseModel {
   final bool isComplete;
 
   LoginResponseModel(
-      {this.userId,
+      {
+      this.userId,
       this.orgId,
       this.userName,
       this.email,
-      this.fullName,
+      this.firstName,
+      this.lastName,
       this.phoneNumber,
       this.role,
       this.isComplete,
@@ -35,7 +42,8 @@ class LoginResponseModel {
       orgId: json["orgid"] != null ? json["orgid"] : "",
       userName: json["username"] != null ? json["username"] : "",
       email: json["email"] != null ? json["email"] : "",
-      fullName: json["fullname"] != null ? json["fullname"] : "",
+      firstName: json["firstname"] != null ? json["firstname"] : "",
+      lastName: json["lastname"] != null ? json["lastname"] : "",
       phoneNumber: json["phone"] != null ? json["phone"] : "",
       role: json["role"] != null ? json["role"] : "",
       isComplete: json["isComplete"] != null ? json["isComplete"] : false,
