@@ -60,6 +60,7 @@ class _LoginState extends State<LoginPage> {
                         TextInput(
                           hintText: "Email",
                           icon: Icons.email,
+                          textInputType: TextInputType.emailAddress,
                           validate: validator.validateEmail,
                           onSaved: (input) {
                             //user.email = email;
@@ -114,8 +115,7 @@ class _LoginState extends State<LoginPage> {
                                 });
                                 if (response.token != "") {
                                   final snackBar = SnackBar(
-                                    content: Text('Sign in Successful!')
-                                  );
+                                      content: Text('Sign in Successful!'));
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(snackBar);
                                   Navigator.pushReplacement(
@@ -124,8 +124,10 @@ class _LoginState extends State<LoginPage> {
                                           builder: (context) => DashBoard()));
                                 } else {
                                   final snackBar = SnackBar(
-                                    content: Text("Error: ${response.error.message}", style: TextStyle(color: Colors.red),)
-                                  );
+                                      content: Text(
+                                    "Error: ${response.error.message}",
+                                    style: TextStyle(color: Colors.red),
+                                  ));
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(snackBar);
                                 }
@@ -138,7 +140,10 @@ class _LoginState extends State<LoginPage> {
                         ),
                         Divider(thickness: 1.0, color: tealLightColor),
                         SizedBox(height: 15.0),
-                        Text('or Sign in using...', style: TextStyle(fontSize: 15.0),),
+                        Text(
+                          'or Sign in using...',
+                          style: TextStyle(fontSize: 15.0),
+                        ),
                         Container(
                           margin: EdgeInsets.all(10.0),
                           child: Row(
@@ -146,12 +151,14 @@ class _LoginState extends State<LoginPage> {
                               Expanded(
                                 flex: 1,
                                 child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(primary: tealColors),
-                                    onPressed: (){
-                                  // Todo: implement sign in with linkedin
-                                },
+                                  style: ElevatedButton.styleFrom(
+                                      primary: tealColors),
+                                  onPressed: () {
+                                    // Todo: implement sign in with linkedin
+                                  },
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
                                     children: <Widget>[
                                       FaIcon(FontAwesomeIcons.linkedin),
                                       Text('Linked In')
@@ -163,18 +170,19 @@ class _LoginState extends State<LoginPage> {
                               Expanded(
                                 flex: 1,
                                 child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(primary: tealColors),
-                                  onPressed: (){
-                                    // Todo: implement sign in with google
-                                  },
+                                    style: ElevatedButton.styleFrom(
+                                        primary: tealColors),
+                                    onPressed: () {
+                                      // Todo: implement sign in with google
+                                    },
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
                                       children: <Widget>[
                                         FaIcon(FontAwesomeIcons.google),
                                         Text('Google')
                                       ],
-                                    )
-                                ),
+                                    )),
                               )
                             ],
                           ),
@@ -191,10 +199,12 @@ class _LoginState extends State<LoginPage> {
                               text: TextSpan(children: [
                             TextSpan(
                                 text: "Don't have an account?",
-                                style: TextStyle(color: Colors.black, fontSize: 15.0)),
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 15.0)),
                             TextSpan(
                                 text: " Sign Up",
-                                style: TextStyle(color: tealColors, fontSize: 15.0))
+                                style: TextStyle(
+                                    color: tealColors, fontSize: 15.0))
                           ])),
                         )
                       ],

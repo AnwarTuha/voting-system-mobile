@@ -15,12 +15,16 @@ class RequestService {
     var response;
     try {
       response =
-          await http.post(Uri.parse(url), body: loginRequestModel.toJson());
-      return LoginResponseModel.fromJson(
-          new Map<String, dynamic>.from(json.decode(response.body.toString())));
+      await http.post(Uri.parse(url), body: loginRequestModel.toJson());
+      if (response != null){
+        return LoginResponseModel.fromJson(
+            new Map<String, dynamic>.from(json.decode(response.body.toString())));
+      }
     } catch (e) {
-      return LoginResponseModel.fromJson(
-          new Map<String, dynamic>.from(jsonDecode(response.body)));
+      if (response != null){
+        return LoginResponseModel.fromJson(
+            new Map<String, dynamic>.from(jsonDecode(response.body)));
+      }
     }
   }
 
@@ -37,8 +41,8 @@ class RequestService {
           new Map<String, dynamic>.from(jsonDecode(response.body)));
     } catch (e) {
       print(response.body);
-      return RegisterResponseModel.fromJson(new Map<String, dynamic>.from(
-          jsonDecode(response.body)));
+      return RegisterResponseModel.fromJson(
+          new Map<String, dynamic>.from(jsonDecode(response.body)));
     }
   }
 
@@ -49,9 +53,7 @@ class RequestService {
     var response;
 
     response = await http.get(Uri.parse(url));
-    print("Success"+ response.body);
-    // return Organization.fromJson(
-    //     new Map<String, dynamic>.from(jsonDecode(response.body)));
-    return OrganizationFromJson(response.body);
+    print("Success" + response.body);
+    return organizationFromJson(response.body);
   }
 }

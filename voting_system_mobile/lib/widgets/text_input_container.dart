@@ -35,23 +35,30 @@ class TextInput extends StatelessWidget {
       child: TextFormField(
         controller: controller,
         validator: validate,
+        onChanged: onChanged,
         onSaved: onSaved,
         keyboardType: textInputType,
         obscureText: obscureText != null ? obscureText : false,
         decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-              borderSide: BorderSide(color: tealColors),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
             ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-              borderSide: BorderSide(color: tealColors),
+            borderSide: BorderSide(color: tealColors),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
             ),
-            errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                borderSide: BorderSide(color: Colors.red)),
-            hintText: hintText,
-            prefixIcon: Icon(icon, color: tealColors),
+            borderSide: BorderSide(color: tealColors),
+          ),
+          errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10.0),
+              ),
+              borderSide: BorderSide(color: Colors.red)),
+          hintText: hintText,
+          prefixIcon: Icon(icon, color: tealColors),
         ),
       ),
     );

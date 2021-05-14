@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-LoginResponseModel LoginResponseModelFromJson(String str) => LoginResponseModel.fromJson(json.decode(str));
-
+LoginResponseModel loginResponseModelFromJson(String str) =>
+    LoginResponseModel.fromJson(json.decode(str));
 
 class LoginResponseModel {
   final String token;
@@ -16,7 +16,17 @@ class LoginResponseModel {
   final ResponseError error;
   final bool isComplete;
 
-  LoginResponseModel({this.userId, this.orgId, this.userName, this.email, this.fullName, this.phoneNumber, this.role, this.isComplete, this.token, this.error});
+  LoginResponseModel(
+      {this.userId,
+      this.orgId,
+      this.userName,
+      this.email,
+      this.fullName,
+      this.phoneNumber,
+      this.role,
+      this.isComplete,
+      this.token,
+      this.error});
 
   factory LoginResponseModel.fromJson(Map<String, dynamic> json) {
     return LoginResponseModel(
@@ -29,24 +39,23 @@ class LoginResponseModel {
       phoneNumber: json["phone"] != null ? json["phone"] : "",
       role: json["role"] != null ? json["role"] : "",
       isComplete: json["isComplete"] != null ? json["isComplete"] : false,
-      error: json["error"] != null ? ResponseError.fromJson(json["error"]) : null,
+      error:
+          json["error"] != null ? ResponseError.fromJson(json["error"]) : null,
     );
   }
 }
 
-class ResponseError{
+class ResponseError {
   int statusCode;
   String message;
 
   ResponseError({this.statusCode, this.message});
 
-  factory ResponseError.fromJson(Map<String, dynamic> json){
+  factory ResponseError.fromJson(Map<String, dynamic> json) {
     return ResponseError(
-      statusCode: json["statusCode"] != null ? json["statusCode"] : 200,
-      message: json["message"] != null ? json["message"] : ""
-    );
+        statusCode: json["statusCode"] != null ? json["statusCode"] : 200,
+        message: json["message"] != null ? json["message"] : "");
   }
-
 }
 
 class LoginRequestModel {

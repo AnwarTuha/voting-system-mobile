@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
 
 class CustomButton extends StatelessWidget {
-
   final Function onPressed;
   final String title;
 
@@ -30,7 +29,7 @@ class CustomButton extends StatelessWidget {
               fontSize: 20.0,
               fontWeight: FontWeight.bold,
               letterSpacing: 2.0),
-        )
+        ),
       ),
     );
   }

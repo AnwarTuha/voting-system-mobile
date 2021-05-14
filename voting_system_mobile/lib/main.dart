@@ -6,7 +6,6 @@ import 'package:voting_system_mobile/screens/select_organization_screen.dart';
 import 'package:voting_system_mobile/screens/splash_screen.dart';
 
 Future<void> main() async {
-
   // This is the glue that binds the framework to the Flutter engine.
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -27,9 +26,8 @@ class VotingSystem extends StatelessWidget {
         LoginPage.id: (context) => LoginPage(),
         RegistrationPage.id: (context) => RegistrationPage(),
         ForgotPassword.id: (context) => ForgotPassword(),
-        SelectOrganization.id:(context) => SelectOrganization()
+        SelectOrganization.id: (context) => SelectOrganization()
       },
     );
   }
 }
-

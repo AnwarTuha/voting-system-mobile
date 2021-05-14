@@ -9,8 +9,9 @@ class RegisterResponseModel {
   factory RegisterResponseModel.fromJson(Map<String, dynamic> json) {
     return RegisterResponseModel(
         user: json["user"] != null ? User.fromJson(json["user"]) : null,
-        error: json["error"] != null ? ResponseError.fromJson(json["error"]) : null
-    );
+        error: json["error"] != null
+            ? ResponseError.fromJson(json["error"])
+            : null);
   }
 }
 
@@ -44,23 +45,24 @@ class RegisterRequestModel {
   }
 }
 
-class ResponseError{
+class ResponseError {
   int statusCode;
   String errorName;
   String errorMessage;
   ErrorDetails errorDetails;
 
-  ResponseError({this.statusCode, this.errorName, this.errorMessage, this.errorDetails});
+  ResponseError(
+      {this.statusCode, this.errorName, this.errorMessage, this.errorDetails});
 
   factory ResponseError.fromJson(Map<String, dynamic> json) => ResponseError(
-    statusCode: json["statusCode"] != null ? json["statusCode"] : "",
-    errorName: json["name"] != null ? json["name"] : "",
-    errorMessage: json["message"] != null ? json["message"] : "",
-    errorDetails: ErrorDetails.fromJson(json["details"]),
-  );
+        statusCode: json["statusCode"] != null ? json["statusCode"] : "",
+        errorName: json["name"] != null ? json["name"] : "",
+        errorMessage: json["message"] != null ? json["message"] : "",
+        errorDetails: ErrorDetails.fromJson(json["details"]),
+      );
 }
 
-class ErrorDetails{
+class ErrorDetails {
   String context;
   ErrorCodes codes;
   ErrorCodes messages;
@@ -68,21 +70,24 @@ class ErrorDetails{
   ErrorDetails({this.codes, this.context, this.messages});
 
   factory ErrorDetails.fromJson(Map<String, dynamic> json) => ErrorDetails(
-    context: json["context"] != null ? json["context"] : "",
-    codes: ErrorCodes.fromJson(json["codes"]),
-    messages: ErrorCodes.fromJson(json["messages"])
-  );
+      context: json["context"] != null ? json["context"] : "",
+      codes: ErrorCodes.fromJson(json["codes"]),
+      messages: ErrorCodes.fromJson(json["messages"]));
 }
 
-class ErrorCodes{
+class ErrorCodes {
   List<String> email;
   List<String> userName;
 
   ErrorCodes({this.email, this.userName});
 
   factory ErrorCodes.fromJson(Map<String, dynamic> json) => ErrorCodes(
-    email: json["email"] != null ? List<String>.from(json["email"].map((emailErrorCode) => emailErrorCode)) : "",
-    userName: json["username"] != null ? List<String>.from(json["username"].map((userNameErrorCode) => userNameErrorCode) ) : ""
-  );
-
+      email: json["email"] != null
+          ? List<String>.from(
+              json["email"].map((emailErrorCode) => emailErrorCode))
+          : "",
+      userName: json["username"] != null
+          ? List<String>.from(
+              json["username"].map((userNameErrorCode) => userNameErrorCode))
+          : "");
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:voting_system_mobile/classes/request_service.dart';
-import 'package:voting_system_mobile/utils/color_palette_util.dart';
 import 'package:voting_system_mobile/widgets/header_container.dart';
 import 'package:voting_system_mobile/widgets/organization_card.dart';
 import 'package:voting_system_mobile/widgets/progress_hud_modal.dart';
+import 'package:voting_system_mobile/widgets/text_input_container.dart';
 
 class SelectOrganization extends StatefulWidget {
   static const String id = 'select_organization';
@@ -13,7 +13,6 @@ class SelectOrganization extends StatefulWidget {
 }
 
 class _SelectOrganizationState extends State<SelectOrganization> {
-
   List organizations = [];
   bool inAsynchCall = true;
 
@@ -21,7 +20,6 @@ class _SelectOrganizationState extends State<SelectOrganization> {
   void initState() {
     // fetch organizations list
     RequestService().fetchOrganizations().then((response) {
-      //organizations.add(response.organizations);
       organizations.addAll(response);
       setState(() {
         inAsynchCall = false;
@@ -31,12 +29,12 @@ class _SelectOrganizationState extends State<SelectOrganization> {
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return ProgressHUD(child: _uiSetup(context), inAsynchCall: inAsynchCall);
   }
 
   Widget _uiSetup(BuildContext context) {
-    TextEditingController editingController = TextEditingController();
+    TextEditingController searchController = TextEditingController();
 
     return Scaffold(
       body: Container(
@@ -53,31 +51,22 @@ class _SelectOrganizationState extends State<SelectOrganization> {
                   margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 30.0),
                   child: Column(
                     children: <Widget>[
-                      TextField(
-                        onChanged: (query) {
-                          // Todo: filter organizations based on query
+                      TextInput(
+                        icon: Icons.search_sharp,
+                        onChanged: (input){
+                          // Todo: implement search functionality here
                         },
-                        controller: editingController,
-                        decoration: InputDecoration(
-                            hintText: "Search",
-                            prefix: Icon(Icons.search),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: tealColors),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0))),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                                borderSide: BorderSide(color: tealColors)),
-                            errorBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                                borderSide: BorderSide(color: Colors.red))),
+                        hintText: 'Search from Organizations',
+                        textInputType: TextInputType.text,
+                        controller: searchController,
                       ),
                       SizedBox(height: 10.0),
                       Divider(height: 2.0, thickness: 2.0),
                       SizedBox(height: 10.0),
-                      for (var organization in organizations) OrganizationCard(organizationId: organization.organizationId, organizationName: organization.organizationName)
+                      for (var organization in organizations)
+                        OrganizationCard(
+                            organizationId: organization.organizationId,
+                            organizationName: organization.organizationName)
                     ],
                   ),
                 ),

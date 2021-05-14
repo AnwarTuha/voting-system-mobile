@@ -2,7 +2,7 @@
     package="anwartuha.netlify.voting_system_mobile">
     <uses-permission android:name="android.permission.INTERNET" />
     <application
-        android:label="voting_system_mobile"
+        android:label="Votion"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity

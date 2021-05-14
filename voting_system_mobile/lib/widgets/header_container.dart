@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
 
 class HeaderContainer extends StatelessWidget {
-
   final double queryHeight;
   final String title;
 
@@ -10,7 +9,6 @@ class HeaderContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       height: MediaQuery.of(context).size.height * queryHeight,
       decoration: BoxDecoration(
@@ -18,8 +16,7 @@ class HeaderContainer extends StatelessWidget {
               colors: [tealColors, tealLightColor],
               end: Alignment.bottomCenter,
               begin: Alignment.topCenter),
-          borderRadius:
-          BorderRadius.only(bottomLeft: Radius.circular(50.0))),
+          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(50.0))),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -35,15 +32,13 @@ class HeaderContainer extends StatelessWidget {
           ),
           Center(
               child: Text(
-                title != null ? title : '',
-                style: TextStyle(
-                    color: Colors.white,
-                    letterSpacing: 2.0,
-                    fontSize: 35.0,
-                    fontWeight: FontWeight.w300
-                ),
-              )
-          )
+            title != null ? title : '',
+            style: TextStyle(
+                color: Colors.white,
+                letterSpacing: 2.0,
+                fontSize: 35.0,
+                fontWeight: FontWeight.w300),
+          ))
         ],
       ),
     );

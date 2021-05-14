@@ -22,6 +22,7 @@ class RegistrationPage extends StatefulWidget {
 class _RegistrationState extends State<RegistrationPage> {
   String _countryCodeInit = 'et';
   String _countryCode = '+251';
+  String _confirm = '';
 
   Validator validator = Validator();
 
@@ -39,10 +40,13 @@ class _RegistrationState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
     return ProgressHUD(
-        child: _uiSetup(context), inAsynchCall: isApiCallprocess);
+        child: _uiSetup(context),
+        inAsynchCall: isApiCallprocess,
+    );
   }
 
   Widget _uiSetup(BuildContext context) {
+
     return Scaffold(
       key: scaffoldKey,
       body: SingleChildScrollView(
@@ -51,161 +55,176 @@ class _RegistrationState extends State<RegistrationPage> {
           child: Column(
             children: <Widget>[
               HeaderContainer(
-                queryHeight: 0.3,
+                queryHeight: 0.2,
                 title: 'Sign Up',
               ),
               Container(
                 margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 30.0),
                 child: Form(
                   key: _formKey,
-                  child: Column(
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: TextInput(
-                              hintText: 'First Name',
-                              icon: Icons.person,
-                              textInputType: TextInputType.name,
-                              validate: validator.validateName,
-                              onSaved: (input) {
-                                //user.firstName += input;
-                                requestModel.firstName = input;
-                              },
-                            ),
-                          ),
-                          Expanded(
-                            child: TextInput(
-                              hintText: 'Last Name',
-                              icon: Icons.person,
-                              textInputType: TextInputType.name,
-                              validate: validator.validateName,
-                              onSaved: (input) {
-                                //user.lastName += lastName;
-                                requestModel.lastName = input;
-                              },
-                            ),
-                          )
-                        ],
-                      ),
-                      TextInput(
-                        hintText: 'User name',
-                        icon: Icons.person,
-                        textInputType: TextInputType.name,
-                        onSaved: (input) {
-                          //user.userName = userName;
-                          requestModel.userName = input;
-                        },
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: CountryCodePicker(
-                              initialSelection: _countryCodeInit,
-                              onChanged: (value) {
-                                _countryCode = value.dialCode;
-                                print(_countryCode);
-                              },
-                              textStyle: TextStyle(
-                                fontSize: 18.0,
-                                color: tealColors,
+                  child: Expanded(
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: TextInput(
+                                hintText: 'First Name',
+                                icon: Icons.person,
+                                textInputType: TextInputType.name,
+                                validate: validator.validateName,
+                                onSaved: (input) {
+                                  //user.firstName += input;
+                                  requestModel.firstName = input;
+                                },
                               ),
-                              alignLeft: false,
-                              showFlagMain: false,
                             ),
-                          ),
-                          Expanded(
-                            flex: 4,
-                            child: TextInput(
-                              hintText: "Phone Number",
-                              icon: Icons.phone,
-                              textInputType: TextInputType.phone,
-                              validate: validator.validatePhoneNumber,
-                              onSaved: (input) {
-                                //user.phoneNumber = _countryCode + phoneNumber;
-                                requestModel.phoneNumber = _countryCode + input;
-                              },
+                            Expanded(
+                              child: TextInput(
+                                hintText: 'Last Name',
+                                icon: Icons.person,
+                                textInputType: TextInputType.name,
+                                validate: validator.validateName,
+                                onSaved: (input) {
+                                  //user.lastName += lastName;
+                                  requestModel.lastName = input;
+                                },
+                              ),
+                            )
+                          ],
+                        ),
+                        TextInput(
+                          hintText: 'User name',
+                          icon: Icons.person,
+                          textInputType: TextInputType.name,
+                          onSaved: (input) {
+                            //user.userName = userName;
+                            requestModel.userName = input;
+                          },
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              flex: 1,
+                              child: CountryCodePicker(
+                                initialSelection: _countryCodeInit,
+                                onChanged: (value) {
+                                  _countryCode = value.dialCode;
+                                  print(_countryCode);
+                                },
+                                textStyle: TextStyle(
+                                  fontSize: 18.0,
+                                  color: tealColors,
+                                ),
+                                alignLeft: false,
+                                showFlagMain: false,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      TextInput(
-                        hintText: "Email",
-                        icon: Icons.email,
-                        textInputType: TextInputType.emailAddress,
-                        validate: validator.validateEmail,
-                        onSaved: (input) {
-                          //user.email = email;
-                          requestModel.email = input;
-                        },
-                      ),
-                      TextInput(
-                        hintText: "Password",
-                        obscureText: true,
-                        icon: Icons.vpn_key,
-                        validate: validator.validatePassword,
-                        onSaved: (input) {
-                          //user.password = password;
-                          requestModel.password = input;
-                        },
-                      ),
-                      SizedBox(height: 40.0),
-                      Center(
-                          child: CustomButton(
-                        title: 'Continue',
-                        onPressed: () {
-                          if (validateAndSave()) {
-                            setState(() {
-                              // start progress indicator
-                              isApiCallprocess = true;
-                            });
-
-                            RequestService()
-                                .register(requestModel)
-                                .then((response) {
+                            Expanded(
+                              flex: 4,
+                              child: TextInput(
+                                hintText: "Phone Number",
+                                icon: Icons.phone,
+                                textInputType: TextInputType.phone,
+                                validate: validator.validatePhoneNumber,
+                                onSaved: (input) {
+                                  //user.phoneNumber = _countryCode + phoneNumber;
+                                  requestModel.phoneNumber = _countryCode + input;
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        TextInput(
+                          hintText: "Email",
+                          icon: Icons.email,
+                          textInputType: TextInputType.emailAddress,
+                          validate: validator.validateEmail,
+                          onSaved: (input) {
+                            //user.email = email;
+                            requestModel.email = input;
+                          },
+                        ),
+                        TextInput(
+                          hintText: "Password",
+                          obscureText: true,
+                          icon: Icons.vpn_key,
+                          validate: validator.validatePassword,
+                          onChanged: (input){
+                            _confirm = input;
+                            print("Password: "+_confirm);
+                          },
+                          onSaved: (input) {
+                            //user.password = password;
+                            requestModel.password = input;
+                          },
+                        ),
+                        TextInput(
+                          hintText: "Confirm Password",
+                          obscureText: true,
+                          icon: Icons.vpn_key_outlined,
+                          validate: (input){
+                            print("Confirm Password: "+_confirm);
+                            if (input != _confirm){
+                              return "Passwords Don't Match";
+                            }
+                            return null;
+                          }
+                        ),
+                        SizedBox(height: 30.0),
+                        Center(
+                            child: CustomButton(
+                          title: 'Continue',
+                          onPressed: () {
+                            if (validateAndSave()) {
                               setState(() {
-                                // stop progress indicator
-                                isApiCallprocess = false;
+                                // start progress indicator
+                                isApiCallprocess = true;
                               });
 
-                              if (response.user != null) {
-                                final snackBar = SnackBar(
-                                  content: Text('Sign up Successful!'),
-                                );
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => SelectOrganization()));
-                              } else {
-                                final snackBar = SnackBar(
-                                  content: Text("Error: ${response.error.errorMessage}"),
-                                );
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                              }
-                            });
-                          }
-                        },
-                      )),
-                      SizedBox(height: 30.0),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(context, LoginPage.id);
-                        },
-                        child: RichText(
-                            text: TextSpan(children: [
-                          TextSpan(
-                              text: "Already have an account?",
-                              style: TextStyle(color: Colors.black)),
-                          TextSpan(
-                              text: " Login",
-                              style: TextStyle(color: tealColors))
-                        ])),
-                      )
-                    ],
+                              RequestService()
+                                  .register(requestModel)
+                                  .then((response) {
+                                setState(() {
+                                  // stop progress indicator
+                                  isApiCallprocess = false;
+                                });
+
+                                if (response.user != null) {
+                                  final snackBar = SnackBar(
+                                    content: Text('Sign up Successful!'),
+                                  );
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              SelectOrganization()));
+                                } else {
+                                  showError(response);
+                                }
+                              });
+                            }
+                          },
+                        )),
+                        SizedBox(height: 30.0),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context, LoginPage.id);
+                          },
+                          child: RichText(
+                              text: TextSpan(children: [
+                            TextSpan(
+                                text: "Already have an account?",
+                                style: TextStyle(color: Colors.black)),
+                            TextSpan(
+                                text: " Login",
+                                style: TextStyle(color: tealColors))
+                          ])),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               )
@@ -214,6 +233,31 @@ class _RegistrationState extends State<RegistrationPage> {
         ),
       ),
     );
+  }
+
+  void showError(RegisterResponseModel response){
+    SnackBar snackBar;
+    if (response.error.errorDetails.codes.userName != null){
+      snackBar = SnackBar(
+        content: Text(
+          "Error: User name is not available",
+        ),
+      );
+    } else if(response.error.errorDetails.codes.email != null){
+      snackBar = SnackBar(
+        content: Text(
+          "Error: Email is not available"
+        ),
+      );
+    } else {
+      snackBar = SnackBar(
+        content: Text(
+            "Error: ${response.error.errorMessage}"
+        ),
+      );
+    }
+    ScaffoldMessenger.of(context)
+        .showSnackBar(snackBar);
   }
 
   bool validateAndSave() {

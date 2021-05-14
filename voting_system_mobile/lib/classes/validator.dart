@@ -1,22 +1,22 @@
 import 'package:voting_system_mobile/utils/constants_util.dart';
 
-class Validator{
-  String validatePhoneNumber(String phoneNumber){
+class Validator {
+  String validatePhoneNumber(String phoneNumber) {
     phoneNumber = phoneNumber.trim();
 
     String regex = kRegExpPhoneNumber;
     RegExp regExp = RegExp(regex);
 
-    if (phoneNumber.isEmpty | !regExp.hasMatch(phoneNumber)){
+    if (phoneNumber.isEmpty | !regExp.hasMatch(phoneNumber)) {
       return 'Enter a valid phone number';
     }
 
     return null;
   }
 
-  String validateName(String name){
+  String validateName(String name) {
     name = name.trim();
-    if (name.isEmpty || name.length < 3){
+    if (name.isEmpty || name.length < 3) {
       return 'Enter a valid name';
     }
 
@@ -41,6 +41,7 @@ class Validator{
 
     return null;
   }
+
   String validatePassword(String password) {
     /* Validate Password from user input
       :param password: String containing password of the user
@@ -63,5 +64,4 @@ class Validator{
 
     return null;
   }
-
 }

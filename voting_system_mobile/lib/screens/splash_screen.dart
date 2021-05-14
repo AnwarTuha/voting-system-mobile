@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:voting_system_mobile/screens/select_organization_screen.dart';
+import 'package:voting_system_mobile/screens/login_screen.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
 
 class SplashPage extends StatefulWidget {
@@ -18,7 +18,7 @@ class _SplashPageState extends State<SplashPage> {
 
     // Timer function will exit splash screen after 4000 milliseconds
     Timer(const Duration(milliseconds: 4000), () {
-      Navigator.pushReplacementNamed(context, SelectOrganization.id);
+      Navigator.pushReplacementNamed(context, LoginPage.id);
     });
   }
 

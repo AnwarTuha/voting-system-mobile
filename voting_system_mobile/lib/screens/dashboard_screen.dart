@@ -10,9 +10,7 @@ class _DashBoardState extends State<DashBoard> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child: Center(
-          child: Text('Welcome User')
-        ),
+        child: Center(child: Text('Welcome User')),
       ),
     );
   }
