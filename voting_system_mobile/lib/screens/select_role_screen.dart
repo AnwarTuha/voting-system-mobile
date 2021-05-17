@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:voting_system_mobile/classes/request_service.dart';
+import 'package:voting_system_mobile/model/verification_request_model.dart';
 import 'package:voting_system_mobile/widgets/alert_dialog.dart';
 import 'package:voting_system_mobile/widgets/header_container.dart';
 import 'package:voting_system_mobile/widgets/list_card.dart';
+import 'package:voting_system_mobile/widgets/progress_hud_modal.dart';
 import 'package:voting_system_mobile/widgets/text_input_container.dart';
 import 'package:voting_system_mobile/model/roles_model.dart';
+
+import 'login_screen.dart';
 
 class SelectRole extends StatefulWidget {
 
@@ -21,6 +25,7 @@ class SelectRole extends StatefulWidget {
 class _SelectRoleState extends State<SelectRole> {
 
   List roles = [];
+  bool isAsyncCall = true;
 
   @override
   void initState() {
@@ -31,16 +36,26 @@ class _SelectRoleState extends State<SelectRole> {
 
     roleRequestModel.orgId = widget.organizationId;
 
-    RequestService().fetchRoles(roleRequestModel).then((value){
-      print(value);
+    RequestService().fetchRoles(roleRequestModel).then((response){
+      roles.addAll(response.roles);
+      print(roles.first.roleId);
+      setState(() {
+        isAsyncCall = false;
+      });
     });
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
+    return ProgressHUD(child: _uiSetup(context), inAsynchCall: isAsyncCall);
+  }
+
+
+  Widget _uiSetup(BuildContext context) {
 
     TextEditingController searchController = TextEditingController();
+    VerificationRequestModel verificationRequestModel = VerificationRequestModel();
 
     return Scaffold(
       body: Container(
@@ -71,13 +86,25 @@ class _SelectRoleState extends State<SelectRole> {
                       SizedBox(height: 10.0),
                       for (var role in roles)
                         ListCard(
+                          objectId: role.roleId,
+                          objectName: role.roleName,
                           userId: widget.userId,
-                          objectId: role['id'],
-                          objectName: role['name'],
                           onPressed: (){
-                            showDialog(context: context, builder: (BuildContext context) => ShowAlertDialog(organizationName: role['name'])).then((value){
+                            showDialog(context: context, builder: (BuildContext context) => ShowAlertDialog(organizationName: role.roleName)).then((value){
                               if (value == true){
+                                  setState(() {
+                                    isAsyncCall = true;
+                                  });
+                                  verificationRequestModel.orgId = role.orgId;
+                                  verificationRequestModel.userId = widget.userId;
+                                  verificationRequestModel.roleName = role.roleName;
 
+                                  RequestService().submitAccountForVerification(verificationRequestModel).then((response){
+                                    setState(() {
+                                      isAsyncCall = false;
+                                    });
+                                    handleRoutes(response);
+                                  });
                               }
                             });
                           },
@@ -91,5 +118,14 @@ class _SelectRoleState extends State<SelectRole> {
         ),
       ),
     );
+  }
+
+  handleRoutes(response){
+    if (response.body != ""){
+      final snackBar = SnackBar(content: Text('Account submitted for verification'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => LoginPage()));
+    }
   }
 }

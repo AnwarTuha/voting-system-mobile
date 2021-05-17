@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:voting_system_mobile/screens/login_screen.dart';
+import 'package:voting_system_mobile/screens/profile_screen.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
 
 class SplashPage extends StatefulWidget {

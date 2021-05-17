@@ -6,6 +6,7 @@ import 'package:http/http.dart';
 import 'package:voting_system_mobile/model/organization_model.dart';
 import 'package:voting_system_mobile/model/register_model.dart';
 import 'package:voting_system_mobile/model/login_model.dart';
+import 'package:voting_system_mobile/model/verification_request_model.dart';
 import 'package:voting_system_mobile/utils/constants_util.dart';
 import 'package:voting_system_mobile/model/roles_model.dart';
 
@@ -81,6 +82,28 @@ class RequestService {
         new Map<String, dynamic>.from(jsonDecode(response.body))
       );
     }
+  }
+
+  // Send account for verification
+
+  Future<VerificationResponseModel> submitAccountForVerification(VerificationRequestModel verificationRequestModel) async {
+    String url = "$kBaseUrl/Verifications";
+    var response;
+
+    try{
+      response = await http.post(Uri.parse(url), body: verificationRequestModel.toJson());
+      print(response.body);
+      if (response != null){
+        return VerificationResponseModel.fromJson(
+            new Map<String, dynamic>.from(json.decode(response.body)));
+      }
+    } catch (e){
+      if (response != null){
+        return VerificationResponseModel.fromJson(
+            new Map<String, dynamic>.from(jsonDecode(response.body)));
+      }
+    }
+
   }
 
 }
