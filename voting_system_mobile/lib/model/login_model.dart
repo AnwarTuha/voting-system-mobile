@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:voting_system_mobile/model/user_model.dart';
-
 LoginResponseModel loginResponseModelFromJson(String str) =>
     LoginResponseModel.fromJson(json.decode(str));
 

@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:voting_system_mobile/utils/color_palette_util.dart';
 
 class ShowAlertDialog extends StatelessWidget {
 
   final String organizationName;
+  final String organizationId;
+
+  final String roleName;
+  final String roleId;
+
   final BuildContext context;
 
-  ShowAlertDialog({this.organizationName, this.context});
+  ShowAlertDialog({this.organizationName, this.context, this.organizationId, this.roleName, this.roleId});
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +68,7 @@ class ShowAlertDialog extends StatelessWidget {
                                   style: ElevatedButton.styleFrom(primary: Colors.green, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))),
                                   onPressed: (){
                                     Navigator.pop(context, true);
-                                  },
+                                  }
                                 ),
                             ),
                             SizedBox(width: 10.0),

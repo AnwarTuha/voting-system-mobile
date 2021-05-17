@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:voting_system_mobile/classes/request_service.dart';
-import 'package:voting_system_mobile/model/organization_model.dart';
 import 'package:voting_system_mobile/model/user_model.dart';
 import 'package:voting_system_mobile/screens/dashboard_screen.dart';
 import 'package:voting_system_mobile/screens/forgot_password_screen.dart';
