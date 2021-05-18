@@ -121,7 +121,7 @@ class _SelectRoleState extends State<SelectRole> {
   }
 
   handleRoutes(response){
-    if (response.body != ""){
+    if (response != ""){
       final snackBar = SnackBar(content: Text('Account submitted for verification'));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       Navigator.pushReplacement(context,
