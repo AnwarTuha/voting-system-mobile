@@ -27,4 +27,8 @@ class UserPreferences{
     return User.fromJson(jsonDecode(json));
   }
 
+  static Future removeUser() async{
+    await _preferences.remove(userKey);
+  }
+
 }

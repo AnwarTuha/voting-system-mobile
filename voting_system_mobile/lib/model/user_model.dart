@@ -29,6 +29,7 @@ class User {
       lastName: json["lastname"] != null ? json["lastname"] : "",
       phoneNumber: json["phone"] != null ? json["phone"] : "",
       userName: json["username"] != null ? json["username"] : "",
+      email: json["email"] != null ? json["email"] : "",
       userId: json["userid"] != null ? json["userid"] : "",
       orgId: json["orgId"] != null ? json["orgId"] : "",
       role: json["role"] != null ? json["role"] : "",
@@ -42,7 +43,8 @@ class User {
     "username": userName,
     "userid": userId,
     "orgId": orgId,
-    "role": role
+    "role": role,
+    "email": email
   };
 
 }
