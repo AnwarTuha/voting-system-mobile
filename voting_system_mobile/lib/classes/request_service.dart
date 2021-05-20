@@ -17,16 +17,26 @@ class RequestService {
     String url = "$kBaseUrl/Voters/login";
     var response;
     try {
-      response =
-      await http.post(Uri.parse(url), body: loginRequestModel.toJson());
-      if (response != null){
+      response = await http.post(
+        Uri.parse(url),
+        body: loginRequestModel.toJson(),
+      );
+      if (response != null) {
         return LoginResponseModel.fromJson(
-            new Map<String, dynamic>.from(json.decode(response.body.toString())));
+          new Map<String, dynamic>.from(
+            json.decode(
+              response.body.toString(),
+            ),
+          ),
+        );
       }
     } catch (e) {
-      if (response != null){
+      if (response != null) {
         return LoginResponseModel.fromJson(
-            new Map<String, dynamic>.from(jsonDecode(response.body)));
+          new Map<String, dynamic>.from(
+            jsonDecode(response.body),
+          ),
+        );
       }
     }
     return null;
@@ -39,14 +49,22 @@ class RequestService {
     var response;
 
     try {
-      response =
-          await http.post(Uri.parse(url), body: registerRequestModel.toJson());
+      response = await http.post(
+        Uri.parse(url),
+        body: registerRequestModel.toJson(),
+      );
       return RegisterResponseModel.fromJson(
-          new Map<String, dynamic>.from(jsonDecode(response.body)));
+        new Map<String, dynamic>.from(
+          jsonDecode(response.body),
+        ),
+      );
     } catch (e) {
       print(response.body);
       return RegisterResponseModel.fromJson(
-          new Map<String, dynamic>.from(jsonDecode(response.body)));
+        new Map<String, dynamic>.from(
+          jsonDecode(response.body),
+        ),
+      );
     }
   }
 
@@ -63,47 +81,64 @@ class RequestService {
 
   // Fetch Roles Service
 
-  Future<RoleResponseModel> fetchRoles(RoleRequestModel roleRequestModel) async{
+  Future<RoleResponseModel> fetchRoles(
+      RoleRequestModel roleRequestModel) async {
     String url = "$kBaseUrl/roles/getRolesInOrg";
 
     print("Organization Id: ${roleRequestModel.orgId}");
 
     var response;
 
-    try{
-      response = await http.post(Uri.parse(url), body: roleRequestModel.toJson());
+    try {
+      response = await http.post(
+        Uri.parse(url),
+        body: roleRequestModel.toJson(),
+      );
       print(response.body);
       return RoleResponseModel.fromJson(
-          new Map<String, dynamic>.from(jsonDecode(response.body))
+        new Map<String, dynamic>.from(
+          jsonDecode(response.body),
+        ),
       );
     } catch (e) {
       print(response.body);
       return RoleResponseModel.fromJson(
-        new Map<String, dynamic>.from(jsonDecode(response.body))
+        new Map<String, dynamic>.from(
+          jsonDecode(response.body),
+        ),
       );
     }
   }
 
   // Send account for verification
 
-  Future<VerificationResponseModel> submitAccountForVerification(VerificationRequestModel verificationRequestModel) async {
+  Future<VerificationResponseModel> submitAccountForVerification(
+      VerificationRequestModel verificationRequestModel) async {
     String url = "$kBaseUrl/Verifications";
     var response;
 
-    try{
-      response = await http.post(Uri.parse(url), body: verificationRequestModel.toJson());
+    try {
+      response = await http.post(
+        Uri.parse(url),
+        body: verificationRequestModel.toJson(),
+      );
       print(response.body);
-      if (response != null){
+      if (response != null) {
         return VerificationResponseModel.fromJson(
-            new Map<String, dynamic>.from(json.decode(response.body)));
+          new Map<String, dynamic>.from(
+            json.decode(response.body),
+          ),
+        );
       }
-    } catch (e){
-      if (response != null){
+    } catch (e) {
+      if (response != null) {
         return VerificationResponseModel.fromJson(
-            new Map<String, dynamic>.from(jsonDecode(response.body)));
+          new Map<String, dynamic>.from(
+            jsonDecode(response.body),
+          ),
+        );
       }
     }
     return null;
   }
-
 }

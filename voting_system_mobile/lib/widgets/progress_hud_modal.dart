@@ -33,7 +33,7 @@ class ProgressHUD extends StatelessWidget {
             ),
           ),
           new Center(
-            child: new CircularProgressIndicator(),
+            child: new CircularProgressIndicator(semanticsLabel: "Logging in..."),
           )
         ],
       );

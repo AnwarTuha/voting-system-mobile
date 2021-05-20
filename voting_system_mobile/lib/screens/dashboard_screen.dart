@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:voting_system_mobile/model/organization_model.dart';
+import 'package:voting_system_mobile/model/roles_model.dart';
 import 'package:voting_system_mobile/model/user_model.dart';
 import 'package:voting_system_mobile/screens/login_screen.dart';
 import 'package:voting_system_mobile/utils/user_shared_preferences.dart';
@@ -6,9 +8,11 @@ import 'package:voting_system_mobile/utils/user_shared_preferences.dart';
 class DashBoard extends StatefulWidget {
 
   final User user;
+  final Organization organization;
+  final Role role;
   static const String id = "dash_board";
 
-  DashBoard({this.user});
+  DashBoard({this.user, this.role, this.organization});
   printName() => print(user.firstName);
 
   @override
@@ -16,6 +20,7 @@ class DashBoard extends StatefulWidget {
 }
 
 class _DashBoardState extends State<DashBoard> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

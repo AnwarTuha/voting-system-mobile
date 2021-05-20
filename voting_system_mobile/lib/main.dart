@@ -31,7 +31,7 @@ class VotingSystem extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: MyAccount.id,
+      initialRoute: SplashPage.id,
       routes: {
         SplashPage.id: (context) => SplashPage(),
         LoginPage.id: (context) => LoginPage(),

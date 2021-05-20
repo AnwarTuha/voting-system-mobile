@@ -213,23 +213,34 @@ class _LoginState extends State<LoginPage> {
               context, MaterialPageRoute(builder: (context) => DashBoard()));
         } else {
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => ProfilePage()));
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProfilePage(
+                user: user,
+              ),
+            ),
+          );
         }
       } else {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => SelectOrganization(userId: user.userId)));
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SelectOrganization(userId: user.userId),
+          ),
+        );
       }
     } else {
       final snackBar = SnackBar(
-          content: Text(
-        "Error: ${response.error.message}",
-        style: TextStyle(color: Colors.red),
-      ));
+        content: Text(
+          "Error: ${response.error.message}",
+          style: TextStyle(color: Colors.red),
+        ),
+      );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
-  User setUserData(response){
+  User setUserData(response) {
     User user = User();
 
     // init user attributes
@@ -248,7 +259,6 @@ class _LoginState extends State<LoginPage> {
     UserPreferences.setUser(user);
 
     return user;
-
   }
 
   bool validateAndSave() {

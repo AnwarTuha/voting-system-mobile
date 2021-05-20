@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:voting_system_mobile/model/user_model.dart';
+import 'package:voting_system_mobile/screens/my_account_screen.dart';
 import 'package:voting_system_mobile/widgets/profile_picture_avatar.dart';
 import 'package:voting_system_mobile/widgets/profile_menu.dart';
 
 class ProfilePage extends StatefulWidget {
-
   static const String id = 'profile_page';
+  final User user;
+
+  ProfilePage({this.user});
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -24,7 +28,9 @@ class _ProfilePageState extends State<ProfilePage> {
         children: <Widget>[
           ProfilePic(),
           SizedBox(height: 20.0),
-          ProfileMenu(title: "My Account", icon: Icons.person_outline, onPressed: (){}),
+          ProfileMenu(title: "My Account", icon: Icons.person_outline, onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => MyAccount(user: widget.user)));
+          }),
           ProfileMenu(title: "Notification", icon: Icons.notifications_none, onPressed: (){}),
           ProfileMenu(title: "Settings", icon: Icons.settings, onPressed: (){}),
           ProfileMenu(title: "Help Center", icon: Icons.help_outline, onPressed: (){}),
