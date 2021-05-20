@@ -40,7 +40,7 @@ class User {
     "lastname": lastName,
     "phone": phoneNumber,
     "username": userName,
-    "id": userId,
+    "userid": userId,
     "orgId": orgId,
     "role": role
   };

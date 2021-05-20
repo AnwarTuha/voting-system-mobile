@@ -8,6 +8,7 @@ import 'package:voting_system_mobile/screens/register_screen.dart';
 import 'package:voting_system_mobile/screens/profile_screen.dart';
 import 'package:voting_system_mobile/screens/select_organization_screen.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
+import 'package:voting_system_mobile/utils/user_shared_preferences.dart';
 import 'package:voting_system_mobile/widgets/custom_button.dart';
 import 'package:voting_system_mobile/widgets/header_container.dart';
 import 'package:voting_system_mobile/widgets/progress_hud_modal.dart';
@@ -25,7 +26,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginState extends State<LoginPage> {
-  //User user = User(email: '', password: '');
   Validator validator = Validator();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -107,7 +107,6 @@ class _LoginState extends State<LoginPage> {
                                   isApiCallProcess = true;
                                 });
                               }
-
                               // authenticate user
                               RequestService()
                                   .login(requestModel)
@@ -233,6 +232,7 @@ class _LoginState extends State<LoginPage> {
   User setUserData(response){
     User user = User();
 
+    // init user attributes
     user.isComplete = response.isComplete;
     user.role = response.role;
     user.userId = response.userId;
@@ -243,6 +243,9 @@ class _LoginState extends State<LoginPage> {
     user.orgId = response.orgId;
     user.token = response.token;
     user.userName = response.userName;
+
+    // save user to local storage
+    UserPreferences.setUser(user);
 
     return user;
 

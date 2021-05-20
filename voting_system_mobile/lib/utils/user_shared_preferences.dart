@@ -6,19 +6,25 @@ import 'package:voting_system_mobile/model/user_model.dart';
 class UserPreferences{
 
   static SharedPreferences _preferences;
+  static const String userKey = "user";
 
   static Future init() async =>
       _preferences = await SharedPreferences.getInstance();
 
   static Future setUser(User user) async {
     final json =  jsonEncode(user.toJson());
-    final userId = user.userId;
 
-    await _preferences.setString(userId, json);
+    await _preferences.setString(userKey, json);
   }
 
-  static User getUser(String userId){
-    final json = _preferences.getString(userId);
+  static User getUser(){
+    final json = _preferences.get(userKey);
+
+    if (json == null){
+      return null;
+    }
+
     return User.fromJson(jsonDecode(json));
   }
+
 }

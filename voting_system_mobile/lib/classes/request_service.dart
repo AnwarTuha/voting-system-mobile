@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
 import 'package:voting_system_mobile/model/organization_model.dart';
 import 'package:voting_system_mobile/model/register_model.dart';
 import 'package:voting_system_mobile/model/login_model.dart';
@@ -30,6 +29,7 @@ class RequestService {
             new Map<String, dynamic>.from(jsonDecode(response.body)));
       }
     }
+    return null;
   }
 
   // Register service
@@ -103,7 +103,7 @@ class RequestService {
             new Map<String, dynamic>.from(jsonDecode(response.body)));
       }
     }
-
+    return null;
   }
 
 }

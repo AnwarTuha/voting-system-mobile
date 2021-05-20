@@ -6,7 +6,7 @@ import 'package:voting_system_mobile/screens/register_screen.dart';
 import 'package:voting_system_mobile/screens/select_organization_screen.dart';
 import 'package:voting_system_mobile/screens/splash_screen.dart';
 import 'package:voting_system_mobile/screens/select_role_screen.dart';
-import 'package:voting_system_mobile/utils/user_preferences.dart';
+import 'package:voting_system_mobile/utils/user_shared_preferences.dart';
 
 Future<void> main() async {
   // This is the glue that binds the framework to the Flutter engine.
@@ -20,7 +20,7 @@ Future<void> main() async {
 
 class VotingSystem extends StatelessWidget {
 
-  String userId = "";
+  final String userId = "";
 
   @override
   Widget build(BuildContext context) {
