@@ -5,7 +5,7 @@ import 'package:voting_system_mobile/utils/user_shared_preferences.dart';
 
 class DashBoard extends StatefulWidget {
 
-  User user;
+  final User user;
   static const String id = "dash_board";
 
   DashBoard({this.user});

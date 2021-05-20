@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:voting_system_mobile/screens/dashboard_screen.dart';
 import 'package:voting_system_mobile/screens/forgot_password_screen.dart';
 import 'package:voting_system_mobile/screens/login_screen.dart';
+import 'package:voting_system_mobile/screens/my_account_screen.dart';
 import 'package:voting_system_mobile/screens/profile_screen.dart';
 import 'package:voting_system_mobile/screens/register_screen.dart';
 import 'package:voting_system_mobile/screens/select_organization_screen.dart';
@@ -30,7 +31,7 @@ class VotingSystem extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: SplashPage.id,
+      initialRoute: MyAccount.id,
       routes: {
         SplashPage.id: (context) => SplashPage(),
         LoginPage.id: (context) => LoginPage(),
@@ -39,7 +40,8 @@ class VotingSystem extends StatelessWidget {
         ForgotPassword.id: (context) => ForgotPassword(),
         SelectOrganization.id: (context) => SelectOrganization(userId: userId),
         SelectRole.id: (context) => SelectRole(),
-        DashBoard.id: (context) => DashBoard()
+        DashBoard.id: (context) => DashBoard(),
+        MyAccount.id: (context) => MyAccount()
       },
     );
   }
