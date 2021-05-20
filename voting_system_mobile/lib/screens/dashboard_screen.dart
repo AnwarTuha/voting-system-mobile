@@ -24,6 +24,9 @@ class _DashBoardState extends State<DashBoard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Votion"),
+      ),
       body: Container(
         child: Center(child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -31,8 +34,9 @@ class _DashBoardState extends State<DashBoard> {
             Text('Welcome ${widget.user.userName}'),
             ElevatedButton(onPressed: logOut, child: Text("Log Out"))
           ],
-        )),
-      ),
+        ),
+        ),
+      )
     );
   }
 

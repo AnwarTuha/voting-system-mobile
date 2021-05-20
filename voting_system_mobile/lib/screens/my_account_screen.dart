@@ -27,7 +27,7 @@ class _MyAccountState extends State<MyAccount> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Anwar Tuha", style: TextStyle(color: Colors.black)),
+        title: Text("${widget.user.firstName} ${widget.user.lastName}", style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.transparent,
         actions: [
           Padding(
@@ -59,8 +59,8 @@ class _MyAccountState extends State<MyAccount> {
               SizedBox(height: 15.0),
               Text("Personal", style: TextStyle(fontWeight: FontWeight.bold)),
               SizedBox(height: 10.0),
-              InputTextField(labelText: "First Name", fieldText: "", inputEnabled: inputEnabled,),
-              InputTextField(labelText: "Last Name", fieldText: "", inputEnabled: inputEnabled),
+              InputTextField(labelText: "First Name", fieldText: "${widget.user.firstName}", inputEnabled: inputEnabled,),
+              InputTextField(labelText: "Last Name", fieldText: "${widget.user.lastName}", inputEnabled: inputEnabled),
               InputTextField(labelText: "Phone Number", fieldText: "${widget.user.phoneNumber}", inputEnabled: inputEnabled),
               InputTextField(labelText: "Email", fieldText: "${widget.user.email}", inputEnabled: inputEnabled),
               SizedBox(height: 10.0),
