@@ -8,6 +8,7 @@ import 'package:voting_system_mobile/screens/register_screen.dart';
 import 'package:voting_system_mobile/screens/select_organization_screen.dart';
 import 'package:voting_system_mobile/screens/splash_screen.dart';
 import 'package:voting_system_mobile/screens/select_role_screen.dart';
+import 'package:voting_system_mobile/utils/color_palette_util.dart';
 import 'package:voting_system_mobile/utils/role_shared_preference.dart';
 import 'package:voting_system_mobile/utils/user_shared_preferences.dart';
 
@@ -32,6 +33,11 @@ class VotingSystem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: "Votion",
+      theme: ThemeData(
+        primaryColor: tealColors,
+        accentColor: tealLightColor,
+      ),
       debugShowCheckedModeBanner: false,
       initialRoute: SplashPage.id,
       routes: {

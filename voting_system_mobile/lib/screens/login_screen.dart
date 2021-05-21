@@ -118,6 +118,12 @@ class _LoginState extends State<LoginPage> {
                                   isApiCallProcess = false;
                                 });
                                 handleRoutes(response);
+                              }).timeout(Duration(seconds: 30), onTimeout: (){
+                                setState(() {
+                                  isApiCallProcess = false;
+                                });
+                                final snackBar = SnackBar(content: Text('Request Timed out, Check your connection'));
+                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
                               });
                             },
                           ),

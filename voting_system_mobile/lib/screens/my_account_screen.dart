@@ -25,7 +25,7 @@ class _MyAccountState extends State<MyAccount> {
   RoleDetail roleDetail = RoleDetail();
   RoleDetail roleDetailFromPreference;
 
-  bool inAsynchCall = true;
+  bool isAsyncCall = true;
 
   @override
   void initState() {
@@ -36,14 +36,14 @@ class _MyAccountState extends State<MyAccount> {
       requestModel.roleId = widget.user.role;
       RequestService().requestRoleDetail(requestModel).then((response){
         setState(() {
-          inAsynchCall = false;
+          isAsyncCall = false;
           roleDetail = response.roleDetail;
         });
         RolePreferences.setRoleDetail(roleDetail);
       });
     } else {
       setState(() {
-        inAsynchCall = false;
+        isAsyncCall = false;
         roleDetail = roleDetailFromPreference;
       });
     }
@@ -56,7 +56,7 @@ class _MyAccountState extends State<MyAccount> {
 
   @override
   Widget build(BuildContext context){
-    return ProgressHUD(child: _uiSetup(context), inAsynchCall: inAsynchCall);
+    return ProgressHUD(child: _uiSetup(context), inAsynchCall: isAsyncCall);
   }
 
   Widget _uiSetup(BuildContext context) {

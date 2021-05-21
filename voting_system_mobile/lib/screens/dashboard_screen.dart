@@ -22,6 +22,8 @@ class DashBoard extends StatefulWidget {
 
 class _DashBoardState extends State<DashBoard> {
 
+  int _selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +39,18 @@ class _DashBoardState extends State<DashBoard> {
           ],
         ),
         ),
-      )
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.notifications_active), label: "Notifications"),
+          BottomNavigationBarItem(icon: Icon(Icons.supervised_user_circle), label: "Profile"),
+        ],
+        onTap: (index){setState(() {
+          _selectedIndex = index;
+        });},
+      ),
     );
   }
 
