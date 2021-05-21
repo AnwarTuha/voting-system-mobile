@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:voting_system_mobile/model/organization_model.dart';
 import 'package:voting_system_mobile/model/register_model.dart';
 import 'package:voting_system_mobile/model/login_model.dart';
+import 'package:voting_system_mobile/model/role_detail.dart';
 import 'package:voting_system_mobile/model/verification_request_model.dart';
 import 'package:voting_system_mobile/utils/constants_util.dart';
 import 'package:voting_system_mobile/model/roles_model.dart';
@@ -141,4 +142,33 @@ class RequestService {
     }
     return null;
   }
+
+  // Fetch role detail
+
+  Future<RoleDetailResponseModel> requestRoleDetail(RoleDetailRequestModel roleDetailRequestModel) async{
+    String url = "$kBaseUrl/roles/getRoleDetails";
+
+    var response;
+
+    try{
+      response = await http.post(Uri.parse(url), body: roleDetailRequestModel.toJson());
+      if (response != null){
+        return RoleDetailResponseModel.fromJson(
+          new Map<String, dynamic>.from(
+            json.decode(response.body),
+          )
+        );
+      }
+    } catch (e){
+      if(response != null){
+        return RoleDetailResponseModel.fromJson(
+          new Map<String, dynamic>.from(
+            json.decode(response.body)
+          )
+        );
+      }
+    }
+    return null;
+  }
+
 }

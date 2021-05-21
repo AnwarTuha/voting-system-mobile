@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:voting_system_mobile/model/organization_model.dart';
-import 'package:voting_system_mobile/model/roles_model.dart';
+import 'package:voting_system_mobile/classes/request_service.dart';
+import 'package:voting_system_mobile/model/role_detail.dart';
 import 'package:voting_system_mobile/model/user_model.dart';
+import 'package:voting_system_mobile/utils/role_shared_preference.dart';
 import 'package:voting_system_mobile/widgets/custom_button.dart';
 import 'package:voting_system_mobile/widgets/profile_picture_avatar.dart';
+import 'package:voting_system_mobile/widgets/progress_hud_modal.dart';
 import 'package:voting_system_mobile/widgets/text_field_widget.dart';
 
 class MyAccount extends StatefulWidget {
 
   final User user;
-  final Organization organization;
-  final Role role;
   static const String id = "my_account";
 
-  MyAccount({this.user, this.organization, this.role});
+  MyAccount({this.user});
 
   @override
   _MyAccountState createState() => _MyAccountState();
@@ -21,10 +21,45 @@ class MyAccount extends StatefulWidget {
 
 class _MyAccountState extends State<MyAccount> {
 
-  bool inputEnabled = false;
+  RoleDetailRequestModel requestModel = RoleDetailRequestModel();
+  RoleDetail roleDetail = RoleDetail();
+  RoleDetail roleDetailFromPreference;
+
+  bool inAsynchCall = true;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    roleDetailFromPreference = RolePreferences.getRoleDetail();
+
+    if (roleDetailFromPreference == null){
+      print(widget.user.role);
+      requestModel.roleId = widget.user.role;
+      RequestService().requestRoleDetail(requestModel).then((response){
+        setState(() {
+          inAsynchCall = false;
+          roleDetail = response.roleDetail;
+        });
+        RolePreferences.setRoleDetail(roleDetail);
+      });
+    } else {
+      setState(() {
+        inAsynchCall = false;
+        roleDetail = roleDetailFromPreference;
+      });
+    }
+
+    super.initState();
+  }
+
+  bool inputEnabled = false;
+  bool buttonEnabled = false;
+
+  @override
+  Widget build(BuildContext context){
+    return ProgressHUD(child: _uiSetup(context), inAsynchCall: inAsynchCall);
+  }
+
+  Widget _uiSetup(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("${widget.user.firstName} ${widget.user.lastName}", style: TextStyle(color: Colors.black)),
@@ -36,6 +71,7 @@ class _MyAccountState extends State<MyAccount> {
                 onTap: () {
                   setState(() {
                     inputEnabled = true;
+                    buttonEnabled = true;
                   });
                 },
                 child: Icon(
@@ -65,14 +101,14 @@ class _MyAccountState extends State<MyAccount> {
               InputTextField(labelText: "Email", fieldText: "${widget.user.email}", inputEnabled: inputEnabled),
               SizedBox(height: 10.0),
               Text("Company", style: TextStyle(fontWeight: FontWeight.bold)),
-              InputTextField(labelText: "Organization/company", fieldText: "", inputEnabled: false),
-              InputTextField(labelText: "Role", fieldText: "", inputEnabled: false),
+              InputTextField(labelText: "Organization/company", fieldText: "${roleDetail.orgName}", inputEnabled: false),
+              InputTextField(labelText: "Role", fieldText: "${roleDetail.roleName}", inputEnabled: false),
               SizedBox(height: 10.0),
               Text("Address", style: TextStyle(fontWeight: FontWeight.bold)),
               InputTextField(labelText: "Country", fieldText: "", inputEnabled: inputEnabled),
               InputTextField(labelText: "City", fieldText: "", inputEnabled: inputEnabled),
               SizedBox(height: 10.0),
-              CustomButton(title: "Update", onPressed: (){
+              CustomButton(enabled: buttonEnabled,title: "Update", onPressed: (){
                 setState(() {
                   inputEnabled = false;
                 });

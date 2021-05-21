@@ -8,6 +8,7 @@ import 'package:voting_system_mobile/screens/register_screen.dart';
 import 'package:voting_system_mobile/screens/select_organization_screen.dart';
 import 'package:voting_system_mobile/screens/splash_screen.dart';
 import 'package:voting_system_mobile/screens/select_role_screen.dart';
+import 'package:voting_system_mobile/utils/role_shared_preference.dart';
 import 'package:voting_system_mobile/utils/user_shared_preferences.dart';
 
 import 'model/user_model.dart';
@@ -18,6 +19,7 @@ Future<void> main() async {
 
   // initialize shared preferences
   await UserPreferences.init();
+  await RolePreferences.init();
 
   runApp(VotingSystem());
 }

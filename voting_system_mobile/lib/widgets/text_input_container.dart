@@ -56,7 +56,8 @@ class TextInput extends StatelessWidget {
               borderRadius: BorderRadius.all(
                 Radius.circular(10.0),
               ),
-              borderSide: BorderSide(color: Colors.red)),
+              borderSide: BorderSide(color: Colors.red),
+          ),
           hintText: hintText,
           prefixIcon: Icon(icon, color: tealColors),
         ),

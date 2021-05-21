@@ -10,6 +10,7 @@ import 'package:voting_system_mobile/screens/select_organization_screen.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
 import 'package:voting_system_mobile/utils/user_shared_preferences.dart';
 import 'package:voting_system_mobile/widgets/custom_button.dart';
+import 'package:voting_system_mobile/widgets/custom_divider_painter.dart';
 import 'package:voting_system_mobile/widgets/header_container.dart';
 import 'package:voting_system_mobile/widgets/progress_hud_modal.dart';
 import 'package:voting_system_mobile/widgets/text_input_container.dart';
@@ -100,6 +101,7 @@ class _LoginState extends State<LoginPage> {
                         SizedBox(height: 40.0),
                         Center(
                           child: CustomButton(
+                            enabled: true,
                             title: 'Login',
                             onPressed: () {
                               if (validateAndSave()) {
@@ -123,12 +125,9 @@ class _LoginState extends State<LoginPage> {
                         SizedBox(
                           height: 25.0,
                         ),
-                        Divider(thickness: 1.0, color: tealLightColor),
                         SizedBox(height: 15.0),
-                        Text(
-                          'or Sign in using...',
-                          style: TextStyle(fontSize: 15.0),
-                        ),
+                        getSeparateDivider(),
+                        SizedBox(height: 10.0),
                         Container(
                           margin: EdgeInsets.all(10.0),
                           child: Row(
@@ -240,6 +239,23 @@ class _LoginState extends State<LoginPage> {
     }
   }
 
+  Widget getSeparateDivider() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        CustomPaint(painter: DrawHorizontalLine(true)),
+        Text(
+          "Or Sign in with",
+          style: TextStyle(
+              color: tealColors,
+              fontWeight: FontWeight.bold,
+              fontSize: 15.0),
+        ),
+        CustomPaint(painter: DrawHorizontalLine(false))
+      ],
+    );
+  }
+
   User setUserData(response) {
     User user = User();
 
@@ -255,7 +271,7 @@ class _LoginState extends State<LoginPage> {
     user.token = response.token;
     user.userName = response.userName;
 
-    // save user to local storage
+    // save user and his/her role to local storage
     UserPreferences.setUser(user);
 
     return user;

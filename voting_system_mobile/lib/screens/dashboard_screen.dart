@@ -3,6 +3,7 @@ import 'package:voting_system_mobile/model/organization_model.dart';
 import 'package:voting_system_mobile/model/roles_model.dart';
 import 'package:voting_system_mobile/model/user_model.dart';
 import 'package:voting_system_mobile/screens/login_screen.dart';
+import 'package:voting_system_mobile/utils/role_shared_preference.dart';
 import 'package:voting_system_mobile/utils/user_shared_preferences.dart';
 
 class DashBoard extends StatefulWidget {
@@ -42,6 +43,7 @@ class _DashBoardState extends State<DashBoard> {
 
   logOut(){
     UserPreferences.removeUser();
+    RolePreferences.removeRoleDetail();
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
   }
 

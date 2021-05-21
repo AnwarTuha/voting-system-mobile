@@ -4,8 +4,9 @@ import 'package:voting_system_mobile/utils/color_palette_util.dart';
 class CustomButton extends StatelessWidget {
   final Function onPressed;
   final String title;
+  final bool enabled;
 
-  CustomButton({this.onPressed, this.title});
+  CustomButton({this.onPressed, this.title, this.enabled});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class CustomButton extends StatelessWidget {
         height: 45.0,
         decoration: BoxDecoration(
           gradient: LinearGradient(
-              colors: [tealColors, tealLightColor],
+              colors: enabled ? [tealColors, tealLightColor] : [Colors.grey, Colors.grey],
               end: Alignment.centerLeft,
               begin: Alignment.centerRight),
           borderRadius: BorderRadius.all(Radius.circular(10.0)),

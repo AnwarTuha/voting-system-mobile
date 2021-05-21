@@ -174,6 +174,7 @@ class _RegistrationState extends State<RegistrationPage> {
                         SizedBox(height: 30.0),
                         Center(
                             child: CustomButton(
+                              enabled: true,
                           title: 'Continue',
                           onPressed: () {
                             if (validateAndSave()) {

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:voting_system_mobile/model/user_model.dart';
 import 'package:voting_system_mobile/screens/my_account_screen.dart';
+import 'package:voting_system_mobile/utils/role_shared_preference.dart';
+import 'package:voting_system_mobile/utils/user_shared_preferences.dart';
 import 'package:voting_system_mobile/widgets/profile_picture_avatar.dart';
 import 'package:voting_system_mobile/widgets/profile_menu.dart';
+
+import 'login_screen.dart';
 
 class ProfilePage extends StatefulWidget {
   static const String id = 'profile_page';
@@ -34,7 +38,11 @@ class _ProfilePageState extends State<ProfilePage> {
           ProfileMenu(title: "Notification", icon: Icons.notifications_none, onPressed: (){}),
           ProfileMenu(title: "Settings", icon: Icons.settings, onPressed: (){}),
           ProfileMenu(title: "Help Center", icon: Icons.help_outline, onPressed: (){}),
-          ProfileMenu(title: "Log Out", icon: Icons.logout, onPressed: (){})
+          ProfileMenu(title: "Log Out", icon: Icons.logout, onPressed: (){
+            UserPreferences.removeUser();
+            RolePreferences.removeRoleDetail();
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
+          })
         ],
       )
     );

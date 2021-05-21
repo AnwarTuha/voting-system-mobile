@@ -24,19 +24,19 @@ class ProgressHUD extends StatelessWidget {
     // check to see if there is an async call then load modal
     if (inAsynchCall) {
       final modal = new Stack(
-        children: <Widget>[
-          new Opacity(
-            opacity: opacity,
-            child: ModalBarrier(
-              dismissible: false,
-              color: color,
+          children: <Widget>[
+            new Opacity(
+              opacity: opacity,
+              child: ModalBarrier(
+                dismissible: false,
+                color: color,
+              ),
             ),
-          ),
-          new Center(
-            child: new CircularProgressIndicator(semanticsLabel: "Logging in..."),
-          )
-        ],
-      );
+            new Center(
+              child: new CircularProgressIndicator(),
+            )
+          ],
+        );
       widgetList.add(modal);
     }
     return Stack(

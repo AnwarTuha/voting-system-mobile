@@ -28,6 +28,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 ),
                 SizedBox(height: 20.0),
                 CustomButton(
+                  enabled: true,
                   onPressed: () {
                     // Todo: Send password reset link here
                   },
