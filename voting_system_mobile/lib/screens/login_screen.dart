@@ -210,6 +210,7 @@ class _LoginState extends State<LoginPage> {
   void handleRoutes(response) {
     if (response.token != "") {
       User user = setUserData(response);
+      debugPrint(user.firstName);
       final snackBar = SnackBar(content: Text('Sign in Successful!'));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       if (user.orgId != "") {

@@ -21,7 +21,6 @@ class _SplashPageState extends State<SplashPage> {
     // Get user data if there is any
     User user = UserPreferences.getUser();
 
-
     if (user != null){
       if (user.orgId == ""){
         UserPreferences.removeUser();
@@ -36,7 +35,8 @@ class _SplashPageState extends State<SplashPage> {
     } else {
       Timer(const Duration(milliseconds: 4000), () {
         Navigator.pushReplacementNamed(context, LoginPage.id);
-      });
+      }
+      );
     }
 
     super.initState();

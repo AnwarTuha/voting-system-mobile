@@ -18,9 +18,6 @@ class DashBoard extends StatefulWidget {
 
   DashBoard({this.user, this.role, this.organization});
 
-
-  printName() => print(user.firstName);
-
   @override
   _DashBoardState createState() => _DashBoardState();
 }
@@ -36,6 +33,11 @@ class _DashBoardState extends State<DashBoard> {
       Notifications(),
       ProfilePage(user: widget.user)
     ];
+
+    print("Dashboard / Firstname: ${widget.user.firstName}");
+
+    super.initState();
+
   }
 
   int _selectedIndex = 0;

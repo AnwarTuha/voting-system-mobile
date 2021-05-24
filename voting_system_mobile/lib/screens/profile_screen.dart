@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:voting_system_mobile/model/user_model.dart';
 import 'package:voting_system_mobile/screens/my_account_screen.dart';
+import 'package:voting_system_mobile/utils/color_palette_util.dart';
 import 'package:voting_system_mobile/utils/role_shared_preference.dart';
 import 'package:voting_system_mobile/utils/user_shared_preferences.dart';
 import 'package:voting_system_mobile/widgets/profile_picture_avatar.dart';
@@ -23,13 +24,14 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile', style: TextStyle(color: Colors.black)),
+        title: Text('Profile'),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: tealColors,
         elevation: 0.0,
       ),
       body: Column(
         children: <Widget>[
+          SizedBox(height: 15.0),
           ProfilePic(),
           SizedBox(height: 20.0),
           ProfileMenu(title: "My Account", icon: Icons.person_outline, onPressed: (){
