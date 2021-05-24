@@ -31,8 +31,8 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   final _kTabs = <Tab>[
-    const Tab(text: "Upcoming"),
-    const Tab(text: "Completed")
+    const Tab(text: "Live"),
+    const Tab(text: "Results")
   ];
 
   @override

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:voting_system_mobile/utils/color_palette_util.dart';
 import 'package:voting_system_mobile/widgets/custom_button.dart';
+import 'package:voting_system_mobile/widgets/poll_card.dart';
 
 class UpcomingPoll extends StatefulWidget {
 
@@ -15,35 +17,15 @@ class _UpcomingPollState extends State<UpcomingPoll> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0)
-            ),
-            child: Container(
-              padding: EdgeInsets.all(15.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text("Poll Title"),
-                  SizedBox(height: 10.0),
-                  Text("Choose Copy Machine Type", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),),
-                  SizedBox(height: 15.0),
-                  Text("Type"),
-                  SizedBox(height: 10.0),
-                  Text("Selection", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),),
-                  SizedBox(height: 15.0),
-                  Text("Deadline"),
-                  SizedBox(height: 10.0),
-                  Text("May 24, 2021", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0)),
-                  SizedBox(height: 15.0),
-                  CustomButton(title: "View", onPressed: (){}, enabled: true)
-                ],
-              ),
-            ),
-          ),
+          PollCard(pollTitle: "Choose copier type", onPressed: (){}),
+          PollCard(pollTitle: "Should we get a new coffee machine?", onPressed: (){}),
+          PollCard(pollTitle: "Approve/deny corporate name change", onPressed: (){}),
+          PollCard(pollTitle: "Choose copier type", onPressed: (){}),
+          PollCard(pollTitle: "Choose copier type", onPressed: (){}),
         ],
       ),
     );
   }
 }
+
+
