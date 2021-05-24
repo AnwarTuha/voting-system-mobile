@@ -15,6 +15,8 @@ class MyAccount extends StatefulWidget {
 
   MyAccount({this.user});
 
+  printName() => print(user.firstName);
+
   @override
   _MyAccountState createState() => _MyAccountState();
 }

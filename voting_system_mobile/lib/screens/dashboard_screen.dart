@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:voting_system_mobile/model/organization_model.dart';
 import 'package:voting_system_mobile/model/roles_model.dart';
 import 'package:voting_system_mobile/model/user_model.dart';
+import 'package:voting_system_mobile/screens/home_screen.dart';
 import 'package:voting_system_mobile/screens/login_screen.dart';
+import 'package:voting_system_mobile/screens/notifications_screen.dart';
+import 'package:voting_system_mobile/screens/profile_screen.dart';
 import 'package:voting_system_mobile/utils/role_shared_preference.dart';
 import 'package:voting_system_mobile/utils/user_shared_preferences.dart';
 
@@ -14,6 +17,8 @@ class DashBoard extends StatefulWidget {
   static const String id = "dash_board";
 
   DashBoard({this.user, this.role, this.organization});
+
+
   printName() => print(user.firstName);
 
   @override
@@ -22,24 +27,23 @@ class DashBoard extends StatefulWidget {
 
 class _DashBoardState extends State<DashBoard> {
 
+  List<Widget> _pages;
+
+  @override
+  void initState() {
+    _pages = [
+      HomeScreen(user: widget.user),
+      Notifications(),
+      ProfilePage(user: widget.user)
+    ];
+  }
+
   int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Votion"),
-      ),
-      body: Container(
-        child: Center(child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Welcome ${widget.user.userName}'),
-            ElevatedButton(onPressed: logOut, child: Text("Log Out"))
-          ],
-        ),
-        ),
-      ),
+      body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         items: [

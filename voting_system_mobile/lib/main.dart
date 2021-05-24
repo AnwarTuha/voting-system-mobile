@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:voting_system_mobile/screens/dashboard_screen.dart';
 import 'package:voting_system_mobile/screens/forgot_password_screen.dart';
+import 'package:voting_system_mobile/screens/home_screen.dart';
 import 'package:voting_system_mobile/screens/login_screen.dart';
 import 'package:voting_system_mobile/screens/my_account_screen.dart';
 import 'package:voting_system_mobile/screens/profile_screen.dart';
@@ -28,7 +29,6 @@ Future<void> main() async {
 class VotingSystem extends StatelessWidget {
 
   final String userId = "";
-  final User user = null;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +49,7 @@ class VotingSystem extends StatelessWidget {
         SelectOrganization.id: (context) => SelectOrganization(userId: userId),
         SelectRole.id: (context) => SelectRole(),
         DashBoard.id: (context) => DashBoard(),
+        HomeScreen.id: (context) => HomeScreen(),
         MyAccount.id: (context) => MyAccount()
       },
     );

@@ -220,7 +220,7 @@ class _LoginState extends State<LoginPage> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => ProfilePage(
+              builder: (context) => DashBoard(
                 user: user,
               ),
             ),
