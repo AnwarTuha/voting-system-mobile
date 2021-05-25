@@ -1,3 +1,5 @@
+import 'response_error_model.dart';
+
 class PollResponseModel{
   List<Poll> polls;
   ResponseError error;
@@ -18,23 +20,32 @@ class Poll{
   DateTime startDate;
   DateTime endDate;
   List<Rules> rules;
+  List<Option> options;
 
-  Poll({this.pollTitle, this.endDate, this.pollDescription, this.startDate, this.rules});
+  Poll({this.pollTitle, this.endDate, this.pollDescription, this.startDate, this.rules, this.options});
 
   factory Poll.fromJson(Map<String, dynamic> json) => Poll(
       pollTitle: json['pollTitle'] != null ? json['pollTitle'] : '',
       pollDescription: json['pollDescription'] != null ? json['pollDescription'] : '',
       startDate: json['startDate'] != null ? json['startDate'] : '',
       endDate: json['endDate'] != null ? json['endDate'] : '',
-      rules: json["rules"] != null ? List<Rules>.from(json["rules"].map((x) => Rules.fromJson(x))) : []
+      rules: json["rules"] != null ? List<Rules>.from(json["rules"].map((x) => Rules.fromJson(x))) : [],
+      options: json["options"] != null ? json["options"] : []
   );
 
   Map<String, dynamic> toJson() => {
     "pollTitle": pollTitle,
     "pollDescription": pollDescription,
     "startDate": startDate,
-    "endDate": endDate
+    "endDate": endDate,
+    "rules": rules,
+    "options": options
   };
+
+}
+
+class Option{
+  String optionName;
 
 }
 
@@ -62,28 +73,4 @@ class PollRequestModel{
     "userId": userId
   };
 
-}
-
-class ResponseError{
-  ResponseError({
-    this.name,
-    this.message,
-    this.code,
-  });
-
-  String name;
-  String message;
-  String code;
-
-  factory ResponseError.fromJson(Map<String, dynamic> json) => ResponseError(
-    name: json["name"],
-    message: json["message"],
-    code: json["statusCode"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "statusCode": code,
-    "name": name,
-    "message": message,
-  };
 }

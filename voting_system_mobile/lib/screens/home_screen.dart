@@ -3,6 +3,7 @@ import 'package:voting_system_mobile/model/organization_model.dart';
 import 'package:voting_system_mobile/model/roles_model.dart';
 import 'package:voting_system_mobile/model/user_model.dart';
 import 'package:voting_system_mobile/screens/completed_polls_screen.dart';
+import 'package:voting_system_mobile/screens/pending_polls_screen.dart';
 import 'package:voting_system_mobile/screens/upcoming_polls_screen.dart';
 import 'package:voting_system_mobile/utils/role_shared_preference.dart';
 import 'package:voting_system_mobile/utils/user_shared_preferences.dart';
@@ -27,11 +28,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final _kTabPages = <Widget>[
     UpcomingPoll(),
+    PendingPolls(),
     CompletedPoll()
   ];
 
   final _kTabs = <Tab>[
     const Tab(text: "Live"),
+    const Tab(text: "Pending"),
     const Tab(text: "Results")
   ];
 

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'response_error_model.dart';
 
 LoginResponseModel loginResponseModelFromJson(String str) =>
     LoginResponseModel.fromJson(json.decode(str));
@@ -48,19 +49,6 @@ class LoginResponseModel {
       error:
           json["error"] != null ? ResponseError.fromJson(json["error"]) : null,
     );
-  }
-}
-
-class ResponseError {
-  int statusCode;
-  String message;
-
-  ResponseError({this.statusCode, this.message});
-
-  factory ResponseError.fromJson(Map<String, dynamic> json) {
-    return ResponseError(
-        statusCode: json["statusCode"] != null ? json["statusCode"] : 200,
-        message: json["message"] != null ? json["message"] : "");
   }
 }
 

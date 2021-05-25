@@ -24,7 +24,7 @@ class User {
       this.isComplete});
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-      token: json["token"] != null ? json["token"] : "",
+      token: json["token"] != null ? json["tokyouen"] : "",
       firstName: json["firstname"] != null ? json["firstname"] : "",
       lastName: json["lastname"] != null ? json["lastname"] : "",
       phoneNumber: json["phone"] != null ? json["phone"] : "",

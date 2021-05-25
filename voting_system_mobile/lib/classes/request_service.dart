@@ -124,11 +124,12 @@ class RequestService {
         Uri.parse(url),
         body: pollRequestModel.toJson()
       );
-      print(response.body);
+      print("Success" + response.body);
     } catch (e){
-      print(response.statusCode);
-      print(response.body);
+      print("Error: " + response.body);
     }
+
+    return null;
 
   }
 

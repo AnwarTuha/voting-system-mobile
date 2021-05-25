@@ -25,6 +25,7 @@ class PollCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
+                SizedBox(width: 10.0),
                 Container(
                   child: Expanded(
                     flex: 9,
@@ -34,7 +35,7 @@ class PollCard extends StatelessWidget {
                       children: <Widget>[
                         Text("Poll Title"),
                         SizedBox(height: 10.0),
-                        Text("$pollTitle", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0))
+                        Text("$pollTitle", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, letterSpacing: 1.5))
                       ],
                     ),
                   ),
