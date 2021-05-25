@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:voting_system_mobile/model/organization_model.dart';
+import 'package:voting_system_mobile/model/poll_model.dart';
 import 'package:voting_system_mobile/model/register_model.dart';
 import 'package:voting_system_mobile/model/login_model.dart';
 import 'package:voting_system_mobile/model/role_detail.dart';
@@ -109,6 +110,26 @@ class RequestService {
         ),
       );
     }
+  }
+
+  // Fetch Poll Service
+
+  Future<PollResponseModel> fetchPolls(PollRequestModel pollRequestModel) async {
+    String url = "$kBaseUrl/polls/getPolls";
+
+    var response;
+
+    try{
+      response = await http.post(
+        Uri.parse(url),
+        body: pollRequestModel.toJson()
+      );
+      print(response.body);
+    } catch (e){
+      print(response.statusCode);
+      print(response.body);
+    }
+
   }
 
   // Send account for verification
