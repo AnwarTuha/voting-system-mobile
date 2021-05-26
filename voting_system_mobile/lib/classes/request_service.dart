@@ -24,6 +24,7 @@ class RequestService {
         body: loginRequestModel.toJson(),
       );
       if (response != null) {
+        print("success: $response");
         return LoginResponseModel.fromJson(
           new Map<String, dynamic>.from(
             json.decode(
@@ -31,6 +32,8 @@ class RequestService {
             ),
           ),
         );
+      } else {
+        throw Exception();
       }
     } catch (e) {
       if (response != null) {
@@ -39,6 +42,8 @@ class RequestService {
             jsonDecode(response.body),
           ),
         );
+      } else {
+        print("Error: $response");
       }
     }
     return null;
@@ -114,19 +119,33 @@ class RequestService {
 
   // Fetch Poll Service
 
-  Future<PollResponseModel> fetchPolls(PollRequestModel pollRequestModel) async {
-    String url = "$kBaseUrl/polls/getPolls";
+  Future<Polls> fetchPolls(PollRequestModel pollRequestModel) async {
+    print(pollRequestModel.userId);
+    String url = "$kBaseUrl/Polls/getUserPolls/${pollRequestModel.userId}";
 
     var response;
 
     try{
-      response = await http.post(
-        Uri.parse(url),
-        body: pollRequestModel.toJson()
-      );
-      print("Success" + response.body);
+      response = await http.get(Uri.parse(url));
+      if (response != null){
+        print("From request: $response");
+        return Polls.fromJson(
+          new Map<String, dynamic>.from(
+            jsonDecode(response.body)
+          )
+        );
+      } else {
+        print("Response is Null: $response");
+      }
     } catch (e){
       print("Error: " + response.body);
+      if (response != null){
+        return Polls.fromJson(
+          new Map<String, dynamic>.from(
+            jsonDecode(response.body)
+          )
+        );
+      }
     }
 
     return null;

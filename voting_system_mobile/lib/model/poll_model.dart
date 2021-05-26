@@ -1,65 +1,54 @@
-import 'response_error_model.dart';
+import 'dart:convert';
 
-class PollResponseModel{
+import 'package:voting_system_mobile/model/register_model.dart';
+
+Polls pollsFromJson(String str) => Polls.fromJson(jsonDecode(str));
+
+class Polls{
   List<Poll> polls;
   ResponseError error;
 
-  PollResponseModel({this.polls, this.error});
+  Polls({this.polls, this.error});
 
-  factory PollResponseModel.fromJson(Map<String, dynamic> json) => PollResponseModel(
-      polls: json["polls"] != null ? List<Poll>.from(json["polls"].map((x) => Poll.fromJson(x))) : [],
-      error:  json["error"] != null ? ResponseError.fromJson(json["error"]) : null
+  factory Polls.fromJson(Map<String, dynamic> json) => Polls(
+    polls: json["Polls"] != null ? List<Poll>.from(json["Polls"].map((x) => Poll.fromJson(x))) : [],
+    error: json["error"] != null ? ResponseError.fromJson(json["error"]) : null,
   );
 
 }
-
 
 class Poll{
   String pollTitle;
   String pollDescription;
   DateTime startDate;
   DateTime endDate;
-  List<Rules> rules;
-  List<Option> options;
+  List<Option> option;
+  bool isPublic;
+  bool canRetract;
 
-  Poll({this.pollTitle, this.endDate, this.pollDescription, this.startDate, this.rules, this.options});
+  Poll({this.pollTitle, this.isPublic, this.endDate, this.startDate, this.pollDescription, this.canRetract, this.option});
 
   factory Poll.fromJson(Map<String, dynamic> json) => Poll(
-      pollTitle: json['pollTitle'] != null ? json['pollTitle'] : '',
-      pollDescription: json['pollDescription'] != null ? json['pollDescription'] : '',
-      startDate: json['startDate'] != null ? json['startDate'] : '',
-      endDate: json['endDate'] != null ? json['endDate'] : '',
-      rules: json["rules"] != null ? List<Rules>.from(json["rules"].map((x) => Rules.fromJson(x))) : [],
-      options: json["options"] != null ? json["options"] : []
+    pollTitle: json["Title"] != null ? json["Title"] : "",
+    pollDescription: json["description"] != null ? json["description"] : "",
+    endDate: json["endDate"] != null ? DateTime.parse(json["endDate"]) : "",
+    startDate: json["startDate"] != null ? DateTime.parse(json["startDate"]) : "",
+    isPublic: json["isPublic"],
+    canRetract: json["canRetract"],
+    option: List<Option>.from(json["options"].map((x) => Option.fromJson(x)))
   );
-
-  Map<String, dynamic> toJson() => {
-    "pollTitle": pollTitle,
-    "pollDescription": pollDescription,
-    "startDate": startDate,
-    "endDate": endDate,
-    "rules": rules,
-    "options": options
-  };
 
 }
 
 class Option{
-  String optionName;
+  String title;
+  int voteCount;
 
-}
+  Option({this.voteCount, this.title});
 
-class Rules{
-  bool isVoteRetractable;
-  bool isWinPlurality;
-  bool isWinPercent;
-
-  Rules({this.isVoteRetractable, this.isWinPercent, this.isWinPlurality});
-
-  factory Rules.fromJson(Map<String, dynamic> json) => Rules(
-    isVoteRetractable: json["isVoteRetractable"],
-    isWinPercent: json["isWinPercent"],
-    isWinPlurality: json["isWinPlurality"]
+  factory Option.fromJson(Map<String, dynamic> json) => Option(
+    title: json["Title"] != null ? json["Title"] : "",
+    voteCount: json["vote_count"] != null ? json["vote_count"] : ""
   );
 
 }
@@ -68,9 +57,4 @@ class PollRequestModel{
   String userId;
 
   PollRequestModel({this.userId});
-
-  Map<String, dynamic> toJson() => {
-    "userId": userId
-  };
-
 }

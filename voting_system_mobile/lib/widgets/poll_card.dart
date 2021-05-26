@@ -1,19 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
+import 'package:intl/intl.dart';
 
 class PollCard extends StatelessWidget {
 
   final String pollTitle;
+  final DateTime endDate;
   final Function onPressed;
 
   const PollCard({
     Key key,
     this.onPressed,
+    this.endDate,
     this.pollTitle
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
+    final DateTime date = endDate;
+    final DateFormat formatter = DateFormat('EEE, MMM d, ''yyyy');
+    final String formattedDate = formatter.format(date);
+
     return GestureDetector(
       onTap: onPressed,
       child: Card(
@@ -33,9 +41,9 @@ class PollCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text("Poll Title"),
+                        Text("$pollTitle", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, letterSpacing: 1.5)),
                         SizedBox(height: 10.0),
-                        Text("$pollTitle", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, letterSpacing: 1.5))
+                        Text("End Date: $formattedDate")
                       ],
                     ),
                   ),
