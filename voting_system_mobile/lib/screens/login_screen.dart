@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:voting_system_mobile/classes/request_service.dart';
 import 'package:voting_system_mobile/model/user_model.dart';
 import 'package:voting_system_mobile/screens/dashboard_screen.dart';
 import 'package:voting_system_mobile/screens/forgot_password_screen.dart';
 import 'package:voting_system_mobile/screens/register_screen.dart';
-import 'package:voting_system_mobile/screens/profile_screen.dart';
 import 'package:voting_system_mobile/screens/select_organization_screen.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
-import 'package:voting_system_mobile/utils/user_shared_preferences.dart';
 import 'package:voting_system_mobile/widgets/custom_button.dart';
 import 'package:voting_system_mobile/widgets/custom_divider_painter.dart';
 import 'package:voting_system_mobile/widgets/header_container.dart';
@@ -16,6 +15,7 @@ import 'package:voting_system_mobile/widgets/progress_hud_modal.dart';
 import 'package:voting_system_mobile/widgets/text_input_container.dart';
 import 'package:voting_system_mobile/classes/validator.dart';
 import 'package:voting_system_mobile/model/login_model.dart';
+import 'package:voting_system_mobile/providers/user_provider.dart';
 
 import '../utils/color_palette_util.dart';
 
@@ -47,6 +47,28 @@ class _LoginState extends State<LoginPage> {
   }
 
   Widget _uiSetup(BuildContext context) {
+
+    void stopProgressIndicator() {
+      setState(() {
+        isApiCallProcess = false;
+      });
+    }
+
+    void doLogin(LoginRequestModel requestModel) {
+      RequestService()
+          .login(requestModel)
+          .then((response) {
+        stopProgressIndicator();
+        handleRoutes(response);
+      }).timeout(Duration(seconds: 30), onTimeout: (){
+        setState(() {
+          isApiCallProcess = false;
+        });
+        final snackBar = SnackBar(content: Text('Request Timed out, Check your connection'));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      });
+    }
+
     return Scaffold(
       body: Container(
         padding: EdgeInsets.only(bottom: 30.0),
@@ -110,21 +132,7 @@ class _LoginState extends State<LoginPage> {
                                 });
                               }
                               // authenticate user
-                              RequestService()
-                                  .login(requestModel)
-                                  .then((response) {
-                                setState(() {
-                                  // stop progress indicator
-                                  isApiCallProcess = false;
-                                });
-                                handleRoutes(response);
-                              }).timeout(Duration(seconds: 30), onTimeout: (){
-                                setState(() {
-                                  isApiCallProcess = false;
-                                });
-                                final snackBar = SnackBar(content: Text('Request Timed out, Check your connection'));
-                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                              });
+                              doLogin(requestModel);
                             },
                           ),
                         ),
@@ -210,23 +218,11 @@ class _LoginState extends State<LoginPage> {
   void handleRoutes(response) {
     if (response.token != "") {
       User user = setUserData(response);
-      debugPrint(user.firstName);
       final snackBar = SnackBar(content: Text('Sign in Successful!'));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       if (user.orgId != "") {
-        if (user.isComplete != false) {
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => DashBoard()));
-        } else {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DashBoard(
-                user: user,
-              ),
-            ),
-          );
-        }
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => DashBoard()));
       } else {
         Navigator.pushReplacement(
           context,
@@ -254,9 +250,7 @@ class _LoginState extends State<LoginPage> {
         Text(
           "Or Sign in with",
           style: TextStyle(
-              color: tealColors,
-              fontWeight: FontWeight.bold,
-              fontSize: 15.0),
+              color: tealColors, fontWeight: FontWeight.bold, fontSize: 15.0),
         ),
         CustomPaint(painter: DrawHorizontalLine(false))
       ],
@@ -278,8 +272,8 @@ class _LoginState extends State<LoginPage> {
     user.token = response.token;
     user.userName = response.userName;
 
-    // save user and his/her role to local storage
-    UserPreferences.setUser(user);
+    // Save to provider
+    Provider.of<UserProvider>(context, listen: false).setUser(user);
 
     return user;
   }

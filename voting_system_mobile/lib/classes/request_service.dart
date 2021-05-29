@@ -8,15 +8,15 @@ import 'package:voting_system_mobile/model/register_model.dart';
 import 'package:voting_system_mobile/model/login_model.dart';
 import 'package:voting_system_mobile/model/role_detail.dart';
 import 'package:voting_system_mobile/model/verification_request_model.dart';
-import 'package:voting_system_mobile/utils/constants_util.dart';
 import 'package:voting_system_mobile/model/roles_model.dart';
+import 'package:voting_system_mobile/utils/app_url.dart';
 
 import '../model/login_model.dart';
 
 class RequestService {
   // Login service
   Future<LoginResponseModel> login(LoginRequestModel loginRequestModel) async {
-    String url = "$kBaseUrl/Voters/login";
+    String url = "${AppUrl.kBaseUrl}/Voters/login";
     var response;
     try {
       response = await http.post(
@@ -52,7 +52,7 @@ class RequestService {
   // Register service
   Future<RegisterResponseModel> register(
       RegisterRequestModel registerRequestModel) async {
-    String url = "$kBaseUrl/Voters/register";
+    String url = "${AppUrl.kBaseUrl}/Voters/register";
     var response;
 
     try {
@@ -78,7 +78,7 @@ class RequestService {
   // Fetch Organization Service
 
   Future<List<Organization>> fetchOrganizations() async {
-    String url = "$kBaseUrl/Organizations";
+    String url = "${AppUrl.kBaseUrl}/Organizations";
     var response;
 
     response = await http.get(Uri.parse(url));
@@ -90,7 +90,7 @@ class RequestService {
 
   Future<RoleResponseModel> fetchRoles(
       RoleRequestModel roleRequestModel) async {
-    String url = "$kBaseUrl/roles/getRolesInOrg";
+    String url = "${AppUrl.kBaseUrl}/roles/getRolesInOrg";
 
     print("Organization Id: ${roleRequestModel.orgId}");
 
@@ -121,7 +121,7 @@ class RequestService {
 
   Future<Polls> fetchPolls(PollRequestModel pollRequestModel) async {
     print(pollRequestModel.userId);
-    String url = "$kBaseUrl/Polls/getUserPolls/${pollRequestModel.userId}";
+    String url = "${AppUrl.kBaseUrl}/Polls/getUserPolls/${pollRequestModel.userId}";
 
     var response;
 
@@ -156,7 +156,7 @@ class RequestService {
 
   Future<VerificationResponseModel> submitAccountForVerification(
       VerificationRequestModel verificationRequestModel) async {
-    String url = "$kBaseUrl/Verifications";
+    String url = "${AppUrl.kBaseUrl}/Verifications";
     var response;
 
     try {
@@ -187,7 +187,7 @@ class RequestService {
   // Fetch role detail
 
   Future<RoleDetailResponseModel> requestRoleDetail(RoleDetailRequestModel roleDetailRequestModel) async{
-    String url = "$kBaseUrl/roles/getRoleDetails";
+    String url = "${AppUrl.kBaseUrl}/roles/getRoleDetails";
 
     var response;
 

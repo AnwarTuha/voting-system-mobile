@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:voting_system_mobile/widgets/custom_button.dart';
+import 'package:voting_system_mobile/model/poll_model.dart';
 
 
 class PollDetail extends StatefulWidget {
   static const String id = "poll_detail";
 
-  final String pollTitle;
+  final Poll poll;
 
-  PollDetail({this.pollTitle});
+  PollDetail({this.poll});
 
   @override
   _PollDetailState createState() => _PollDetailState();
@@ -29,34 +30,71 @@ class _PollDetailState extends State<PollDetail> {
             shrinkWrap: true,
             children: <Widget>[
               Text(
-                "${widget.pollTitle}".toUpperCase(),
+                "${widget.poll.pollTitle}".toUpperCase(),
                 style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
               ),
               SizedBox(height: 16.0),
-              Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque pretium pulvinar lobortis. Morbi finibus cursus purus, eget mattis mauris congue venenatis. Praesent eget fermentum libero, ac luctus leo. Praesent efficitur libero vitae mi pretium, non commodo dolor sollicitudin. Cras varius metus efficitur facilisis ornare. Etiam iaculis dapibus elit, non mollis risus. Phasellus porttitor metus mauris, vitae placerat augue faucibus at. Aenean sed bibendum tellus.", style: TextStyle(height: 1.5, fontSize: 18.0),),
+              Text("${widget.poll.pollDescription}", style: TextStyle(height: 1.5, fontSize: 18.0),),
               SizedBox(height: 20.0),
               Container(
                 child: Card(
                   child: Container(
                     padding: EdgeInsets.all(10.0),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text("Poll Type: General", style: TextStyle(fontSize: 18.0)),
                         Divider(),
-                        Text("65% of participants have already voted", style: TextStyle(fontSize: 18.0)),
+                        Text("Ends in: 10 min", style: TextStyle(fontSize: 18.0)),
                         Divider(),
-                        Text("Ends in: 10 min", style: TextStyle(fontSize: 18.0))
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Available options are: ", style: TextStyle(fontSize: 18.0)),
+                            Divider(),
+                            for (var option in widget.poll.option)
+                               Text("${option.title}", style: TextStyle(fontSize: 18.0)),
+                          ],
+                        )
                       ],
                     ),
                   ),
                 ),
               ),
               SizedBox(height: 20.0),
-              CustomButton(onPressed: (){}, enabled: true, title: "Cast Vote")
+              CustomButton(onPressed: (){
+                showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return Container(
+                        padding: EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Text(
+                                "${widget.poll.pollTitle.toUpperCase()}",
+                              style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
+                            ),
+                            Divider(),
+                            for (var option in widget.poll.option)
+                              ListTile(
+                                title: Text("${option.title}"),
+                                onTap: () {
+                                  option.voteCount += 1;
+                                  print("Count is ${option.voteCount}");
+                                  Navigator.pop(context, option);
+                                },
+                              ),
+                          ],
+                        ),
+                      );
+                    });
+              }, enabled: true, title: "Click here to vote")
             ],
           ),
         ),
       ),
     );
   }
+
 }

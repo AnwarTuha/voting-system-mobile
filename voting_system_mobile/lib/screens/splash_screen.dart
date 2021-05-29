@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:voting_system_mobile/model/user_model.dart';
 import 'package:voting_system_mobile/screens/dashboard_screen.dart';
 import 'package:voting_system_mobile/screens/login_screen.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
-import 'package:voting_system_mobile/utils/user_shared_preferences.dart';
+import 'package:voting_system_mobile/providers/user_provider.dart';
+import 'package:voting_system_mobile/shared%20preferences/user_shared_preferences.dart';
 
 class SplashPage extends StatefulWidget {
   static const String id = 'splash_screen';
@@ -15,9 +17,14 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+
   @override
   void initState() {
+    checkUser();
+    super.initState();
+  }
 
+  void checkUser(){
     // Get user data if there is any
     User user = UserPreferences.getUser();
 
@@ -28,8 +35,9 @@ class _SplashPageState extends State<SplashPage> {
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
         });
       } else {
+        Provider.of<UserProvider>(context, listen: false).setUser(user);
         Timer(const Duration(milliseconds: 4000), (){
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DashBoard(user: user)));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DashBoard()));
         });
       }
     } else {
@@ -38,8 +46,6 @@ class _SplashPageState extends State<SplashPage> {
       }
       );
     }
-
-    super.initState();
   }
 
   @override

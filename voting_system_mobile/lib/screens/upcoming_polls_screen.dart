@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:voting_system_mobile/classes/request_service.dart';
 import 'package:voting_system_mobile/model/poll_model.dart';
-import 'package:voting_system_mobile/model/user_model.dart';
 import 'package:voting_system_mobile/screens/poll_detail_screen.dart';
 import 'package:voting_system_mobile/widgets/poll_card.dart';
 import 'package:voting_system_mobile/widgets/progress_hud_modal.dart';
@@ -51,7 +50,7 @@ class _UpcomingPollState extends State<UpcomingPoll> with AutomaticKeepAliveClie
 
     final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
 
-    Future<Null> _refresh() {
+    Future _refresh() {
 
       PollRequestModel pollRequestModel = PollRequestModel();
 
@@ -86,33 +85,6 @@ class _UpcomingPollState extends State<UpcomingPoll> with AutomaticKeepAliveClie
           child: ListView(
             shrinkWrap: true,
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                    flex: 8,
-                    child: TextField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "Search Polls",
-                      ),
-                      onChanged: (input) {
-                        // Todo: implement search functionality
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: IconButton(
-                      icon: Icon(Icons.filter_alt),
-                      iconSize: 30.0,
-                      onPressed: () {
-                        // Todo: implement filter polls
-                      },
-                    ),
-                  )
-                ],
-              ),
               SizedBox(height: 10.0),
               polls.length == 0 ?
               Center(child: Text("You have no polls yet.", textAlign: TextAlign.center),):
@@ -121,7 +93,7 @@ class _UpcomingPollState extends State<UpcomingPoll> with AutomaticKeepAliveClie
                   itemCount: polls.length,
                   itemBuilder: (BuildContext context, int index) {
                     for (var poll in polls)
-                      return buildPollCard(poll.pollTitle, poll.endDate);
+                      return buildPollCard(poll.pollTitle, poll.endDate, poll);
                     return null;
                   })
 
@@ -132,9 +104,9 @@ class _UpcomingPollState extends State<UpcomingPoll> with AutomaticKeepAliveClie
     );
   }
 
-  Widget buildPollCard(String pollTitle, DateTime endDate){
+  Widget buildPollCard(String pollTitle, DateTime endDate, Poll poll){
     return PollCard(pollTitle: pollTitle, endDate: endDate,  onPressed: (){
-      Navigator.push(context, MaterialPageRoute(builder: (context) => PollDetail(pollTitle: pollTitle,)));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => PollDetail(poll: poll)));
     });
   }
 

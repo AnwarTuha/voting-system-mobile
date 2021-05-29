@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:voting_system_mobile/classes/request_service.dart';
 import 'package:voting_system_mobile/model/role_detail.dart';
 import 'package:voting_system_mobile/model/user_model.dart';
-import 'package:voting_system_mobile/utils/role_shared_preference.dart';
+import 'package:voting_system_mobile/shared%20preferences/role_shared_preference.dart';
 import 'package:voting_system_mobile/widgets/custom_button.dart';
 import 'package:voting_system_mobile/widgets/profile_picture_avatar.dart';
 import 'package:voting_system_mobile/widgets/progress_hud_modal.dart';
@@ -14,8 +14,6 @@ class MyAccount extends StatefulWidget {
   static const String id = "my_account";
 
   MyAccount({this.user});
-
-  printName() => print(user.firstName);
 
   @override
   _MyAccountState createState() => _MyAccountState();

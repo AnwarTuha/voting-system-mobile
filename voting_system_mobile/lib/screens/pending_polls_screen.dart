@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:voting_system_mobile/widgets/poll_card.dart';
 
 class PendingPolls extends StatefulWidget {
   const PendingPolls({Key key}) : super(key: key);
@@ -44,7 +43,6 @@ class _PendingPollsState extends State<PendingPolls> {
               ],
             ),
             SizedBox(height: 10.0),
-            PollCard(pollTitle: "Should we get a new coffee machine?", onPressed: (){})
           ],
         ),
       ),
