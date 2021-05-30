@@ -5,6 +5,8 @@ import 'package:voting_system_mobile/screens/pending_polls_screen.dart';
 import 'package:voting_system_mobile/screens/profile_screen.dart';
 import 'package:voting_system_mobile/screens/upcoming_polls_screen.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
+import 'package:voting_system_mobile/widgets/navigation_drawer_widget.dart';
+import 'package:voting_system_mobile/screens/poll_detail_screen.dart';
 
 class DashBoard extends StatefulWidget {
   static const String id = "dash_board";
@@ -13,8 +15,8 @@ class DashBoard extends StatefulWidget {
   _DashBoardState createState() => _DashBoardState();
 }
 
-class _DashBoardState extends State<DashBoard>  with SingleTickerProviderStateMixin<DashBoard>{
-
+class _DashBoardState extends State<DashBoard>
+    with SingleTickerProviderStateMixin<DashBoard> {
   String title = "Votion";
 
   TabController _tabController;
@@ -26,7 +28,7 @@ class _DashBoardState extends State<DashBoard>  with SingleTickerProviderStateMi
   }
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
     _tabController.dispose();
   }
@@ -37,20 +39,27 @@ class _DashBoardState extends State<DashBoard>  with SingleTickerProviderStateMi
     Tab(icon: Icon(Icons.supervised_user_circle), text: "Profile"),
   ];
 
-  List<Widget> _pages = [
-    TopTabBar(),
-    Notifications(),
-    ProfilePage()
-  ];
+  List<Widget> _pages = [TopTabBar(), Notifications(), ProfilePage()];
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
+      drawer: NavigationDrawer(),
       appBar: AppBar(
         title: Text("Votion"),
         elevation: 0.0,
         centerTitle: true,
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                showSearch(
+                  context: context,
+                  delegate: DataSearch(),
+                );
+              }),
+          IconButton(icon: Icon(Icons.filter_list), onPressed: () {})
+        ],
       ),
       body: TabBarView(
         controller: _tabController,
@@ -80,8 +89,8 @@ class TopTabBar extends StatefulWidget {
   _TopTabBarState createState() => _TopTabBarState();
 }
 
-class _TopTabBarState extends State<TopTabBar> with SingleTickerProviderStateMixin<TopTabBar>{
-
+class _TopTabBarState extends State<TopTabBar>
+    with SingleTickerProviderStateMixin<TopTabBar> {
   TabController _tabController;
 
   @override
@@ -91,7 +100,7 @@ class _TopTabBarState extends State<TopTabBar> with SingleTickerProviderStateMix
   }
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
     _tabController.dispose();
   }
@@ -102,11 +111,7 @@ class _TopTabBarState extends State<TopTabBar> with SingleTickerProviderStateMix
     Tab(text: "Results"),
   ];
 
-  List<Widget> _pages = [
-    UpcomingPoll(),
-    PendingPolls(),
-    CompletedPoll()
-  ];
+  List<Widget> _pages = [UpcomingPoll(), PendingPolls(), CompletedPoll()];
 
   @override
   Widget build(BuildContext context) {
@@ -118,11 +123,10 @@ class _TopTabBarState extends State<TopTabBar> with SingleTickerProviderStateMix
           child: TabBar(
             controller: _tabController,
             indicator: UnderlineTabIndicator(
-                borderSide: BorderSide(width: 2.0, color: Colors.white)
-            ),
+                borderSide: BorderSide(width: 2.0, color: Colors.white)),
             indicatorColor: Colors.white,
             indicatorWeight: 5.0,
-            unselectedLabelColor: Colors.black,
+            unselectedLabelColor: Colors.white38,
             labelColor: Colors.white,
             tabs: _tabs,
           ),
@@ -136,3 +140,81 @@ class _TopTabBarState extends State<TopTabBar> with SingleTickerProviderStateMix
   }
 }
 
+class DataSearch extends SearchDelegate<String> {
+
+  @override
+  String get searchFieldLabel => 'Search Polls';
+
+  final cities = [
+    'Addis Ababa',
+    'Bahir Dar',
+    'Shashemene',
+    'New York',
+    'Los santos'
+  ];
+
+  final recentCities = ['Bahir Dar', 'Los santos'];
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    // actions for app bar
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          query = "";
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    // leading icon on app bar
+    return IconButton(
+      icon: AnimatedIcon(
+        icon: AnimatedIcons.menu_arrow,
+        progress: transitionAnimation,
+      ),
+      onPressed: () {
+        close(context, null);
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    // show some result based on selection
+    return PollDetail();
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // show suggestions while typing search
+    final suggestionList = query.isEmpty
+        ? recentCities
+        : cities.where((element) => element.toUpperCase().startsWith(query.toUpperCase())).toList();
+
+    return ListView.builder(
+      itemBuilder: (context, index) => ListTile(
+        onTap: (){
+          showResults(context);
+        },
+        leading: Icon(Icons.poll),
+        title: RichText(
+          text: TextSpan(
+              text: suggestionList[index].substring(0, query.length),
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              children: [
+                TextSpan(
+                  text: suggestionList[index].substring(query.length),
+                  style: TextStyle(color: Colors.grey),
+                )
+              ]),
+        ),
+      ),
+      itemCount: suggestionList.length,
+    );
+  }
+}

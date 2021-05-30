@@ -9,6 +9,7 @@ import 'package:voting_system_mobile/model/login_model.dart';
 import 'package:voting_system_mobile/model/role_detail.dart';
 import 'package:voting_system_mobile/model/verification_request_model.dart';
 import 'package:voting_system_mobile/model/roles_model.dart';
+import 'package:voting_system_mobile/model/vote_model.dart';
 import 'package:voting_system_mobile/utils/app_url.dart';
 
 import '../model/login_model.dart';
@@ -16,7 +17,7 @@ import '../model/login_model.dart';
 class RequestService {
   // Login service
   Future<LoginResponseModel> login(LoginRequestModel loginRequestModel) async {
-    String url = "${AppUrl.kBaseUrl}/Voters/login";
+    String url = "${AppUrl.loginUrl}";
     var response;
     try {
       response = await http.post(
@@ -24,12 +25,10 @@ class RequestService {
         body: loginRequestModel.toJson(),
       );
       if (response != null) {
-        print("success: $response");
+        print("success: ${response.body}");
         return LoginResponseModel.fromJson(
           new Map<String, dynamic>.from(
-            json.decode(
-              response.body.toString(),
-            ),
+            json.decode(response),
           ),
         );
       } else {
@@ -128,7 +127,7 @@ class RequestService {
     try{
       response = await http.get(Uri.parse(url));
       if (response != null){
-        print("From request: $response");
+        print("From request: ${response.body}");
         return Polls.fromJson(
           new Map<String, dynamic>.from(
             jsonDecode(response.body)
@@ -210,6 +209,39 @@ class RequestService {
       }
     }
     return null;
+  }
+
+  // vote on polls
+  Future<VoteResponseModel> voteOnPoll(VoteRequestModel voteRequestModel) async{
+
+    print("${voteRequestModel.toJson()}");
+
+    String url = "${AppUrl.voteOnPollUrl}/${voteRequestModel.pollId}";
+
+    var response;
+
+    try{
+      response = await http.post(Uri.parse(url), body: voteRequestModel.toJson());
+      if (response != null){
+        print("Success: ${response.body}");
+        return VoteResponseModel.fromJson(
+            new Map<String, dynamic>.from(
+              json.decode(response.body),
+            )
+        );
+      }
+    } catch (e){
+      if(response != null){
+        print("Error: ${response.body}");
+        return VoteResponseModel.fromJson(
+            new Map<String, dynamic>.from(
+                json.decode(response.body)
+            )
+        );
+      }
+    }
+    return null;
+
   }
 
 }

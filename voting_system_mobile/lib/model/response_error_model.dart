@@ -1,22 +1,22 @@
-class ResponseError{
-  ResponseError({
+class HttpError {
+  HttpError({
+    this.statusCode,
     this.name,
     this.message,
-    this.code,
   });
 
+  int statusCode;
   String name;
   String message;
-  String code;
 
-  factory ResponseError.fromJson(Map<String, dynamic> json) => ResponseError(
+  factory HttpError.fromJson(Map<String, dynamic> json) => HttpError(
+    statusCode: json["statusCode"],
     name: json["name"],
     message: json["message"],
-    code: json["statusCode"],
   );
 
   Map<String, dynamic> toJson() => {
-    "statusCode": code,
+    "statusCode": statusCode,
     "name": name,
     "message": message,
   };

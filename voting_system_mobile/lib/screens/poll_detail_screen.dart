@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:voting_system_mobile/widgets/custom_button.dart';
+import 'package:provider/provider.dart';
+import 'package:voting_system_mobile/classes/request_service.dart';
+import 'package:voting_system_mobile/providers/poll_provider.dart';
+import 'package:voting_system_mobile/providers/user_provider.dart';
 import 'package:voting_system_mobile/model/poll_model.dart';
-
+import 'package:voting_system_mobile/widgets/custom_button.dart';
+import 'package:voting_system_mobile/widgets/progress_hud_modal.dart';
+import 'package:voting_system_mobile/widgets/single_choice_listView.dart';
+import 'package:voting_system_mobile/model/vote_model.dart';
 
 class PollDetail extends StatefulWidget {
   static const String id = "poll_detail";
@@ -15,8 +21,31 @@ class PollDetail extends StatefulWidget {
 }
 
 class _PollDetailState extends State<PollDetail> {
+  bool isApiCallProcess = false;
+
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+  }
+
+  Future<String> showChooseDialog(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (context){
+        return ChoiceModal(options: widget.poll.option,);
+      }
+    );
+  }
+
+  @override
+  Widget build(BuildContext context){
+    return ProgressHUD(child: _uiSetup(context), inAsynchCall: isApiCallProcess);
+  }
+
+  Widget _uiSetup(BuildContext context) {
+
+    String userId = Provider.of<UserProvider>(context).user.userId;
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Poll Details"),
@@ -25,71 +54,125 @@ class _PollDetailState extends State<PollDetail> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          margin: EdgeInsets.all(20.0),
-          child: ListView(
-            shrinkWrap: true,
+          margin: EdgeInsets.all(15.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Text(
-                "${widget.poll.pollTitle}".toUpperCase(),
-                style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
-              ),
-              SizedBox(height: 16.0),
-              Text("${widget.poll.pollDescription}", style: TextStyle(height: 1.5, fontSize: 18.0),),
-              SizedBox(height: 20.0),
-              Container(
-                child: Card(
-                  child: Container(
-                    padding: EdgeInsets.all(10.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text("Poll Type: General", style: TextStyle(fontSize: 18.0)),
-                        Divider(),
-                        Text("Ends in: 10 min", style: TextStyle(fontSize: 18.0)),
-                        Divider(),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Available options are: ", style: TextStyle(fontSize: 18.0)),
-                            Divider(),
-                            for (var option in widget.poll.option)
-                               Text("${option.title}", style: TextStyle(fontSize: 18.0)),
-                          ],
-                        )
-                      ],
-                    ),
+              Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                elevation: 8.0,
+                color: Colors.white,
+                child: Padding(
+                  padding: EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        "${widget.poll.pollTitle.toUpperCase()}",
+                        style: TextStyle(
+                            fontSize: 22,
+                            color: Colors.black,
+                            letterSpacing: 2.0,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      const SizedBox(height: 12.0),
+                      Text(
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                        style: TextStyle(fontSize: 18.0, color: Colors.black),
+                      )
+                    ],
                   ),
                 ),
               ),
-              SizedBox(height: 20.0),
-              CustomButton(onPressed: (){
-                showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return Container(
-                        padding: EdgeInsets.all(8.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Text(
-                                "${widget.poll.pollTitle.toUpperCase()}",
-                              style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
-                            ),
-                            Divider(),
-                            for (var option in widget.poll.option)
-                              ListTile(
-                                title: Text("${option.title}"),
-                                onTap: () {
-                                  option.voteCount += 1;
-                                  print("Count is ${option.voteCount}");
-                                  Navigator.pop(context, option);
-                                },
-                              ),
-                          ],
+              const SizedBox(height: 5.0),
+              Card(
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                elevation: 8.0,
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text("Poll Type",
+                          style: TextStyle(
+                              fontSize: 22,
+                              color: Colors.black,
+                              letterSpacing: 2.0,
+                              fontWeight: FontWeight.w600)),
+                      const SizedBox(height: 12.0),
+                      _buildChip("general"),
+                      _buildChip("non-retractable"),
+                      _buildChip("single-choice")
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 5.0),
+              Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                elevation: 8.0,
+                color: Colors.white,
+                child: Padding(
+                  padding: EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        "Given Options",
+                        style: TextStyle(
+                            fontSize: 22.0,
+                            color: Colors.black,
+                            letterSpacing: 2.0,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      const SizedBox(height: 12.0),
+                      for (var option in widget.poll.option)
+                        Text(
+                          "${option.title}",
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            color: Colors.black,
+                          ),
                         ),
-                      );
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 15.0),
+              CustomButton(
+                title: "Cast your vote",
+                enabled: !(widget.poll.hasVoted),
+                onPressed: () async {
+                  String selectedOption = await showChooseDialog(context);
+                  VoteRequestModel voteRequestModel = VoteRequestModel(voterId: userId, option: selectedOption, pollId: widget.poll.pollId);
+
+                  setState(() {
+                    isApiCallProcess = true;
+                  });
+
+                  RequestService().voteOnPoll(voteRequestModel).then((response){
+                    print(response.response);
+                    setState(() {
+                      isApiCallProcess = false;
                     });
-              }, enabled: true, title: "Click here to vote")
+                    widget.poll.hasVoted = true;
+                    Provider.of<PollProvider>(context, listen: false).setHasUserHasVoted();
+                    final snackBar = SnackBar(content: Text('${response.response}'));
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }).timeout(Duration(seconds: 30), onTimeout: () {
+                    setState(() {
+                      isApiCallProcess = false;
+                    });
+                    final snackBar =
+                    SnackBar(content: Text('Request Timed out, Check your connection'));
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  });
+                },
+              )
             ],
           ),
         ),
@@ -97,4 +180,23 @@ class _PollDetailState extends State<PollDetail> {
     );
   }
 
+  Widget _buildChip(String title) {
+    return Chip(
+      avatar: CircleAvatar(
+        child: Text(title[0].toUpperCase()),
+        backgroundColor: Colors.white,
+      ),
+      label: Text(
+        "$title",
+        style: TextStyle(
+          fontSize: 15.0,
+          color: Colors.black,
+        ),
+      ),
+      backgroundColor: Colors.white,
+      elevation: 6.0,
+      shadowColor: Colors.grey[60],
+      padding: EdgeInsets.all(8.0),
+    );
+  }
 }

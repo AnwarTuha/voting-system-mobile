@@ -7,13 +7,13 @@ String roleToJson(Role data) => json.encode(data.toJson());
 
 class RoleResponseModel{
   List<Role> roles;
-  ResponseError error;
+  HttpError error;
 
   RoleResponseModel({this.roles, this.error});
 
   factory RoleResponseModel.fromJson(Map<String, dynamic> json) => RoleResponseModel(
     roles: json["roles"] != null ? List<Role>.from(json["roles"].map((x) => Role.fromJson(x))) : [],
-    error:  json["error"] != null ? ResponseError.fromJson(json["error"]) : null
+    error:  json["error"] != null ? HttpError.fromJson(json["error"]) : null
   );
 
 }

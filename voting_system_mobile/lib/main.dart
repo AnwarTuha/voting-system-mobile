@@ -13,8 +13,10 @@ import 'package:voting_system_mobile/screens/select_role_screen.dart';
 import 'package:voting_system_mobile/screens/poll_detail_screen.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
 import 'package:voting_system_mobile/providers/user_provider.dart';
+import 'package:voting_system_mobile/providers/poll_provider.dart';
 import 'package:voting_system_mobile/shared%20preferences/role_shared_preference.dart';
 import 'package:voting_system_mobile/shared%20preferences/user_shared_preferences.dart';
+import 'package:voting_system_mobile/widgets/no_result_page.dart';
 
 Future<void> main() async {
   // This is the glue that binds the framework to the Flutter engine.
@@ -36,6 +38,7 @@ class VotingSystem extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => PollProvider(),)
       ],
       child: MaterialApp(
         title: "Votion",
@@ -56,7 +59,8 @@ class VotingSystem extends StatelessWidget {
           DashBoard.id: (context) => DashBoard(),
           HomeScreen.id: (context) => HomeScreen(),
           MyAccount.id: (context) => MyAccount(),
-          PollDetail.id: (context) => PollDetail()
+          PollDetail.id: (context) => PollDetail(),
+          NoResultPage.id: (context) => NoResultPage()
         },
       ),
     );

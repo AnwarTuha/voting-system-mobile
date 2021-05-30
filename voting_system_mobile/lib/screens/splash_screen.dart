@@ -20,8 +20,8 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   void initState() {
-    checkUser();
     super.initState();
+    checkUser();
   }
 
   void checkUser(){
@@ -29,7 +29,7 @@ class _SplashPageState extends State<SplashPage> {
     User user = UserPreferences.getUser();
 
     if (user != null){
-      if (user.orgId == ""){
+      if (user.orgId == null || user.orgId == ""){
         UserPreferences.removeUser();
         Timer(const Duration(milliseconds: 4000), (){
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
@@ -50,6 +50,7 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(

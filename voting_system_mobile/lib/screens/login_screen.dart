@@ -7,6 +7,7 @@ import 'package:voting_system_mobile/screens/dashboard_screen.dart';
 import 'package:voting_system_mobile/screens/forgot_password_screen.dart';
 import 'package:voting_system_mobile/screens/register_screen.dart';
 import 'package:voting_system_mobile/screens/select_organization_screen.dart';
+import 'package:voting_system_mobile/shared%20preferences/user_shared_preferences.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
 import 'package:voting_system_mobile/widgets/custom_button.dart';
 import 'package:voting_system_mobile/widgets/custom_divider_painter.dart';
@@ -43,7 +44,9 @@ class _LoginState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return ProgressHUD(
-        child: _uiSetup(context), inAsynchCall: isApiCallProcess);
+        child: _uiSetup(context),
+        inAsynchCall: isApiCallProcess,
+    );
   }
 
   Widget _uiSetup(BuildContext context) {
@@ -133,6 +136,7 @@ class _LoginState extends State<LoginPage> {
                               }
                               // authenticate user
                               doLogin(requestModel);
+
                             },
                           ),
                         ),
@@ -216,11 +220,17 @@ class _LoginState extends State<LoginPage> {
   }
 
   void handleRoutes(response) {
-    if (response.token != "") {
-      User user = setUserData(response);
+    if (response.user != null) {
+      User user = response.user;
+
+      // save user to local storage
+      UserPreferences.setUser(user);
+
       final snackBar = SnackBar(content: Text('Sign in Successful!'));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      if (user.orgId != "") {
+      if (user.orgId != null) {
+        Provider.of<UserProvider>(context, listen: false).setUser(user);
+
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => DashBoard()));
       } else {
@@ -255,27 +265,6 @@ class _LoginState extends State<LoginPage> {
         CustomPaint(painter: DrawHorizontalLine(false))
       ],
     );
-  }
-
-  User setUserData(response) {
-    User user = User();
-
-    // init user attributes
-    user.isComplete = response.isComplete;
-    user.role = response.role;
-    user.userId = response.userId;
-    user.phoneNumber = response.phoneNumber;
-    user.lastName = response.lastName;
-    user.firstName = response.firstName;
-    user.email = response.email;
-    user.orgId = response.orgId;
-    user.token = response.token;
-    user.userName = response.userName;
-
-    // Save to provider
-    Provider.of<UserProvider>(context, listen: false).setUser(user);
-
-    return user;
   }
 
   bool validateAndSave() {

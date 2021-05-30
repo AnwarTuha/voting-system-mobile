@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:voting_system_mobile/utils/color_palette_util.dart';
 
 class ProgressHUD extends StatelessWidget {
   final Widget child;
@@ -33,7 +35,7 @@ class ProgressHUD extends StatelessWidget {
               ),
             ),
             new Center(
-              child: new CircularProgressIndicator(),
+              child: SpinKitWave(size: 25.0, color: tealLightColor),
             )
           ],
         );

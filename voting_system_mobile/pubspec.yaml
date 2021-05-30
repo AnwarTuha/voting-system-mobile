@@ -35,6 +35,9 @@ dependencies:
   # app wide state management
   provider: ^5.0.0
 
+  # loading animation
+  flutter_spinkit: ^5.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -7,9 +7,14 @@ class PendingPolls extends StatefulWidget {
   _PendingPollsState createState() => _PendingPollsState();
 }
 
-class _PendingPollsState extends State<PendingPolls> {
+class _PendingPollsState extends State<PendingPolls> with AutomaticKeepAliveClientMixin<PendingPolls>{
+
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Container(
       margin: EdgeInsets.all(20.0),
       child: SingleChildScrollView(
