@@ -159,10 +159,16 @@ class _PollDetailState extends State<PollDetail> {
                     setState(() {
                       isApiCallProcess = false;
                     });
-                    widget.poll.hasVoted = true;
-                    Provider.of<PollProvider>(context, listen: false).setHasUserHasVoted();
-                    final snackBar = SnackBar(content: Text('${response.response}'));
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                    if (response.response != null){
+                      widget.poll.hasVoted = true;
+                      Provider.of<PollProvider>(context, listen: false).setHasUserHasVoted();
+                      final snackBar = SnackBar(content: Text('${response.response}'));
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    } else {
+                      final snackBar = SnackBar(content: Text('${response.error.message}'));
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
                   }).timeout(Duration(seconds: 30), onTimeout: () {
                     setState(() {
                       isApiCallProcess = false;
