@@ -90,16 +90,13 @@ class RequestService {
 
   Future<RoleResponseModel> fetchRoles(
       RoleRequestModel roleRequestModel) async {
-    String url = "${AppUrl.kBaseUrl}/roles/getRolesInOrg";
-
-    print("Organization Id: ${roleRequestModel.orgId}");
+    String url = "${AppUrl.kBaseUrl}/roles/${roleRequestModel.orgId}";
 
     var response;
 
     try {
-      response = await http.post(
+      response = await http.get(
         Uri.parse(url),
-        body: roleRequestModel.toJson(),
       );
       print(response.body);
       return RoleResponseModel.fromJson(
@@ -121,35 +118,35 @@ class RequestService {
 
   Future<Polls> fetchPolls(PollRequestModel pollRequestModel) async {
     print(pollRequestModel.userId);
-    String url = "${AppUrl.kBaseUrl}/Polls/getUserPolls/${pollRequestModel.userId}";
+    String url = "${AppUrl.kBaseUrl}/Polls/getUserPolls/${pollRequestModel
+        .userId}";
 
     var response;
 
-    try{
+    try {
       response = await http.get(Uri.parse(url));
-      if (response != null){
+      if (response != null) {
         print("From request: ${response.body}");
         return Polls.fromJson(
-          new Map<String, dynamic>.from(
-            jsonDecode(response.body)
-          )
+            new Map<String, dynamic>.from(
+                jsonDecode(response.body)
+            )
         );
       } else {
         print("Response is Null: $response");
       }
-    } catch (e){
+    } catch (e) {
       print("Error: " + response.body);
-      if (response != null){
+      if (response != null) {
         return Polls.fromJson(
-          new Map<String, dynamic>.from(
-            jsonDecode(response.body)
-          )
+            new Map<String, dynamic>.from(
+                jsonDecode(response.body)
+            )
         );
       }
     }
 
     return null;
-
   }
 
   // Send account for verification
@@ -186,26 +183,28 @@ class RequestService {
 
   // Fetch role detail
 
-  Future<RoleDetailResponseModel> requestRoleDetail(RoleDetailRequestModel roleDetailRequestModel) async{
+  Future<RoleDetailResponseModel> requestRoleDetail(
+      RoleDetailRequestModel roleDetailRequestModel) async {
     String url = "${AppUrl.kBaseUrl}/roles/getRoleDetails";
 
     var response;
 
-    try{
-      response = await http.post(Uri.parse(url), body: roleDetailRequestModel.toJson());
-      if (response != null){
+    try {
+      response =
+      await http.post(Uri.parse(url), body: roleDetailRequestModel.toJson());
+      if (response != null) {
         return RoleDetailResponseModel.fromJson(
-          new Map<String, dynamic>.from(
-            json.decode(response.body),
-          )
+            new Map<String, dynamic>.from(
+              json.decode(response.body),
+            )
         );
       }
-    } catch (e){
-      if(response != null){
+    } catch (e) {
+      if (response != null) {
         return RoleDetailResponseModel.fromJson(
-          new Map<String, dynamic>.from(
-            json.decode(response.body)
-          )
+            new Map<String, dynamic>.from(
+                json.decode(response.body)
+            )
         );
       }
     }
@@ -213,17 +212,18 @@ class RequestService {
   }
 
   // vote on polls
-  Future<VoteResponseModel> voteOnPoll(VoteRequestModel voteRequestModel) async{
-
+  Future<VoteResponseModel> voteOnPoll(
+      VoteRequestModel voteRequestModel) async {
     print("${voteRequestModel.toJson()}");
 
     String url = "${AppUrl.voteOnPollUrl}/${voteRequestModel.pollId}";
 
     var response;
 
-    try{
-      response = await http.post(Uri.parse(url), body: voteRequestModel.toJson());
-      if (response != null){
+    try {
+      response =
+      await http.post(Uri.parse(url), body: voteRequestModel.toJson());
+      if (response != null) {
         print("Success: ${response.body}");
         return VoteResponseModel.fromJson(
             new Map<String, dynamic>.from(
@@ -231,8 +231,8 @@ class RequestService {
             )
         );
       }
-    } catch (e){
-      if(response != null){
+    } catch (e) {
+      if (response != null) {
         print("Error: ${response.body}");
         return VoteResponseModel.fromJson(
             new Map<String, dynamic>.from(
@@ -242,19 +242,19 @@ class RequestService {
       }
     }
     return null;
-
   }
 
   // request result of poll
 
   Future<ResultModel> requestResult(ResultRequestModel requestModel) async {
-    String url = "${AppUrl.resultOfPollUrl}/${requestModel.userId}/poll/${requestModel.pollId}";
-    
+    String url = "${AppUrl.resultOfPollUrl}/${requestModel
+        .userId}/poll/${requestModel.pollId}";
+
     var response;
 
-    try{
+    try {
       response = await http.get(Uri.parse(url));
-      if (response != null){
+      if (response != null) {
         print("From request: ${response.body}");
         return ResultModel.fromJson(
             new Map<String, dynamic>.from(
@@ -264,9 +264,9 @@ class RequestService {
       } else {
         print("Response is Null: $response");
       }
-    } catch (e){
+    } catch (e) {
       print("Error: " + response.body);
-      if (response != null){
+      if (response != null) {
         return ResultModel.fromJson(
             new Map<String, dynamic>.from(
                 jsonDecode(response.body)
@@ -276,41 +276,5 @@ class RequestService {
     }
 
     return null;
-    
   }
-
-  // check if user has already voted
-
-  Future<HasVotedResponseModel> checkHasUserVoted(HasVotedRequestModel requestModel) async {
-    String url = "${AppUrl.hasUserVoted}/${requestModel.userId}/poll/${requestModel.pollId}";
-
-    var response;
-
-    try{
-      response = await http.get(Uri.parse(url));
-      if (response != null){
-        print("From request: ${response.body}");
-        return HasVotedResponseModel.fromJson(
-            new Map<String, dynamic>.from(
-                jsonDecode(response.body)
-            )
-        );
-      } else {
-        print("Response is Null: $response");
-      }
-    } catch (e){
-      print("Error: " + response.body);
-      if (response != null){
-        return HasVotedResponseModel.fromJson(
-            new Map<String, dynamic>.from(
-                jsonDecode(response.body)
-            )
-        );
-      }
-    }
-
-    return null;
-
-  }
-
 }

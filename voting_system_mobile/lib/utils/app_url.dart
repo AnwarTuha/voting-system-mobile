@@ -1,4 +1,4 @@
-class AppUrl{
+abstract class AppUrl{
 
   static const String kBaseUrl = "https://voting-system2.herokuapp.com/api";
   static const String loginUrl = "$kBaseUrl/Voters/signin";
@@ -10,5 +10,6 @@ class AppUrl{
   static const String voteOnPollUrl = "$kBaseUrl/Voters/vote";
   static const String resultOfPollUrl = "$kBaseUrl/Voters/getResults";
   static const String hasUserVoted = "$kBaseUrl/Voters/hasVoted";
+  static const String getRolesOrg = "$kBaseUrl/roles/getRolesInOrg/";
 
 }

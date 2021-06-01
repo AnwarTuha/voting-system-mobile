@@ -24,7 +24,8 @@ class _SplashPageState extends State<SplashPage> {
     checkUser();
   }
 
-  void checkUser(){
+  void checkUser() async{
+
     // Get user data if there is any
     User user = UserPreferences.getUser();
 
@@ -41,6 +42,7 @@ class _SplashPageState extends State<SplashPage> {
         });
       }
     } else {
+      print("No user found");
       Timer(const Duration(milliseconds: 4000), () {
         Navigator.pushReplacementNamed(context, LoginPage.id);
       }

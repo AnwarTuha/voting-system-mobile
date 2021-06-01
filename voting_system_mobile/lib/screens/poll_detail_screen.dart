@@ -145,7 +145,7 @@ class _PollDetailState extends State<PollDetail> {
               ),
               const SizedBox(height: 15.0),
               CustomButton(
-                title: _selectedOption == null || _selectedOption == ""
+                title: !widget.poll.hasVoted
                     ? "Cast your vote"
                     : "You have chosen $_selectedOption}",
                 enabled: !(widget.poll.hasVoted),

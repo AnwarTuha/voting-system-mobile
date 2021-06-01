@@ -63,7 +63,7 @@ class _LoginState extends State<LoginPage> {
           .then((response) {
         stopProgressIndicator();
         handleRoutes(response);
-      }).timeout(Duration(seconds: 30), onTimeout: (){
+      }).timeout(Duration(seconds: 60), onTimeout: (){
         setState(() {
           isApiCallProcess = false;
         });

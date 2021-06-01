@@ -26,7 +26,7 @@ class Poll{
   List<Option> option;
   bool isPublic;
   bool canRetract;
-  bool hasVoted;
+  bool hasVoted = false;
 
   Poll({this.pollId, this.pollTitle, this.isPublic, this.endDate, this.startDate, this.pollDescription, this.canRetract, this.option, this.type});
 
@@ -60,36 +60,4 @@ class Option{
 class PollRequestModel{
   String userId;
   PollRequestModel({this.userId});
-}
-
-class HasVotedRequestModel{
-  String userId;
-  String pollId;
-
-  HasVotedRequestModel({this.userId, this.pollId});
-
-
-}
-
-HasVotedResponseModel hasVotedResponseModelFromJson(String str) => HasVotedResponseModel.fromJson(json.decode(str));
-
-String hasVotedResponseModelToJson(HasVotedResponseModel data) => json.encode(data.toJson());
-
-class HasVotedResponseModel {
-  HasVotedResponseModel({
-    this.hasVoted,
-  });
-
-  bool hasVoted;
-
-  factory HasVotedResponseModel.fromJson(Map<String, dynamic> json) => HasVotedResponseModel(
-    hasVoted: json["hasVoted"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "hasVoted": hasVoted,
-  };
-
-  getHasVoted() => hasVoted;
-
 }

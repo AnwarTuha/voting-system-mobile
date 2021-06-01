@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:voting_system_mobile/classes/request_service.dart';
+import 'package:voting_system_mobile/model/poll_model.dart';
 import 'package:voting_system_mobile/providers/poll_provider.dart';
+import 'package:voting_system_mobile/providers/user_provider.dart';
 import 'package:voting_system_mobile/screens/completed_polls_screen.dart';
 import 'package:voting_system_mobile/screens/notifications_screen.dart';
 import 'package:voting_system_mobile/screens/pending_polls_screen.dart';
@@ -23,9 +26,12 @@ class _DashBoardState extends State<DashBoard>
 
   TabController _tabController;
 
+  bool inAsyncCall = true;
+
   @override
   void initState() {
     super.initState();
+    _getPolls();
     _tabController = TabController(length: 3, vsync: this);
   }
 
@@ -33,6 +39,23 @@ class _DashBoardState extends State<DashBoard>
   void dispose() {
     super.dispose();
     _tabController.dispose();
+  }
+
+  _getPolls() async {
+    // setup request model
+    PollRequestModel pollRequestModel = PollRequestModel();
+    pollRequestModel.userId = Provider.of<UserProvider>(context, listen: false).user.userId;
+
+    // make request
+    RequestService().fetchPolls(pollRequestModel).then((response) {
+      // set all polls for user
+      Provider.of<PollProvider>(context, listen: false).setAllPoll(response.polls);
+      Provider.of<PollProvider>(context, listen: false).setLivePolls();
+      Provider.of<PollProvider>(context, listen: false).setCompletedPolls();
+      setState(() {
+        inAsyncCall = false;
+      });
+    });
   }
 
   List<Widget> _tabs = [
@@ -195,11 +218,12 @@ class DataSearch extends SearchDelegate<String> {
     // show suggestions while typing search
     final suggestionList = query.isEmpty
         ? recentPolls
-        : polls.where((element) => element.pollTitle.toUpperCase().startsWith(query.toUpperCase())).toList();
+        : polls.where((element) => element.pollTitle.toUpperCase().startsWith(query.toUpperCase())).toSet().toList();
 
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
         onTap: (){
+          recentPolls.add(polls[index]);
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => PollDetail(poll: polls[index])));
         },

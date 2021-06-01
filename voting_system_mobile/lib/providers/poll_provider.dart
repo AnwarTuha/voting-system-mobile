@@ -19,13 +19,21 @@ class PollProvider extends ChangeNotifier{
     notifyListeners();
   }
 
+  void setAllPollsToEmpty(){
+    _allPolls = [];
+    _livePolls = [];
+    _pendingPolls = [];
+    _completedPolls = [];
+    notifyListeners();
+  }
+
   void setLivePolls(){
-    _livePolls.addAll(_allPolls.where((element) => element.endDate.isAfter(DateTime.now())).toSet().toList());
+    _livePolls.addAll(_allPolls.where((element) => element.endDate.isAfter(DateTime.now()) && element.hasVoted == false).toList());
     notifyListeners();
   }
 
   void setPendingPolls(){
-    _pendingPolls.addAll(_allPolls.where((element) => element.hasVoted == true).toSet().toList());
+    _pendingPolls.addAll(_allPolls.where((element) => element.hasVoted == true && element.endDate.isAfter(DateTime.now())).toSet().toList());
     notifyListeners();
   }
 

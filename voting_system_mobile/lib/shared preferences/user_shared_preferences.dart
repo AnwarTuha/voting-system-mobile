@@ -12,6 +12,7 @@ class UserPreferences{
       _preferences = await SharedPreferences.getInstance();
 
   static Future setUser(User user) async {
+
     final json =  jsonEncode(user.toJson());
 
     await _preferences.setString(userKey, json);

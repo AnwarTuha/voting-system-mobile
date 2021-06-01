@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:voting_system_mobile/model/user_model.dart';
+import 'package:voting_system_mobile/providers/poll_provider.dart';
 import 'package:voting_system_mobile/providers/user_provider.dart';
 import 'package:voting_system_mobile/screens/my_account_screen.dart';
 import 'package:voting_system_mobile/shared%20preferences/role_shared_preference.dart';
@@ -45,6 +46,7 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
           ProfileMenu(title: "Log Out", icon: Icons.logout, onPressed: (){
             UserPreferences.removeUser();
             RolePreferences.removeRoleDetail();
+            Provider.of<PollProvider>(context, listen: false).setAllPollsToEmpty();
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
           })
         ],
