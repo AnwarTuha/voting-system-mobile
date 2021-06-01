@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:voting_system_mobile/model/poll_model.dart';
+import 'package:voting_system_mobile/providers/poll_provider.dart';
+import 'package:voting_system_mobile/screens/poll_detail_screen.dart';
+import 'package:voting_system_mobile/widgets/poll_card.dart';
 
 class PendingPolls extends StatefulWidget {
   const PendingPolls({Key key}) : super(key: key);
@@ -7,8 +12,8 @@ class PendingPolls extends StatefulWidget {
   _PendingPollsState createState() => _PendingPollsState();
 }
 
-class _PendingPollsState extends State<PendingPolls> with AutomaticKeepAliveClientMixin<PendingPolls>{
-
+class _PendingPollsState extends State<PendingPolls>
+    with AutomaticKeepAliveClientMixin<PendingPolls> {
   @override
   bool get wantKeepAlive => true;
 
@@ -16,41 +21,34 @@ class _PendingPollsState extends State<PendingPolls> with AutomaticKeepAliveClie
   Widget build(BuildContext context) {
     super.build(context);
     return Container(
-      margin: EdgeInsets.all(20.0),
+      margin: EdgeInsets.all(18.0),
       child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                  flex: 8,
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "Search Polls",
-                    ),
-                    onChanged: (input){
-                      // Todo: implement search functionality
-                    },
-                  ),
+        child: Consumer<PollProvider>(
+          builder: (_, provider, __) => provider.pendingPolls.length == 0
+              ? Center(
+                  child: Text("No pending polls yet"),
+                )
+              : ListView.builder(
+                  shrinkWrap: true,
+                  itemBuilder: (_, index) {
+                    Poll poll = provider.getPendingPollByIndex(index);
+                    return buildPollCard(poll.pollTitle, poll.endDate, poll);
+                  },
+                  itemCount: provider.pendingPolls.length,
                 ),
-                Expanded(
-                    flex: 1,
-                    child: IconButton(
-                      icon: Icon(Icons.filter_alt),
-                      iconSize: 30.0,
-                      onPressed: (){
-                        //Todo: implement filter
-                      },
-                    ))
-              ],
-            ),
-            SizedBox(height: 10.0),
-          ],
         ),
       ),
     );
   }
+
+  Widget buildPollCard(String pollTitle, DateTime endDate, Poll poll) {
+    return PollCard(
+        pollTitle: pollTitle,
+        endDate: endDate,
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => PollDetail(poll: poll)));
+        });
+  }
+
 }

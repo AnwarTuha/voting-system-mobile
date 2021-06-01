@@ -10,6 +10,7 @@ import 'package:voting_system_mobile/model/role_detail.dart';
 import 'package:voting_system_mobile/model/verification_request_model.dart';
 import 'package:voting_system_mobile/model/roles_model.dart';
 import 'package:voting_system_mobile/model/vote_model.dart';
+import 'package:voting_system_mobile/model/result_model.dart';
 import 'package:voting_system_mobile/utils/app_url.dart';
 
 import '../model/login_model.dart';
@@ -240,6 +241,74 @@ class RequestService {
         );
       }
     }
+    return null;
+
+  }
+
+  // request result of poll
+
+  Future<ResultModel> requestResult(ResultRequestModel requestModel) async {
+    String url = "${AppUrl.resultOfPollUrl}/${requestModel.userId}/poll/${requestModel.pollId}";
+    
+    var response;
+
+    try{
+      response = await http.get(Uri.parse(url));
+      if (response != null){
+        print("From request: ${response.body}");
+        return ResultModel.fromJson(
+            new Map<String, dynamic>.from(
+                jsonDecode(response.body)
+            )
+        );
+      } else {
+        print("Response is Null: $response");
+      }
+    } catch (e){
+      print("Error: " + response.body);
+      if (response != null){
+        return ResultModel.fromJson(
+            new Map<String, dynamic>.from(
+                jsonDecode(response.body)
+            )
+        );
+      }
+    }
+
+    return null;
+    
+  }
+
+  // check if user has already voted
+
+  Future<HasVotedResponseModel> checkHasUserVoted(HasVotedRequestModel requestModel) async {
+    String url = "${AppUrl.hasUserVoted}/${requestModel.userId}/poll/${requestModel.pollId}";
+
+    var response;
+
+    try{
+      response = await http.get(Uri.parse(url));
+      if (response != null){
+        print("From request: ${response.body}");
+        return HasVotedResponseModel.fromJson(
+            new Map<String, dynamic>.from(
+                jsonDecode(response.body)
+            )
+        );
+      } else {
+        print("Response is Null: $response");
+      }
+    } catch (e){
+      print("Error: " + response.body);
+      if (response != null){
+        return HasVotedResponseModel.fromJson(
+            new Map<String, dynamic>.from(
+                jsonDecode(response.body)
+            )
+        );
+      }
+    }
+
     return null;
 
   }

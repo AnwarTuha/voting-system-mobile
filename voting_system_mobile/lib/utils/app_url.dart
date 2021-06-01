@@ -8,5 +8,7 @@ class AppUrl{
   static const String verificationUrl = "$kBaseUrl/Verifications";
   static const String roleDetailUrl = "$kBaseUrl/roles/getRoleDetails";
   static const String voteOnPollUrl = "$kBaseUrl/Voters/vote";
+  static const String resultOfPollUrl = "$kBaseUrl/Voters/getResults";
+  static const String hasUserVoted = "$kBaseUrl/Voters/hasVoted";
 
 }

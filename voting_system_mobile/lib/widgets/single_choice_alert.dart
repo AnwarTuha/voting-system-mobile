@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 
 class ChoiceModal extends StatefulWidget {
   final List<Option> options;
+  String pollTitle;
 
-  ChoiceModal({this.options});
+  ChoiceModal({this.options, this.pollTitle});
 
   @override
   _ChoiceModalState createState() => _ChoiceModalState();
@@ -23,6 +24,7 @@ class _ChoiceModalState extends State<ChoiceModal> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      title: Text(widget.pollTitle),
       actions: <Widget>[TextButton(child: Text("Vote"), onPressed: (){Navigator.pop(context, selectedValue);},)],
       content: Container(
           width: double.infinity,

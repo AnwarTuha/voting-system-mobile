@@ -20,24 +20,34 @@ class PollProvider extends ChangeNotifier{
   }
 
   void setLivePolls(){
-    _livePolls.addAll(_allPolls.where((element) => element.endDate.isAfter(DateTime.now())).toList());
+    _livePolls.addAll(_allPolls.where((element) => element.endDate.isAfter(DateTime.now())).toSet().toList());
     notifyListeners();
   }
 
   void setPendingPolls(){
-    _pendingPolls.addAll(_allPolls.where((element) => element.hasVoted == true));
+    _pendingPolls.addAll(_allPolls.where((element) => element.hasVoted == true).toSet().toList());
     notifyListeners();
   }
 
   void setCompletedPolls(){
-    _completedPolls.addAll(_allPolls.where((element) => element.endDate.isBefore(DateTime.now())));
+    _completedPolls.addAll(_allPolls.where((element) => element.endDate.isBefore(DateTime.now())).toSet().toList());
     notifyListeners();
   }
 
-  void setHasUserHasVoted(){
-    _livePolls.removeWhere((element) => element.hasVoted);
+  void setHasUserHasVoted(bool hasVoted, String pollId){
+    for (var poll in _allPolls){
+      if (poll.pollId == pollId){
+        if (hasVoted){
+          poll.hasVoted = true;
+        } else {
+          poll.hasVoted = false;
+        }
+      }
+    }
     notifyListeners();
   }
+
+
 
   Poll getAllPollByIndex(int index) => _allPolls[index];
   Poll getLivePollByIndex(int index) => _livePolls[index];

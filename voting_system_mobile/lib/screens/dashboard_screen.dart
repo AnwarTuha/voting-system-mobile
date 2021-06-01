@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:voting_system_mobile/providers/poll_provider.dart';
 import 'package:voting_system_mobile/screens/completed_polls_screen.dart';
 import 'package:voting_system_mobile/screens/notifications_screen.dart';
 import 'package:voting_system_mobile/screens/pending_polls_screen.dart';
@@ -145,19 +147,19 @@ class DataSearch extends SearchDelegate<String> {
   @override
   String get searchFieldLabel => 'Search Polls';
 
-  final cities = [
-    'Addis Ababa',
-    'Bahir Dar',
-    'Shashemene',
-    'New York',
-    'Los santos'
-  ];
+  bool get maintainState => true;
 
-  final recentCities = ['Bahir Dar', 'Los santos'];
+  final polls = [];
+  var indexGlobal;
+
+  final recentPolls = [];
 
   @override
   List<Widget> buildActions(BuildContext context) {
     // actions for app bar
+
+    polls.addAll(Provider.of<PollProvider>(context).allPolls);
+
     return [
       IconButton(
         icon: Icon(Icons.clear),
@@ -185,30 +187,31 @@ class DataSearch extends SearchDelegate<String> {
   @override
   Widget buildResults(BuildContext context) {
     // show some result based on selection
-    return PollDetail();
+    return null;
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
     // show suggestions while typing search
     final suggestionList = query.isEmpty
-        ? recentCities
-        : cities.where((element) => element.toUpperCase().startsWith(query.toUpperCase())).toList();
+        ? recentPolls
+        : polls.where((element) => element.pollTitle.toUpperCase().startsWith(query.toUpperCase())).toList();
 
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
         onTap: (){
-          showResults(context);
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => PollDetail(poll: polls[index])));
         },
         leading: Icon(Icons.poll),
         title: RichText(
           text: TextSpan(
-              text: suggestionList[index].substring(0, query.length),
+              text: suggestionList[index].pollTitle.substring(0, query.length),
               style:
                   TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               children: [
                 TextSpan(
-                  text: suggestionList[index].substring(query.length),
+                  text: suggestionList[index].pollTitle.substring(query.length),
                   style: TextStyle(color: Colors.grey),
                 )
               ]),
