@@ -28,8 +28,9 @@ class VoteRequestModel{
   String voterId;
   String option;
   String pollId;
+  String authenticationToken;
 
-  VoteRequestModel({this.option, this.voterId, this.pollId});
+  VoteRequestModel({this.option, this.voterId, this.pollId, this.authenticationToken});
 
   Map<String, dynamic> toJson() => {
     "voterId": voterId,

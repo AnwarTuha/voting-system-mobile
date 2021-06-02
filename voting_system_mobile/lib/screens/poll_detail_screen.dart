@@ -45,6 +45,7 @@ class _PollDetailState extends State<PollDetail> {
 
   Widget _uiSetup(BuildContext context) {
     String userId = Provider.of<UserProvider>(context).user.userId;
+    String authenticationToken =  Provider.of<UserProvider>(context).user.token;
     String _selectedOption;
 
     return Scaffold(
@@ -160,7 +161,9 @@ class _PollDetailState extends State<PollDetail> {
                     VoteRequestModel voteRequestModel = VoteRequestModel(
                         voterId: userId,
                         option: _selectedOption,
-                        pollId: widget.poll.pollId);
+                        pollId: widget.poll.pollId,
+                        authenticationToken: authenticationToken
+                    );
 
                     setState(() {
                       isApiCallProcess = true;

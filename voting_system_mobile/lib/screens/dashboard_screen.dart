@@ -10,6 +10,7 @@ import 'package:voting_system_mobile/screens/pending_polls_screen.dart';
 import 'package:voting_system_mobile/screens/profile_screen.dart';
 import 'package:voting_system_mobile/screens/upcoming_polls_screen.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
+import 'package:voting_system_mobile/widgets/custom_button.dart';
 import 'package:voting_system_mobile/widgets/navigation_drawer_widget.dart';
 import 'package:voting_system_mobile/screens/poll_detail_screen.dart';
 
@@ -44,17 +45,65 @@ class _DashBoardState extends State<DashBoard>
   _getPolls() async {
     // setup request model
     PollRequestModel pollRequestModel = PollRequestModel();
-    pollRequestModel.userId = Provider.of<UserProvider>(context, listen: false).user.userId;
+    pollRequestModel.userId =
+        Provider.of<UserProvider>(context, listen: false).user.userId;
+    pollRequestModel.authenticationToken =
+        Provider.of<UserProvider>(context, listen: false).user.token;
 
     // make request
     RequestService().fetchPolls(pollRequestModel).then((response) {
       // set all polls for user
-      Provider.of<PollProvider>(context, listen: false).setAllPoll(response.polls);
-      Provider.of<PollProvider>(context, listen: false).setLivePolls();
-      Provider.of<PollProvider>(context, listen: false).setCompletedPolls();
-      setState(() {
-        inAsyncCall = false;
-      });
+      if (response.error != null) {
+        if (response.error.errorCode == 'AUTHORIZATION_REQUIRED') {
+          showModalBottomSheet(
+              context: context,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              isDismissible: false,
+              backgroundColor: Colors.white,
+              builder: (context){
+                return SingleChildScrollView(
+                  child: Container(
+                    height: 300,
+                    margin: EdgeInsets.all(20.0),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          const Text('Please provide a password to continue', style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),),
+                          SizedBox(height: 2.0),
+                          TextField(
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(color: tealColors),
+                              ),
+                              labelText: "Password",
+                            ),
+                          ),
+                          SizedBox(height: 40.0),
+                          CustomButton(title: "Continue", enabled: true, onPressed: (){})
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              });
+        }
+        print('Error while fetching polls');
+        setState(() {
+          inAsyncCall = false;
+        });
+      } else {
+        Provider.of<PollProvider>(context, listen: false)
+            .setAllPoll(response.polls);
+        Provider.of<PollProvider>(context, listen: false).setLivePolls();
+        Provider.of<PollProvider>(context, listen: false).setCompletedPolls();
+        setState(() {
+          inAsyncCall = false;
+        });
+      }
     });
   }
 
@@ -166,7 +215,6 @@ class _TopTabBarState extends State<TopTabBar>
 }
 
 class DataSearch extends SearchDelegate<String> {
-
   @override
   String get searchFieldLabel => 'Search Polls';
 
@@ -218,14 +266,20 @@ class DataSearch extends SearchDelegate<String> {
     // show suggestions while typing search
     final suggestionList = query.isEmpty
         ? recentPolls
-        : polls.where((element) => element.pollTitle.toUpperCase().startsWith(query.toUpperCase())).toSet().toList();
+        : polls
+            .where((element) =>
+                element.pollTitle.toUpperCase().startsWith(query.toUpperCase()))
+            .toSet()
+            .toList();
 
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
-        onTap: (){
+        onTap: () {
           recentPolls.add(polls[index]);
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => PollDetail(poll: polls[index])));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PollDetail(poll: polls[index])));
         },
         leading: Icon(Icons.poll),
         title: RichText(

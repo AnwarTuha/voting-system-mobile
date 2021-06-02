@@ -1,44 +1,60 @@
 import 'dart:convert';
 
-RoleDetailResponseModel roleDetailFromJson(String str) => RoleDetailResponseModel.fromJson(jsonDecode(str));
+import 'package:voting_system_mobile/model/response_error_model.dart';
 
-class RoleDetailResponseModel{
+RoleDetailResponseModel roleDetailResponseModelFromJson(String str) => RoleDetailResponseModel.fromJson(json.decode(str));
 
-  RoleDetail roleDetail;
+String roleDetailResponseModelToJson(RoleDetailResponseModel data) => json.encode(data.toJson());
 
-  RoleDetailResponseModel({this.roleDetail});
+class RoleDetailResponseModel {
+  RoleDetailResponseModel({
+    this.data,
+    this.error
+  });
+
+  RoleDetail data;
+  HttpError error;
 
   factory RoleDetailResponseModel.fromJson(Map<String, dynamic> json) => RoleDetailResponseModel(
-    roleDetail: RoleDetail.fromJson(json["data"]),
+    data: json["data"] != null ? RoleDetail.fromJson(json["data"]) : null,
+    error: json["error"] != null ? HttpError.fromJson(json["error"]) : null,
   );
+
+  Map<String, dynamic> toJson() => {
+    "data": data.toJson(),
+  };
 }
 
 class RoleDetail {
+  RoleDetail({
+    this.roleName,
+    this.orgName,
+    this.parentRole,
+  });
 
   String roleName;
   String orgName;
-  String parentRoleId;
-
-  RoleDetail({this.roleName, this.orgName, this.parentRoleId});
+  String parentRole;
 
   factory RoleDetail.fromJson(Map<String, dynamic> json) => RoleDetail(
     roleName: json["roleName"],
     orgName: json["orgName"],
-    parentRoleId: json["parentRole"]
+    parentRole: json["parentRole"],
   );
 
   Map<String, dynamic> toJson() => {
     "roleName": roleName,
     "orgName": orgName,
-    "parentRoleId": parentRoleId
+    "parentRole": parentRole,
   };
-
 }
+
 
 class RoleDetailRequestModel{
   String roleId;
+  String authenticationToken;
 
-  RoleDetailRequestModel({this.roleId});
+  RoleDetailRequestModel({this.roleId, this.authenticationToken});
 
   Map<String, dynamic> toJson() => {
     "roleId": roleId

@@ -59,5 +59,6 @@ class Option{
 
 class PollRequestModel{
   String userId;
+  String authenticationToken;
   PollRequestModel({this.userId});
 }

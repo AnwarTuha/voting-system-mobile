@@ -118,7 +118,7 @@ class NavigationDrawer extends StatelessWidget {
 
   void selectedItem(BuildContext context, int index){
 
-    Navigator.of(context).pop();
+    Navigator.pop(context);
 
     switch(index){
       case 0:

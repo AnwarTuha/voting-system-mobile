@@ -39,6 +39,7 @@ class _PollResultsDetail extends State<PollResultsDetail> {
 
     requestModel.pollId = widget.poll.pollId;
     requestModel.userId = Provider.of<UserProvider>(context, listen: false).user.userId;
+    requestModel.authenticationToken = Provider.of<UserProvider>(context, listen: false).user.token;
 
     RequestService().requestResult(requestModel).then((response) {
       //polls.addAll(response.polls);
@@ -67,8 +68,8 @@ class _PollResultsDetail extends State<PollResultsDetail> {
   }
 
   Widget _uiSetup(BuildContext context) {
-    String userId = Provider.of<UserProvider>(context).user.userId;
-    String _selectedOption;
+    //String userId = Provider.of<UserProvider>(context).user.userId;
+    //String _selectedOption;
 
     return Scaffold(
       appBar: AppBar(

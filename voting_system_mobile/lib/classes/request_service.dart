@@ -16,6 +16,7 @@ import 'package:voting_system_mobile/utils/app_url.dart';
 import '../model/login_model.dart';
 
 class RequestService {
+
   // Login service
   Future<LoginResponseModel> login(LoginRequestModel loginRequestModel) async {
     String url = "${AppUrl.loginUrl}";
@@ -50,8 +51,7 @@ class RequestService {
   }
 
   // Register service
-  Future<RegisterResponseModel> register(
-      RegisterRequestModel registerRequestModel) async {
+  Future<RegisterResponseModel> register(RegisterRequestModel registerRequestModel) async {
     String url = "${AppUrl.kBaseUrl}/Voters/register";
     var response;
 
@@ -93,7 +93,6 @@ class RequestService {
     String url = "${AppUrl.kBaseUrl}/roles/${roleRequestModel.orgId}";
 
     var response;
-
     try {
       response = await http.get(
         Uri.parse(url),
@@ -117,14 +116,13 @@ class RequestService {
   // Fetch Poll Service
 
   Future<Polls> fetchPolls(PollRequestModel pollRequestModel) async {
-    print(pollRequestModel.userId);
-    String url = "${AppUrl.kBaseUrl}/Polls/getUserPolls/${pollRequestModel
-        .userId}";
+
+    String url = "${AppUrl.kBaseUrl}/Polls/getUserPolls/${pollRequestModel.userId}";
 
     var response;
 
     try {
-      response = await http.get(Uri.parse(url));
+      response = await http.get(Uri.parse(url), headers: {'Authorization': '${pollRequestModel.authenticationToken}'});
       if (response != null) {
         print("From request: ${response.body}");
         return Polls.fromJson(
@@ -183,15 +181,14 @@ class RequestService {
 
   // Fetch role detail
 
-  Future<RoleDetailResponseModel> requestRoleDetail(
-      RoleDetailRequestModel roleDetailRequestModel) async {
-    String url = "${AppUrl.kBaseUrl}/roles/getRoleDetails";
+  Future<RoleDetailResponseModel> requestRoleDetail(RoleDetailRequestModel roleDetailRequestModel) async {
+    String url = "${AppUrl.kBaseUrl}/roles/getRoleDetails/${roleDetailRequestModel.roleId}";
 
     var response;
 
     try {
       response =
-      await http.post(Uri.parse(url), body: roleDetailRequestModel.toJson());
+      await http.get(Uri.parse(url), headers: {'Authorization' : '${roleDetailRequestModel.authenticationToken}'});
       if (response != null) {
         return RoleDetailResponseModel.fromJson(
             new Map<String, dynamic>.from(
@@ -212,8 +209,7 @@ class RequestService {
   }
 
   // vote on polls
-  Future<VoteResponseModel> voteOnPoll(
-      VoteRequestModel voteRequestModel) async {
+  Future<VoteResponseModel> voteOnPoll(VoteRequestModel voteRequestModel) async {
     print("${voteRequestModel.toJson()}");
 
     String url = "${AppUrl.voteOnPollUrl}/${voteRequestModel.pollId}";
@@ -222,7 +218,7 @@ class RequestService {
 
     try {
       response =
-      await http.post(Uri.parse(url), body: voteRequestModel.toJson());
+      await http.post(Uri.parse(url), body: voteRequestModel.toJson(), headers: {'Authorization' : voteRequestModel.authenticationToken});
       if (response != null) {
         print("Success: ${response.body}");
         return VoteResponseModel.fromJson(
@@ -253,7 +249,7 @@ class RequestService {
     var response;
 
     try {
-      response = await http.get(Uri.parse(url));
+      response = await http.get(Uri.parse(url), headers: {'Authorization' : requestModel.authenticationToken});
       if (response != null) {
         print("From request: ${response.body}");
         return ResultModel.fromJson(

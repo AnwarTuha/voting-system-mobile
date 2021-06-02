@@ -50,6 +50,7 @@ class ResultData {
 class ResultRequestModel{
   String userId;
   String pollId;
+  String authenticationToken;
 
-  ResultRequestModel({this.userId, this.pollId});
+  ResultRequestModel({this.userId, this.pollId, this.authenticationToken});
 }

@@ -34,12 +34,20 @@ class _MyAccountState extends State<MyAccount> {
     if (roleDetailFromPreference == null){
       print(widget.user.role);
       requestModel.roleId = widget.user.role;
+      requestModel.authenticationToken = widget.user.token;
       RequestService().requestRoleDetail(requestModel).then((response){
-        setState(() {
-          isAsyncCall = false;
-          roleDetail = response.roleDetail;
-        });
-        RolePreferences.setRoleDetail(roleDetail);
+        if (response.error != null){
+          print("Error");
+          if (response.error.errorCode == 'AUTHORIZATION_ERROR'){
+            print('authorization error');
+          }
+        } else {
+          setState(() {
+            isAsyncCall = false;
+            roleDetail = response.data;
+          });
+          RolePreferences.setRoleDetail(roleDetail);
+        }
       });
     } else {
       setState(() {
