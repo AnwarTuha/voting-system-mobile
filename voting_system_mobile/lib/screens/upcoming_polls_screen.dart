@@ -37,9 +37,14 @@ class _UpcomingPollState extends State<UpcomingPoll>
   }
 
   _getPolls() async {
-    var a = RequestService().fetchPolls(pollRequestModel);
+    RequestService().fetchPolls(pollRequestModel).then((response) {
+      // set all polls for user
+      // Provider.of<PollProvider>(context, listen: false)
+      //     .setAllPoll(response.polls);
+      pollsFromBack.addAll(response.polls);
+    });
 
-    return a;
+    return pollsFromBack;
   }
 
   @override
