@@ -7,12 +7,12 @@ import 'package:voting_system_mobile/providers/user_provider.dart';
 import 'package:voting_system_mobile/screens/completed_polls_screen.dart';
 import 'package:voting_system_mobile/screens/notifications_screen.dart';
 import 'package:voting_system_mobile/screens/pending_polls_screen.dart';
+import 'package:voting_system_mobile/screens/poll_detail_screen.dart';
 import 'package:voting_system_mobile/screens/profile_screen.dart';
 import 'package:voting_system_mobile/screens/upcoming_polls_screen.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
 import 'package:voting_system_mobile/widgets/custom_button.dart';
 import 'package:voting_system_mobile/widgets/navigation_drawer_widget.dart';
-import 'package:voting_system_mobile/screens/poll_detail_screen.dart';
 
 class DashBoard extends StatefulWidget {
   static const String id = "dash_board";
@@ -32,7 +32,7 @@ class _DashBoardState extends State<DashBoard>
   @override
   void initState() {
     super.initState();
-    _getPolls();
+    //_getPolls();
     _tabController = TabController(length: 3, vsync: this);
   }
 
@@ -62,7 +62,7 @@ class _DashBoardState extends State<DashBoard>
               ),
               isDismissible: false,
               backgroundColor: Colors.white,
-              builder: (context){
+              builder: (context) {
                 return SingleChildScrollView(
                   child: Container(
                     height: 300,
@@ -71,7 +71,11 @@ class _DashBoardState extends State<DashBoard>
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
-                          const Text('Please provide a password to continue', style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),),
+                          const Text(
+                            'Please provide a password to continue',
+                            style: TextStyle(
+                                fontSize: 22.0, fontWeight: FontWeight.bold),
+                          ),
                           SizedBox(height: 2.0),
                           TextField(
                             obscureText: true,
@@ -83,7 +87,10 @@ class _DashBoardState extends State<DashBoard>
                             ),
                           ),
                           SizedBox(height: 40.0),
-                          CustomButton(title: "Continue", enabled: true, onPressed: (){})
+                          CustomButton(
+                              title: "Continue",
+                              enabled: true,
+                              onPressed: () {})
                         ],
                       ),
                     ),

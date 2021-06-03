@@ -18,7 +18,7 @@ import 'package:voting_system_mobile/shared%20preferences/role_shared_preference
 import 'package:voting_system_mobile/shared%20preferences/user_shared_preferences.dart';
 import 'package:voting_system_mobile/widgets/no_result_page.dart';
 
-Future<void> main() async {
+Future main() async {
   // This is the glue that binds the framework to the Flutter engine.
   WidgetsFlutterBinding.ensureInitialized();
 

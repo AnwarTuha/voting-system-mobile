@@ -15,7 +15,7 @@ class PollProvider extends ChangeNotifier{
   List<Poll> get completedPolls => _completedPolls;
 
   void setAllPoll(List<Poll> polls){
-    _allPolls = polls;
+    _allPolls = polls.toSet().toList();
     notifyListeners();
   }
 
@@ -28,7 +28,7 @@ class PollProvider extends ChangeNotifier{
   }
 
   void setLivePolls(){
-    _livePolls.addAll(_allPolls.where((element) => element.endDate.isAfter(DateTime.now()) && element.hasVoted == false).toList());
+    _livePolls.addAll(_allPolls.where((element) => element.endDate.isAfter(DateTime.now()) && element.hasVoted == false).toSet().toList());
     notifyListeners();
   }
 

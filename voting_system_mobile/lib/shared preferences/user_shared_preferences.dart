@@ -19,13 +19,9 @@ class UserPreferences{
   }
 
   static User getUser(){
-    final json = _preferences.get(userKey);
+    final json = _preferences.getString(userKey);
 
-    if (json == null){
-      return null;
-    }
-
-    return User.fromJson(jsonDecode(json));
+    return json == null ? null : User.fromJson(jsonDecode(json));
   }
 
   static Future removeUser() async{
