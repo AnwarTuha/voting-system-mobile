@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:voting_system_mobile/providers/poll_provider.dart';
+import 'package:voting_system_mobile/providers/user_provider.dart';
 import 'package:voting_system_mobile/screens/dashboard_screen.dart';
 import 'package:voting_system_mobile/screens/forgot_password_screen.dart';
 import 'package:voting_system_mobile/screens/home_screen.dart';
 import 'package:voting_system_mobile/screens/login_screen.dart';
 import 'package:voting_system_mobile/screens/my_account_screen.dart';
+import 'package:voting_system_mobile/screens/poll_detail_screen.dart';
 import 'package:voting_system_mobile/screens/profile_screen.dart';
 import 'package:voting_system_mobile/screens/register_screen.dart';
 import 'package:voting_system_mobile/screens/select_organization_screen.dart';
-import 'package:voting_system_mobile/screens/splash_screen.dart';
 import 'package:voting_system_mobile/screens/select_role_screen.dart';
-import 'package:voting_system_mobile/screens/poll_detail_screen.dart';
-import 'package:voting_system_mobile/utils/color_palette_util.dart';
-import 'package:voting_system_mobile/providers/user_provider.dart';
-import 'package:voting_system_mobile/providers/poll_provider.dart';
+import 'package:voting_system_mobile/screens/splash_screen.dart';
 import 'package:voting_system_mobile/shared%20preferences/role_shared_preference.dart';
 import 'package:voting_system_mobile/shared%20preferences/user_shared_preferences.dart';
+import 'package:voting_system_mobile/utils/color_palette_util.dart';
 import 'package:voting_system_mobile/widgets/no_result_page.dart';
 
 Future main() async {
@@ -30,7 +30,6 @@ Future main() async {
 }
 
 class VotingSystem extends StatelessWidget {
-
   final String userId = "";
 
   @override
@@ -38,7 +37,9 @@ class VotingSystem extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UserProvider()),
-        ChangeNotifierProvider(create: (_) => PollProvider(),)
+        ChangeNotifierProvider(
+          create: (_) => PollProvider(),
+        )
       ],
       child: MaterialApp(
         title: "Votion",
@@ -54,7 +55,8 @@ class VotingSystem extends StatelessWidget {
           RegistrationPage.id: (context) => RegistrationPage(),
           ProfilePage.id: (context) => ProfilePage(),
           ForgotPassword.id: (context) => ForgotPassword(),
-          SelectOrganization.id: (context) => SelectOrganization(userId: userId),
+          SelectOrganization.id: (context) =>
+              SelectOrganization(userId: userId),
           SelectRole.id: (context) => SelectRole(),
           DashBoard.id: (context) => DashBoard(),
           HomeScreen.id: (context) => HomeScreen(),

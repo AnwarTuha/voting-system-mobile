@@ -11,8 +11,7 @@ class User {
   bool isComplete;
 
   User(
-      {
-      this.token,
+      {this.token,
       this.firstName,
       this.lastName,
       this.phoneNumber,
@@ -31,20 +30,18 @@ class User {
       userName: json["username"] != null ? json["username"] : "",
       email: json["email"] != null ? json["email"] : "",
       userId: json["userid"] != null ? json["userid"] : "",
-      orgId: json["orgId"] != null ? json["orgId"] : "",
+      orgId: json["orgid"] != null ? json["orgid"] : "",
       role: json["role"] != null ? json["role"] : "",
-      isComplete: json["isComplete"]
-  );
+      isComplete: json["isComplete"]);
 
   Map<String, dynamic> toJson() => {
-    "firstname": firstName,
-    "lastname": lastName,
-    "phone": phoneNumber,
-    "username": userName,
-    "userid": userId,
-    "orgId": orgId,
-    "role": role,
-    "email": email
-  };
-
+        "firstname": firstName,
+        "lastname": lastName,
+        "phone": phoneNumber,
+        "username": userName,
+        "userid": userId,
+        "orgid": orgId,
+        "role": role,
+        "email": email
+      };
 }

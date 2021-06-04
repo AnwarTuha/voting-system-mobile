@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:voting_system_mobile/model/user_model.dart';
+import 'package:voting_system_mobile/providers/user_provider.dart';
 import 'package:voting_system_mobile/screens/dashboard_screen.dart';
 import 'package:voting_system_mobile/screens/login_screen.dart';
-import 'package:voting_system_mobile/utils/color_palette_util.dart';
-import 'package:voting_system_mobile/providers/user_provider.dart';
 import 'package:voting_system_mobile/shared%20preferences/user_shared_preferences.dart';
+import 'package:voting_system_mobile/utils/color_palette_util.dart';
 
 class SplashPage extends StatefulWidget {
   static const String id = 'splash_screen';
@@ -17,42 +17,41 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-
   @override
   void initState() {
     checkUser();
     super.initState();
   }
 
-  void checkUser() async{
-
+  void checkUser() async {
     // Get user data if there is any
     User user = UserPreferences.getUser();
+    print("User is $user");
 
-    if (user != null){
-      if (user.orgId == null || user.orgId == ""){
+    if (user != null) {
+      if (user.orgId == null || user.orgId == "") {
         UserPreferences.removeUser();
-        Timer(const Duration(milliseconds: 4000), (){
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
+        Timer(const Duration(milliseconds: 4000), () {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => LoginPage()));
         });
       } else {
         Provider.of<UserProvider>(context, listen: false).setUser(user);
-        Timer(const Duration(milliseconds: 4000), (){
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DashBoard()));
+        Timer(const Duration(milliseconds: 4000), () {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => DashBoard()));
         });
       }
     } else {
       print("No user found");
       Timer(const Duration(milliseconds: 4000), () {
         Navigator.pushReplacementNamed(context, LoginPage.id);
-      }
-      );
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
