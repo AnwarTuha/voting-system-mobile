@@ -5,6 +5,7 @@ import 'package:voting_system_mobile/model/poll_model.dart';
 import 'package:voting_system_mobile/providers/poll_provider.dart';
 import 'package:voting_system_mobile/providers/user_provider.dart';
 import 'package:voting_system_mobile/screens/poll_detail_screen.dart';
+import 'package:voting_system_mobile/widgets/no_result_page.dart';
 import 'package:voting_system_mobile/widgets/poll_card.dart';
 
 class UpcomingPoll extends StatefulWidget {
@@ -17,63 +18,76 @@ class _UpcomingPollState extends State<UpcomingPoll>
   @override
   bool get wantKeepAlive => true;
 
-  bool inAsyncCall = false;
-
-  Future polls;
-  List<Poll> pollsFromBack = [];
-
-  PollRequestModel pollRequestModel = PollRequestModel();
+  Future futurePolls;
+  List<Poll> polls = [];
 
   @override
   void initState() {
     super.initState();
-
-    pollRequestModel.userId =
-        Provider.of<UserProvider>(context, listen: false).user.userId;
-    pollRequestModel.authenticationToken =
-        Provider.of<UserProvider>(context, listen: false).user.token;
-
-    //polls = _getPolls();
+    futurePolls = _getPolls();
   }
 
-  _getPolls() async {
-    RequestService().fetchPolls(pollRequestModel).then((response) {
-      // set all polls for user
-      // Provider.of<PollProvider>(context, listen: false)
-      //     .setAllPoll(response.polls);
-      pollsFromBack.addAll(response.polls);
-    });
+  Future _getPolls() async {
+    var userProvider = Provider.of<UserProvider>(context, listen: false);
+    var pollProvider = Provider.of<PollProvider>(context, listen: false);
 
-    return pollsFromBack;
+    PollRequestModel pollRequestModel = PollRequestModel();
+    pollRequestModel.userId = userProvider.user.userId;
+    pollRequestModel.authenticationToken = userProvider.user.token;
+
+    await RequestService().fetchPolls(pollRequestModel).then((response) {
+       pollProvider.setAllPoll(response.polls);
+       pollProvider.setLivePolls();
+       polls = pollProvider.livePolls;
+       print(pollProvider.livePolls);
+    });
+    return polls.toList();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
+    GlobalKey _refreshKey = GlobalKey();
+
     return Container(
-        margin: EdgeInsets.all(10.0),
-        child: FutureBuilder(
-            future: _getPolls(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                print(polls.toString());
+      margin: EdgeInsets.all(10.0),
+      child: FutureBuilder(
+          future: futurePolls,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+              if (snapshot.data.length == 0) {
                 return Container(
                   child: Center(
-                    child: Text("Fetching Polls..."),
+                    child: NoResultPage(
+                      onPressed: () {
+                        return futurePolls = _getPolls();
+                      },
+                    ),
                   ),
                 );
-              } else {
-                print("Snapshot is: ${snapshot.data}");
-                return ListView.builder(
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: snapshot.data[index].pollTitle,
-                    );
+              }
+              return RefreshIndicator(
+                key: _refreshKey,
+                onRefresh: (){
+                  return futurePolls = _getPolls();
+                },
+                child: ListView.builder(
+                  itemBuilder: (context, i) {
+                    return buildPollCard(snapshot.data[i].pollTitle, snapshot.data[i].endDate, snapshot.data[i]);
                   },
                   itemCount: snapshot.data.length,
-                );
-              }
-            }));
+                ),
+              );
+            } else {
+              return Container(
+                child: Center(
+                  child: Text("Fetching polls..."),
+                ),
+              );
+            }
+          }),
+    );
   }
 
   Widget buildPollCard(String pollTitle, DateTime endDate, Poll poll) {
@@ -86,28 +100,4 @@ class _UpcomingPollState extends State<UpcomingPoll>
         });
   }
 
-  Future _refresh() async {
-    print("refresh is called");
-
-    PollRequestModel pollRequestModel = PollRequestModel();
-    pollRequestModel.userId =
-        Provider.of<UserProvider>(context, listen: false).user.userId;
-    pollRequestModel.authenticationToken =
-        Provider.of<UserProvider>(context, listen: false).user.token;
-
-    RequestService().fetchPolls(pollRequestModel).then((response) {
-      // set all polls for user
-
-      if (Provider.of<PollProvider>(context, listen: false).allPolls.length !=
-          response.polls.length) {
-        Provider.of<PollProvider>(context, listen: false)
-            .setAllPoll(response.polls);
-        Provider.of<PollProvider>(context, listen: false).setLivePolls();
-        Provider.of<PollProvider>(context, listen: false).setCompletedPolls();
-      } else {
-        final snackBar = SnackBar(content: Text('No new Polls'));
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      }
-    });
-  }
 }

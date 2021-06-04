@@ -10,7 +10,7 @@ class Polls{
   Polls({this.polls, this.error});
 
   factory Polls.fromJson(Map<String, dynamic> json) => Polls(
-    polls: json["Polls"] != null ? List<Poll>.from(json["Polls"].map((x) => Poll.fromJson(x))) : [],
+    polls: json["Polls"] != null ? List<Poll>.from(json["Polls"].map((x) => Poll.fromJson(x))): [],
     error: json["error"] != null ? HttpError.fromJson(json["error"]) : null,
   );
 
@@ -60,5 +60,5 @@ class Option{
 class PollRequestModel{
   String userId;
   String authenticationToken;
-  PollRequestModel({this.userId});
+  PollRequestModel({this.userId, this.authenticationToken});
 }

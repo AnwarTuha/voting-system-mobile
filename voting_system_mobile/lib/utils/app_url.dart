@@ -11,5 +11,6 @@ abstract class AppUrl{
   static const String resultOfPollUrl = "$kBaseUrl/Voters/getResults";
   static const String hasUserVoted = "$kBaseUrl/Voters/hasVoted";
   static const String getRolesOrg = "$kBaseUrl/roles/getRolesInOrg/";
+  static const String getPendingPollsUrl = "$kBaseUrl/Polls/getUserPendingVotes";
 
 }

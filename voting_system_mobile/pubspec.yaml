@@ -32,6 +32,9 @@ dependencies:
   # localize date format
   intl: ^0.17.0
 
+  # set up unique list of objects
+  darq: ^1.1.1
+
   # app wide state management
   provider: ^5.0.0
 

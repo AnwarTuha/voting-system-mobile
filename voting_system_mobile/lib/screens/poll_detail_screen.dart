@@ -180,8 +180,6 @@ class _PollDetailState extends State<PollDetail> {
                       if (response.response != null) {
                         widget.poll.hasVoted = true;
                         Provider.of<PollProvider>(context, listen: false)
-                            .setPendingPolls();
-                        Provider.of<PollProvider>(context, listen: false)
                             .setHasUserHasVoted(true, widget.poll.pollId);
                         final snackBar =
                             SnackBar(content: Text('${response.response}'));

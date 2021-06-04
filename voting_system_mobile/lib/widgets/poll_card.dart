@@ -29,19 +29,19 @@ class PollCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(10.0)
         ),
         child: Container(
-            padding: EdgeInsets.all(15.0),
+            padding: EdgeInsets.all(18.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 SizedBox(width: 10.0),
                 Container(
                   child: Expanded(
-                    flex: 9,
+                    flex: 1,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text("$pollTitle", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0, letterSpacing: 1.5)),
+                        Text("$pollTitle", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0, letterSpacing: 1.5)),
                         SizedBox(height: 10.0),
                         Text("End Date: $formattedDate")
                       ],

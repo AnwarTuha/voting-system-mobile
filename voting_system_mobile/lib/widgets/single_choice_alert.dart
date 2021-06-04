@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class ChoiceModal extends StatefulWidget {
   final List<Option> options;
-  String pollTitle;
+  final String pollTitle;
 
   ChoiceModal({this.options, this.pollTitle});
 

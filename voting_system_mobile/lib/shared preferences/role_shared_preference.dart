@@ -5,7 +5,7 @@ import 'package:voting_system_mobile/model/role_detail.dart';
 
 class RolePreferences{
   static SharedPreferences _preferences;
-  static const String roleDetailKey = "role";
+  static const String _roleDetailKey = "role";
 
   static Future init() async =>
       _preferences = await SharedPreferences.getInstance();
@@ -13,11 +13,11 @@ class RolePreferences{
   static Future setRoleDetail(RoleDetail roleDetail) async {
     final json =  jsonEncode(roleDetail.toJson());
 
-    await _preferences.setString(roleDetailKey, json);
+    await _preferences.setString(_roleDetailKey, json);
   }
 
   static RoleDetail getRoleDetail(){
-    final json = _preferences.get(roleDetailKey);
+    final json = _preferences.get(_roleDetailKey);
 
     if (json == null){
       return null;
@@ -27,7 +27,7 @@ class RolePreferences{
   }
 
   static Future removeRoleDetail() async{
-    await _preferences.remove(roleDetailKey);
+    await _preferences.remove(_roleDetailKey);
   }
 
 }

@@ -147,6 +147,39 @@ class RequestService {
     return null;
   }
 
+  // fetch pending polls
+
+  Future<Polls> fetchPendingPolls(PollRequestModel pollRequestModel) async {
+    String url = "${AppUrl.getPendingPollsUrl}/${pollRequestModel.userId}";
+
+    var response;
+
+    try{
+      response = await http.get(Uri.parse(url), headers: {'Authorization': '${pollRequestModel.authenticationToken}'});
+      print("Success(Fetch Pending request): ${response.body}");
+      if (response != null){
+        return Polls.fromJson(
+          new Map<String, dynamic>.from(
+            jsonDecode(response.body)
+          )
+        );
+      }
+    } catch(e) {
+      print(e);
+      print("Error(Fetch Pending request): ${response.body}");
+      if (response != null){
+        return Polls.fromJson(
+          new Map<String, dynamic>.from(
+            jsonDecode(response.body)
+          )
+        );
+      }
+    }
+
+    return null;
+
+  }
+
   // Send account for verification
 
   Future<VerificationResponseModel> submitAccountForVerification(
@@ -243,8 +276,7 @@ class RequestService {
   // request result of poll
 
   Future<ResultModel> requestResult(ResultRequestModel requestModel) async {
-    String url = "${AppUrl.resultOfPollUrl}/${requestModel
-        .userId}/poll/${requestModel.pollId}";
+    String url = "${AppUrl.resultOfPollUrl}/${requestModel.userId}/poll/${requestModel.pollId}";
 
     var response;
 

@@ -1,6 +1,7 @@
 
 import 'package:voting_system_mobile/model/poll_model.dart';
 import 'package:flutter/material.dart';
+import 'package:darq/darq.dart';
 
 class PollProvider extends ChangeNotifier{
 
@@ -28,17 +29,19 @@ class PollProvider extends ChangeNotifier{
   }
 
   void setLivePolls(){
-    _livePolls.addAll(_allPolls.where((element) => element.endDate.isAfter(DateTime.now()) && element.hasVoted == false).toSet().toList());
+    _livePolls.addAll(_allPolls.where((element) => element.endDate.isAfter(DateTime.now()) && element.hasVoted == false));
+    _livePolls = _livePolls.distinct((element) => element.pollId).toList();
     notifyListeners();
   }
 
-  void setPendingPolls(){
-    _pendingPolls.addAll(_allPolls.where((element) => element.hasVoted == true && element.endDate.isAfter(DateTime.now())).toSet().toList());
+  void setPendingPolls(List<Poll> pendingPolls){
+    _pendingPolls = pendingPolls;
     notifyListeners();
   }
 
   void setCompletedPolls(){
-    _completedPolls.addAll(_allPolls.where((element) => element.endDate.isBefore(DateTime.now())).toSet().toList());
+    _completedPolls.addAll(_allPolls.where((element) => element.endDate.isBefore(DateTime.now())));
+    _completedPolls = _completedPolls.distinct((element) => element.pollId).toList();
     notifyListeners();
   }
 
