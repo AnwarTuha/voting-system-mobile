@@ -35,6 +35,7 @@ class User {
       isComplete: json["isComplete"]);
 
   Map<String, dynamic> toJson() => {
+        "token": token,
         "firstname": firstName,
         "lastname": lastName,
         "phone": phoneNumber,
