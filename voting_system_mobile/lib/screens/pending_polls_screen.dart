@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:voting_system_mobile/classes/request_service.dart';
 import 'package:voting_system_mobile/model/poll_model.dart';
 import 'package:voting_system_mobile/providers/poll_provider.dart';
 import 'package:voting_system_mobile/providers/user_provider.dart';
 import 'package:voting_system_mobile/screens/poll_detail_screen.dart';
+import 'package:voting_system_mobile/utils/color_palette_util.dart';
 import 'package:voting_system_mobile/widgets/no_result_page.dart';
 import 'package:voting_system_mobile/widgets/poll_card.dart';
 
@@ -81,7 +83,7 @@ class _PendingPollsState extends State<PendingPolls>
               } else {
                 return Container(
                   child: Center(
-                    child: Text("Fetching pending polls..."),
+                    child: SpinKitWave(size: 25.0, color: tealLightColor),
                   ),
                 );
               }

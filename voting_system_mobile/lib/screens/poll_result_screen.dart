@@ -20,7 +20,7 @@ class PollResultsDetail extends StatefulWidget {
 class _PollResultsDetail extends State<PollResultsDetail> {
   bool isApiCallProcess = true;
   List<ResultData> results = [];
-  String winner;
+  String _winner;
 
   @override
   void initState() {
@@ -30,7 +30,7 @@ class _PollResultsDetail extends State<PollResultsDetail> {
 
   _checkWinner(List<ResultData> results){
     results.sort((a, b) => a.voteCount.compareTo(b.voteCount));
-    winner = results.last.title;
+    _winner = results.last.title;
   }
 
   _getResult(){
@@ -119,6 +119,7 @@ class _PollResultsDetail extends State<PollResultsDetail> {
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text("Poll Type",
@@ -188,7 +189,7 @@ class _PollResultsDetail extends State<PollResultsDetail> {
                       ),
                       const SizedBox(height: 12.0),
                       Text(
-                        "Winner is $winner",
+                        "Winner is $_winner",
                         style: TextStyle(
                           fontSize: 18.0,
                           color: Colors.black,

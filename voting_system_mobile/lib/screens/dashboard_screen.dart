@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:voting_system_mobile/providers/poll_provider.dart';
 import 'package:voting_system_mobile/screens/completed_polls_screen.dart';
+import 'package:voting_system_mobile/screens/explore_screen.dart';
 import 'package:voting_system_mobile/screens/notifications_screen.dart';
 import 'package:voting_system_mobile/screens/pending_polls_screen.dart';
 import 'package:voting_system_mobile/screens/poll_detail_screen.dart';
 import 'package:voting_system_mobile/screens/profile_screen.dart';
 import 'package:voting_system_mobile/screens/upcoming_polls_screen.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
+import 'package:voting_system_mobile/widgets/data_search.dart';
 import 'package:voting_system_mobile/widgets/navigation_drawer_widget.dart';
 
 class DashBoard extends StatefulWidget {
@@ -22,6 +24,7 @@ class _DashBoardState extends State<DashBoard>
   String title = "Votion";
 
   TabController _tabController;
+  int _selectedIndex = 0;
 
   bool inAsyncCall = true;
 
@@ -37,13 +40,20 @@ class _DashBoardState extends State<DashBoard>
     _tabController.dispose();
   }
 
-  List<Widget> _tabs = [
-    Tab(icon: Icon(Icons.home, size: 38.0,)),
-    Tab(icon: Icon(Icons.notifications_active, size: 38.0,)),
-    Tab(icon: Icon(Icons.supervised_user_circle, size: 38.0,)),
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  List<BottomNavigationBarItem> _tabs = [
+    BottomNavigationBarItem(icon: Icon(Icons.home, size: 25.0,), label: 'Home'),
+    BottomNavigationBarItem(icon: Icon(Icons.explore, size: 25.0,), label: 'Explore'),
+    BottomNavigationBarItem(icon: Icon(Icons.notifications_active, size: 25.0,), label: 'Notifications'),
+    BottomNavigationBarItem(icon: Icon(Icons.supervised_user_circle, size: 25.0,), label: 'Profile'),
   ];
 
-  List<Widget> _pages = [TopTabBar(), Notifications(), ProfilePage()];
+  List<Widget> _pages = [TopTabBar(), ExploreScreen(), Notifications(), ProfilePage()];
 
   @override
   Widget build(BuildContext context) {
@@ -65,24 +75,16 @@ class _DashBoardState extends State<DashBoard>
           IconButton(icon: Icon(Icons.filter_list), onPressed: () {})
         ],
       ),
-      body: TabBarView(
-        controller: _tabController,
-        physics: NeverScrollableScrollPhysics(),
+      body: IndexedStack(
+        index: _selectedIndex,
         children: _pages,
       ),
-      bottomNavigationBar: SafeArea(
-        child: Container(
-          color: Colors.transparent,
-          height: 65.0,
-          child: TabBar(
-            controller: _tabController,
-            unselectedLabelColor: Colors.grey,
-            physics: NeverScrollableScrollPhysics(),
-            labelColor: tealColors,
-            labelStyle: TextStyle(fontSize: 15.0),
-            tabs: _tabs,
-          ),
-        ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: _tabs,
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _selectedIndex,
+        selectedItemColor: tealColors,
+        onTap: _onItemTapped,
       ),
     );
   }
@@ -95,8 +97,7 @@ class TopTabBar extends StatefulWidget {
   _TopTabBarState createState() => _TopTabBarState();
 }
 
-class _TopTabBarState extends State<TopTabBar>
-    with SingleTickerProviderStateMixin<TopTabBar> {
+class _TopTabBarState extends State<TopTabBar> with SingleTickerProviderStateMixin<TopTabBar> {
   TabController _tabController;
 
   @override
@@ -146,88 +147,3 @@ class _TopTabBarState extends State<TopTabBar>
   }
 }
 
-class DataSearch extends SearchDelegate<String> {
-  @override
-  String get searchFieldLabel => 'Search Polls';
-
-  bool get maintainState => true;
-
-  final polls = [];
-  var indexGlobal;
-
-  final recentPolls = [];
-
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    // actions for app bar
-
-    polls.addAll(Provider.of<PollProvider>(context).allPolls);
-
-    return [
-      IconButton(
-        icon: Icon(Icons.clear),
-        onPressed: () {
-          query = "";
-        },
-      ),
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    // leading icon on app bar
-    return IconButton(
-      icon: AnimatedIcon(
-        icon: AnimatedIcons.menu_arrow,
-        progress: transitionAnimation,
-      ),
-      onPressed: () {
-        close(context, null);
-      },
-    );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    // show some result based on selection
-    return null;
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    // show suggestions while typing search
-    final suggestionList = query.isEmpty
-        ? recentPolls
-        : polls
-            .where((element) =>
-                element.pollTitle.toUpperCase().startsWith(query.toUpperCase()))
-            .toSet()
-            .toList();
-
-    return ListView.builder(
-      itemBuilder: (context, index) => ListTile(
-        onTap: () {
-          recentPolls.add(polls[index]);
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => PollDetail(poll: polls[index])));
-        },
-        leading: Icon(Icons.poll),
-        title: RichText(
-          text: TextSpan(
-              text: suggestionList[index].pollTitle.substring(0, query.length),
-              style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-              children: [
-                TextSpan(
-                  text: suggestionList[index].pollTitle.substring(query.length),
-                  style: TextStyle(color: Colors.grey),
-                )
-              ]),
-        ),
-      ),
-      itemCount: suggestionList.length,
-    );
-  }
-}
