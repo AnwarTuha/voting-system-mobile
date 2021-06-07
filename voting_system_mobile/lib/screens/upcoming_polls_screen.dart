@@ -15,8 +15,7 @@ class UpcomingPoll extends StatefulWidget {
   _UpcomingPollState createState() => _UpcomingPollState();
 }
 
-class _UpcomingPollState extends State<UpcomingPoll>
-    with AutomaticKeepAliveClientMixin<UpcomingPoll> {
+class _UpcomingPollState extends State<UpcomingPoll> with AutomaticKeepAliveClientMixin<UpcomingPoll> {
   @override
   bool get wantKeepAlive => true;
 

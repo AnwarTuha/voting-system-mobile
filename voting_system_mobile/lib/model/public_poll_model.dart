@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:voting_system_mobile/model/response_error_model.dart';
+
 List<PublicPollResponseModel> publicPollResponseModelFromJson(String str) =>
     List<PublicPollResponseModel>.from(
         json.decode(str).map((x) => PublicPollResponseModel.fromJson(x)));
@@ -16,6 +18,7 @@ class PublicPollResponseModel {
     this.questions,
     this.publisherId,
     this.pollId,
+    this.error
   });
 
   String pollTitle;
@@ -25,17 +28,18 @@ class PublicPollResponseModel {
   List<Question> questions;
   String publisherId;
   String pollId;
+  HttpError error;
 
   factory PublicPollResponseModel.fromJson(Map<String, dynamic> json) =>
       PublicPollResponseModel(
-        pollTitle: json["Title"],
-        startDate: DateTime.parse(json["startDate"]),
-        endDate: DateTime.parse(json["endDate"]),
-        pollDescription: json["description"],
-        questions: List<Question>.from(
-            json["questions"].map((x) => Question.fromJson(x))),
-        publisherId: json["publisherId"],
-        pollId: json["id"],
+        pollTitle: json["Title"] != null ? json["Title"] : null,
+        startDate: json["startDate"] != null ? DateTime.parse(json["startDate"]) : null,
+        endDate: json["endDate"] != null ? DateTime.parse(json["endDate"]) : null,
+        pollDescription: json["description"] != null ? json["description"] : null,
+        questions: json["questions"] != null ? List<Question>.from(json["questions"].map((x) => Question.fromJson(x))) : [],
+        publisherId: json["publisherId"] != null ? json["publisherId"] : null,
+        pollId: json["id"] != null ? json["id"] : null,
+        error: json["error"] != null ? HttpError.fromJson(json["error"]) : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -59,9 +63,8 @@ class Question {
   List<Option> options;
 
   factory Question.fromJson(Map<String, dynamic> json) => Question(
-        questionTitle: json["title"],
-        options:
-            List<Option>.from(json["options"].map((x) => Option.fromJson(x))),
+        questionTitle: json["title"] != null ? json["title"] : null,
+        options: json["options"] != null ? List<Option>.from(json["options"].map((x) => Option.fromJson(x))) : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -80,8 +83,8 @@ class Option {
   int voteCount;
 
   factory Option.fromJson(Map<String, dynamic> json) => Option(
-        optionTitle: json["title"],
-        voteCount: json["voteCount"],
+        optionTitle: json["title"] != null ? json["title"] : null,
+        voteCount: json["voteCount"] != null ? json["voteCount"] : null,
       );
 
   Map<String, dynamic> toJson() => {
