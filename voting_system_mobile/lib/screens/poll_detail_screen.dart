@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:voting_system_mobile/classes/request_service.dart';
+import 'package:voting_system_mobile/model/poll_model.dart';
+import 'package:voting_system_mobile/model/vote_model.dart';
 import 'package:voting_system_mobile/providers/poll_provider.dart';
 import 'package:voting_system_mobile/providers/user_provider.dart';
-import 'package:voting_system_mobile/model/poll_model.dart';
 import 'package:voting_system_mobile/widgets/custom_button.dart';
 import 'package:voting_system_mobile/widgets/progress_hud_modal.dart';
 import 'package:voting_system_mobile/widgets/single_choice_alert.dart';
-import 'package:voting_system_mobile/model/vote_model.dart';
 
 class PollDetail extends StatefulWidget {
   static const String id = "poll_detail";
@@ -45,7 +45,7 @@ class _PollDetailState extends State<PollDetail> {
 
   Widget _uiSetup(BuildContext context) {
     String userId = Provider.of<UserProvider>(context).user.userId;
-    String authenticationToken =  Provider.of<UserProvider>(context).user.token;
+    String authenticationToken = Provider.of<UserProvider>(context).user.token;
     String _selectedOption;
 
     return Scaffold(
@@ -162,8 +162,7 @@ class _PollDetailState extends State<PollDetail> {
                         voterId: userId,
                         option: _selectedOption,
                         pollId: widget.poll.pollId,
-                        authenticationToken: authenticationToken
-                    );
+                        authenticationToken: authenticationToken);
 
                     setState(() {
                       isApiCallProcess = true;

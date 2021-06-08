@@ -3,18 +3,17 @@ import 'package:voting_system_mobile/model/user_model.dart';
 
 import 'response_error_model.dart';
 
-LoginResponseModel loginResponseModelFromJson(String str) => LoginResponseModel.fromJson(json.decode(str));
+LoginResponseModel loginResponseModelFromJson(String str) =>
+    LoginResponseModel.fromJson(json.decode(str));
 
 class LoginResponseModel {
-
-
   final User user;
 
   final HttpError error;
 
   LoginResponseModel({
-      this.user,
-      this.error,
+    this.user,
+    this.error,
   });
 
   factory LoginResponseModel.fromJson(Map<String, dynamic> json) {

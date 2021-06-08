@@ -55,7 +55,8 @@ class _PendingPollsState extends State<PendingPolls>
         child: FutureBuilder(
             future: futurePolls,
             builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+              if (snapshot.connectionState == ConnectionState.done &&
+                  snapshot.hasData) {
                 if (snapshot.data.length == 0) {
                   return Container(
                     child: Center(
@@ -74,8 +75,9 @@ class _PendingPollsState extends State<PendingPolls>
                   },
                   child: ListView.builder(
                     itemBuilder: (context, i) {
-                      return buildPollCard(snapshot.data[i].pollTitle,
-                          snapshot.data[i].endDate, snapshot.data[i]);
+                      print(snapshot.data);
+                      return buildPollCard(snapshot.data.pollTitle,
+                          snapshot.data.endDate, snapshot.data);
                     },
                     itemCount: snapshot.data.length,
                   ),

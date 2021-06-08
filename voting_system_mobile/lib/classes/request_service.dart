@@ -51,7 +51,8 @@ class RequestService {
   }
 
   // Register service
-  Future<RegisterResponseModel> register(RegisterRequestModel registerRequestModel) async {
+  Future<RegisterResponseModel> register(
+      RegisterRequestModel registerRequestModel) async {
     String url = "${AppUrl.kBaseUrl}/Voters/register";
     var response;
 
@@ -88,7 +89,8 @@ class RequestService {
 
   // Fetch Roles Service
 
-  Future<RoleResponseModel> fetchRoles(RoleRequestModel roleRequestModel) async {
+  Future<RoleResponseModel> fetchRoles(
+      RoleRequestModel roleRequestModel) async {
     String url = "${AppUrl.kBaseUrl}/roles/${roleRequestModel.orgId}";
 
     var response;
@@ -172,7 +174,8 @@ class RequestService {
 
   // Send account for verification
 
-  Future<VerificationResponseModel> submitAccountForVerification(VerificationRequestModel verificationRequestModel) async {
+  Future<VerificationResponseModel> submitAccountForVerification(
+      VerificationRequestModel verificationRequestModel) async {
     String url = "${AppUrl.kBaseUrl}/Verifications";
     var response;
 
@@ -203,7 +206,8 @@ class RequestService {
 
   // Fetch role detail
 
-  Future<RoleDetailResponseModel> requestRoleDetail(RoleDetailRequestModel roleDetailRequestModel) async {
+  Future<RoleDetailResponseModel> requestRoleDetail(
+      RoleDetailRequestModel roleDetailRequestModel) async {
     String url =
         "${AppUrl.kBaseUrl}/roles/getRoleDetails/${roleDetailRequestModel.roleId}";
 
@@ -228,7 +232,8 @@ class RequestService {
   }
 
   // vote on polls
-  Future<VoteResponseModel> voteOnPoll(VoteRequestModel voteRequestModel) async {
+  Future<VoteResponseModel> voteOnPoll(
+      VoteRequestModel voteRequestModel) async {
     print("${voteRequestModel.toJson()}");
 
     String url = "${AppUrl.voteOnPollUrl}/${voteRequestModel.pollId}";
@@ -286,15 +291,15 @@ class RequestService {
 
   // request public polls
 
-  Future<PublicPollResponseModel> requestPublicPoll() async {
+  Future<List<PublicPollResponseModel>> requestPublicPoll() async {
     String url = "${AppUrl.getPublicPollsUrl}";
 
     var response;
 
     response = await http.get(Uri.parse(url));
-    if (response != null){
+    if (response != null) {
       print("Success(Fetch public votes): ${jsonDecode(response.body)})}}");
-      return PublicPollResponseModel.fromJson(new Map<String, dynamic>.from(jsonDecode(response.body)));
+      return publicPollResponseModelFromJson(response.body);
     }
 
     return null;
