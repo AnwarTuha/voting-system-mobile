@@ -27,6 +27,7 @@ class Poll {
   List<Option> option;
   bool isPublic;
   bool canRetract;
+  String userChoice;
   bool hasVoted = false;
 
   Poll(
@@ -37,6 +38,7 @@ class Poll {
       this.startDate,
       this.pollDescription,
       this.canRetract,
+      this.userChoice,
       this.option,
       this.type});
 

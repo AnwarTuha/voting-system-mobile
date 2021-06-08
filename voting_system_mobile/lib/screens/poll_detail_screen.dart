@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:voting_system_mobile/classes/request_service.dart';
 import 'package:voting_system_mobile/model/poll_model.dart';
+import 'package:voting_system_mobile/model/user_model.dart';
 import 'package:voting_system_mobile/model/vote_model.dart';
 import 'package:voting_system_mobile/providers/poll_provider.dart';
 import 'package:voting_system_mobile/providers/user_provider.dart';
@@ -13,8 +14,9 @@ class PollDetail extends StatefulWidget {
   static const String id = "poll_detail";
 
   final Poll poll;
+  final String fromClass;
 
-  PollDetail({this.poll});
+  PollDetail({this.poll, this.fromClass});
 
   @override
   _PollDetailState createState() => _PollDetailState();
@@ -32,8 +34,7 @@ class _PollDetailState extends State<PollDetail> {
     return showDialog(
         context: context,
         builder: (context) {
-          return ChoiceModal(
-              options: widget.poll.option, pollTitle: widget.poll.pollTitle);
+          return ChoiceModal(options: widget.poll.option, pollTitle: widget.poll.pollTitle);
         });
   }
 
@@ -44,9 +45,29 @@ class _PollDetailState extends State<PollDetail> {
   }
 
   Widget _uiSetup(BuildContext context) {
-    String userId = Provider.of<UserProvider>(context).user.userId;
-    String authenticationToken = Provider.of<UserProvider>(context).user.token;
+    var userProvider = Provider.of<UserProvider>(context);
+    var pollProvider = Provider.of<PollProvider>(context);
+    String _authenticationToken = userProvider.user.token;
+    bool isButtonEnabled;
     String _selectedOption;
+
+
+    switch(widget.fromClass){
+      case "live":
+        isButtonEnabled = false;
+        break;
+      case "pending":
+        isButtonEnabled = true;
+        break;
+      case "upcoming":
+        isButtonEnabled = false;
+        break;
+    }
+
+    setupRequestModel(String option){
+      VoteRequestModel voteRequestModel = VoteRequestModel(voterId: userProvider.user.userId, pollId: widget.poll.pollId, authenticationToken: _authenticationToken, option: option);
+      return voteRequestModel;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -145,59 +166,33 @@ class _PollDetailState extends State<PollDetail> {
                 ),
               ),
               const SizedBox(height: 15.0),
-              CustomButton(
-                title: !widget.poll.hasVoted
-                    ? "Cast your vote"
-                    : "You have chosen $_selectedOption}",
-                enabled: !(widget.poll.hasVoted),
-                onPressed: () async {
-                  _selectedOption = await showChooseDialog(context);
+              widget.fromClass == "upcoming" ? Text("Voting hasn't started yet") : CustomButton(
+                title: isButtonEnabled ? "You voted: ${widget.poll.userChoice}" : "Click here to vote",
+                enabled: !isButtonEnabled,
+                onPressed: () async{
+                  await showChooseDialog(context).then((value) => _selectedOption = value);
+                  VoteRequestModel voteRequestModel = setupRequestModel(_selectedOption);
 
-                  if (_selectedOption == null || _selectedOption == "") {
-                    final snackBar = SnackBar(
-                        content: Text('Please choose from the options'));
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  } else {
-                    VoteRequestModel voteRequestModel = VoteRequestModel(
-                        voterId: userId,
-                        option: _selectedOption,
-                        pollId: widget.poll.pollId,
-                        authenticationToken: authenticationToken);
+                  setState(() {
+                    isApiCallProcess = true;
+                  });
 
+                  RequestService().voteOnPoll(voteRequestModel).then((response){
                     setState(() {
-                      isApiCallProcess = true;
+                      isApiCallProcess = false;
                     });
 
-                    RequestService()
-                        .voteOnPoll(voteRequestModel)
-                        .then((response) {
-                      print(response.response);
-                      setState(() {
-                        isApiCallProcess = false;
-                      });
+                    pollProvider.setUserOptionForPoll(_selectedOption, widget.poll.pollId);
+                    pollProvider.setUserHasVoted(true, widget.poll.pollId);
 
-                      if (response.response != null) {
-                        widget.poll.hasVoted = true;
-                        Provider.of<PollProvider>(context, listen: false)
-                            .setHasUserHasVoted(true, widget.poll.pollId);
-                        final snackBar =
-                            SnackBar(content: Text('${response.response}'));
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      } else {
-                        final snackBar = SnackBar(
-                            content: Text('${response.error.message}'));
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }
-                    }).timeout(Duration(seconds: 30), onTimeout: () {
-                      setState(() {
-                        isApiCallProcess = false;
-                      });
-                      final snackBar = SnackBar(
-                          content:
-                              Text('Request Timed out, Check your connection'));
+                    if (response != null){
+                      final snackBar = SnackBar(content: Text('${response.response}'));
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    });
-                  }
+                    } else {
+                      final snackBar = SnackBar(content: Text('${response.error.message}'));
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+                  });
                 },
               )
             ],

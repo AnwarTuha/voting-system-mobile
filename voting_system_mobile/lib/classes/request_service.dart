@@ -232,9 +232,7 @@ class RequestService {
   }
 
   // vote on polls
-  Future<VoteResponseModel> voteOnPoll(
-      VoteRequestModel voteRequestModel) async {
-    print("${voteRequestModel.toJson()}");
+  Future<VoteResponseModel> voteOnPoll(VoteRequestModel voteRequestModel) async {
 
     String url = "${AppUrl.voteOnPollUrl}/${voteRequestModel.pollId}";
 
