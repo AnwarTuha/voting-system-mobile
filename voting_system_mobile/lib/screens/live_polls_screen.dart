@@ -10,12 +10,12 @@ import 'package:voting_system_mobile/utils/color_palette_util.dart';
 import 'package:voting_system_mobile/widgets/no_result_page.dart';
 import 'package:voting_system_mobile/widgets/poll_card.dart';
 
-class UpcomingPoll extends StatefulWidget {
+class LivePolls extends StatefulWidget {
   @override
-  _UpcomingPollState createState() => _UpcomingPollState();
+  _LivePollsState createState() => _LivePollsState();
 }
 
-class _UpcomingPollState extends State<UpcomingPoll> with AutomaticKeepAliveClientMixin<UpcomingPoll> {
+class _LivePollsState extends State<LivePolls> with AutomaticKeepAliveClientMixin<LivePolls> {
   @override
   bool get wantKeepAlive => true;
 
@@ -37,10 +37,10 @@ class _UpcomingPollState extends State<UpcomingPoll> with AutomaticKeepAliveClie
     pollRequestModel.authenticationToken = userProvider.user.token;
 
     await RequestService().fetchPolls(pollRequestModel).then((response) {
-      pollProvider.setAllPoll(response.polls);
-      pollProvider.setUpcomingPolls();
-      polls = pollProvider.upComingPolls;
-      print(pollProvider.upComingPolls);
+       pollProvider.setAllPoll(response.polls);
+       pollProvider.setLivePolls();
+       polls = pollProvider.livePolls;
+       print(pollProvider.livePolls);
     });
     return polls.toList();
   }
@@ -97,7 +97,7 @@ class _UpcomingPollState extends State<UpcomingPoll> with AutomaticKeepAliveClie
         endDate: endDate,
         onPressed: () {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => PollDetail(poll: poll, fromClass: "upcoming")));
+              MaterialPageRoute(builder: (context) => PollDetail(poll: poll, fromClass: "live")));
         });
   }
 

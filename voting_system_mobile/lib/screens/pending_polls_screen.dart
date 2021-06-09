@@ -76,8 +76,8 @@ class _PendingPollsState extends State<PendingPolls>
                   child: ListView.builder(
                     itemBuilder: (context, i) {
                       print(snapshot.data);
-                      return buildPollCard(snapshot.data.pollTitle,
-                          snapshot.data.endDate, snapshot.data);
+                      return buildPollCard(snapshot.data[i].pollTitle,
+                          snapshot.data[i].endDate, snapshot.data[i]);
                     },
                     itemCount: snapshot.data.length,
                   ),
@@ -98,7 +98,7 @@ class _PendingPollsState extends State<PendingPolls>
         endDate: endDate,
         onPressed: () {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => PollDetail(poll: poll)));
+              MaterialPageRoute(builder: (context) => PollDetail(poll: poll, fromClass: "pending")));
         });
   }
 }

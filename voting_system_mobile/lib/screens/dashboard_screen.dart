@@ -7,6 +7,7 @@ import 'package:voting_system_mobile/screens/notifications_screen.dart';
 import 'package:voting_system_mobile/screens/pending_polls_screen.dart';
 import 'package:voting_system_mobile/screens/poll_detail_screen.dart';
 import 'package:voting_system_mobile/screens/profile_screen.dart';
+import 'package:voting_system_mobile/screens/live_polls_screen.dart';
 import 'package:voting_system_mobile/screens/upcoming_polls_screen.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
 import 'package:voting_system_mobile/widgets/data_search.dart';
@@ -23,7 +24,6 @@ class _DashBoardState extends State<DashBoard>
     with SingleTickerProviderStateMixin<DashBoard> {
   String title = "Votion";
 
-  TabController _tabController;
   int _selectedIndex = 0;
 
   bool inAsyncCall = true;
@@ -31,13 +31,11 @@ class _DashBoardState extends State<DashBoard>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
   void dispose() {
     super.dispose();
-    _tabController.dispose();
   }
 
   void _onItemTapped(int index) {
@@ -103,7 +101,7 @@ class _TopTabBarState extends State<TopTabBar> with SingleTickerProviderStateMix
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
   }
 
   @override
@@ -114,11 +112,12 @@ class _TopTabBarState extends State<TopTabBar> with SingleTickerProviderStateMix
 
   List<Widget> _tabs = [
     Tab(text: "Live"),
+    Tab(text: "Upcoming"),
     Tab(text: "Pending"),
     Tab(text: "Results"),
   ];
 
-  List<Widget> _pages = [UpcomingPoll(), PendingPolls(), CompletedPoll()];
+  List<Widget> _pages = [LivePolls(), UpcomingPoll(), PendingPolls(), CompletedPoll()];
 
   @override
   Widget build(BuildContext context) {

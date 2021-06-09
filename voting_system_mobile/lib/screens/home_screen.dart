@@ -4,7 +4,7 @@ import 'package:voting_system_mobile/model/roles_model.dart';
 import 'package:voting_system_mobile/model/user_model.dart';
 import 'package:voting_system_mobile/screens/completed_polls_screen.dart';
 import 'package:voting_system_mobile/screens/pending_polls_screen.dart';
-import 'package:voting_system_mobile/screens/upcoming_polls_screen.dart';
+import 'package:voting_system_mobile/screens/live_polls_screen.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
 import 'package:voting_system_mobile/shared%20preferences/role_shared_preference.dart';
 import 'package:voting_system_mobile/shared%20preferences/user_shared_preferences.dart';
@@ -28,7 +28,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen>{
 
   final _kTabPages = <Widget>[
-    UpcomingPoll(),
+    LivePolls(),
     PendingPolls(),
     CompletedPoll()
   ];
