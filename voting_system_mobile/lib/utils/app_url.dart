@@ -10,6 +10,10 @@ abstract class AppUrl {
   static const String resultOfPollUrl = "$kBaseUrl/Voters/getResults";
   static const String hasUserVoted = "$kBaseUrl/Voters/hasVoted";
   static const String getRolesOrg = "$kBaseUrl/roles/getRolesInOrg/";
-  static const String getPendingPollsUrl = "$kBaseUrl/Polls/getUserPendingVotes";
-  static const String getPublicPollsUrl = "$kBaseUrl/publicVotes";
+  static const String getPendingPollsUrl =
+      "$kBaseUrl/Polls/getUserPendingVotes";
+  static const String getPublicPollsUrl =
+      "$kBaseUrl/publicVotes?filter[where][isVerified]=true";
+  static const String getCandidateDetailsUrl =
+      "$kBaseUrl//Polls/candidatePollDetails";
 }

@@ -42,12 +42,9 @@ class _CompletedPollState extends State<CompletedPoll>
       pollProvider.setCompletedPolls();
       polls = pollProvider.completedPolls;
       print(pollProvider.completedPolls);
-    }).timeout(Duration(seconds: 40), onTimeout: (){
-
-    });
+    }).timeout(Duration(seconds: 40), onTimeout: () {});
     return polls.toList();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +57,8 @@ class _CompletedPollState extends State<CompletedPoll>
       child: FutureBuilder(
           future: futurePolls,
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+            if (snapshot.connectionState == ConnectionState.done &&
+                snapshot.hasData) {
               if (snapshot.data.length == 0) {
                 return Container(
                   child: Center(
@@ -74,12 +72,20 @@ class _CompletedPollState extends State<CompletedPoll>
               }
               return RefreshIndicator(
                 key: _refreshKey,
-                onRefresh: (){
+                onRefresh: () {
                   return futurePolls = _getPolls();
                 },
-                child: ListView.builder(
+                child: ListView.separated(
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const Divider(
+                    color: Colors.grey,
+                  ),
                   itemBuilder: (context, i) {
-                    return buildPollCard(snapshot.data[i].pollTitle, snapshot.data[i].endDate, snapshot.data[i]);
+                    return buildPollCard(
+                        snapshot.data[i].pollTitle,
+                        snapshot.data[i].endDate,
+                        snapshot.data[i].type,
+                        snapshot.data[i]);
                   },
                   itemCount: snapshot.data.length,
                 ),
@@ -95,13 +101,17 @@ class _CompletedPollState extends State<CompletedPoll>
     );
   }
 
-  Widget buildPollCard(String pollTitle, DateTime endDate, Poll poll) {
+  Widget buildPollCard(
+      String pollTitle, DateTime endDate, String pollType, Poll poll) {
     return PollCard(
         pollTitle: pollTitle,
         endDate: endDate,
+        pollType: pollType,
         onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => PollResultsDetail(poll: poll)));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PollResultsDetail(poll: poll)));
         });
   }
 }

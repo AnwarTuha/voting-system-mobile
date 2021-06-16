@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:voting_system_mobile/providers/poll_provider.dart';
 import 'package:voting_system_mobile/screens/completed_polls_screen.dart';
 import 'package:voting_system_mobile/screens/explore_screen.dart';
+import 'package:voting_system_mobile/screens/live_polls_screen.dart';
 import 'package:voting_system_mobile/screens/notifications_screen.dart';
 import 'package:voting_system_mobile/screens/pending_polls_screen.dart';
-import 'package:voting_system_mobile/screens/poll_detail_screen.dart';
 import 'package:voting_system_mobile/screens/profile_screen.dart';
-import 'package:voting_system_mobile/screens/live_polls_screen.dart';
 import 'package:voting_system_mobile/screens/upcoming_polls_screen.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
 import 'package:voting_system_mobile/widgets/data_search.dart';
@@ -45,13 +42,38 @@ class _DashBoardState extends State<DashBoard>
   }
 
   List<BottomNavigationBarItem> _tabs = [
-    BottomNavigationBarItem(icon: Icon(Icons.home, size: 25.0,), label: 'Home'),
-    BottomNavigationBarItem(icon: Icon(Icons.explore, size: 25.0,), label: 'Explore'),
-    BottomNavigationBarItem(icon: Icon(Icons.notifications_active, size: 25.0,), label: 'Notifications'),
-    BottomNavigationBarItem(icon: Icon(Icons.supervised_user_circle, size: 25.0,), label: 'Profile'),
+    BottomNavigationBarItem(
+        icon: Icon(
+          Icons.home,
+          size: 25.0,
+        ),
+        label: 'Home'),
+    BottomNavigationBarItem(
+        icon: Icon(
+          Icons.explore,
+          size: 25.0,
+        ),
+        label: 'Explore'),
+    BottomNavigationBarItem(
+        icon: Icon(
+          Icons.notifications_active,
+          size: 25.0,
+        ),
+        label: 'Notifications'),
+    BottomNavigationBarItem(
+        icon: Icon(
+          Icons.supervised_user_circle,
+          size: 25.0,
+        ),
+        label: 'Profile'),
   ];
 
-  List<Widget> _pages = [TopTabBar(), ExploreScreen(), Notifications(), ProfilePage()];
+  List<Widget> _pages = [
+    TopTabBar(),
+    ExploreScreen(),
+    Notifications(),
+    ProfilePage()
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +92,20 @@ class _DashBoardState extends State<DashBoard>
                   delegate: DataSearch(),
                 );
               }),
-          IconButton(icon: Icon(Icons.filter_list), onPressed: () {})
+          IconButton(
+              icon: Icon(Icons.filter_list),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Container(
+                      child: Center(
+                        child: Text("sort"),
+                      ),
+                    );
+                  },
+                );
+              })
         ],
       ),
       body: IndexedStack(
@@ -95,7 +130,8 @@ class TopTabBar extends StatefulWidget {
   _TopTabBarState createState() => _TopTabBarState();
 }
 
-class _TopTabBarState extends State<TopTabBar> with SingleTickerProviderStateMixin<TopTabBar> {
+class _TopTabBarState extends State<TopTabBar>
+    with SingleTickerProviderStateMixin<TopTabBar> {
   TabController _tabController;
 
   @override
@@ -117,7 +153,12 @@ class _TopTabBarState extends State<TopTabBar> with SingleTickerProviderStateMix
     Tab(text: "Results"),
   ];
 
-  List<Widget> _pages = [LivePolls(), UpcomingPoll(), PendingPolls(), CompletedPoll()];
+  List<Widget> _pages = [
+    LivePolls(),
+    UpcomingPoll(),
+    PendingPolls(),
+    CompletedPoll()
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -145,4 +186,3 @@ class _TopTabBarState extends State<TopTabBar> with SingleTickerProviderStateMix
     );
   }
 }
-

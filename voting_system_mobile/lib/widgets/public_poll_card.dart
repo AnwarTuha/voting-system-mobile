@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
 
-class PollCard extends StatelessWidget {
+class PublicPollCard extends StatelessWidget {
   final String pollTitle;
   final DateTime endDate;
   final Function onPressed;
-  final String pollType;
 
-  const PollCard(
-      {Key key, this.onPressed, this.endDate, this.pollTitle, this.pollType})
+  const PublicPollCard({Key key, this.onPressed, this.endDate, this.pollTitle})
       : super(key: key);
 
   @override
@@ -46,8 +44,6 @@ class PollCard extends StatelessWidget {
                         ),
                         SizedBox(height: 10.0),
                         Text("End Date: $formattedDate"),
-                        SizedBox(height: 10.0),
-                        Text("Type: $pollType")
                       ],
                     ),
                   ),

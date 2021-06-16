@@ -15,7 +15,8 @@ class UpcomingPoll extends StatefulWidget {
   _UpcomingPollState createState() => _UpcomingPollState();
 }
 
-class _UpcomingPollState extends State<UpcomingPoll> with AutomaticKeepAliveClientMixin<UpcomingPoll> {
+class _UpcomingPollState extends State<UpcomingPoll>
+    with AutomaticKeepAliveClientMixin<UpcomingPoll> {
   @override
   bool get wantKeepAlive => true;
 
@@ -32,15 +33,20 @@ class _UpcomingPollState extends State<UpcomingPoll> with AutomaticKeepAliveClie
     var userProvider = Provider.of<UserProvider>(context, listen: false);
     var pollProvider = Provider.of<PollProvider>(context, listen: false);
 
-    PollRequestModel pollRequestModel = PollRequestModel();
-    pollRequestModel.userId = userProvider.user.userId;
-    pollRequestModel.authenticationToken = userProvider.user.token;
+    PollRequestModel pollRequestModel = PollRequestModel(
+        userId: userProvider.user.userId,
+        authenticationToken: userProvider.user.token);
 
     await RequestService().fetchPolls(pollRequestModel).then((response) {
-      pollProvider.setAllPoll(response.polls);
-      pollProvider.setUpcomingPolls();
-      polls = pollProvider.upComingPolls;
-      print(pollProvider.upComingPolls);
+      if (response.polls.length == pollProvider.allPolls.length) {
+        final snackBar = SnackBar(content: Text('No new Polls'));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      } else {
+        pollProvider.setAllPoll(response.polls);
+        pollProvider.setUpcomingPolls();
+        polls = pollProvider.upComingPolls;
+        print(pollProvider.upComingPolls);
+      }
     });
     return polls.toList();
   }
@@ -56,7 +62,8 @@ class _UpcomingPollState extends State<UpcomingPoll> with AutomaticKeepAliveClie
       child: FutureBuilder(
           future: futurePolls,
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+            if (snapshot.connectionState == ConnectionState.done &&
+                snapshot.hasData) {
               if (snapshot.data.length == 0) {
                 return Container(
                   child: Center(
@@ -70,12 +77,21 @@ class _UpcomingPollState extends State<UpcomingPoll> with AutomaticKeepAliveClie
               }
               return RefreshIndicator(
                 key: _refreshKey,
-                onRefresh: (){
+                onRefresh: () {
+                  futurePolls = null;
                   return futurePolls = _getPolls();
                 },
-                child: ListView.builder(
+                child: ListView.separated(
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const Divider(
+                    color: Colors.grey,
+                  ),
                   itemBuilder: (context, i) {
-                    return buildPollCard(snapshot.data[i].pollTitle, snapshot.data[i].endDate, snapshot.data[i]);
+                    return buildPollCard(
+                        snapshot.data[i].pollTitle,
+                        snapshot.data[i].endDate,
+                        snapshot.data[i].type,
+                        snapshot.data[i]);
                   },
                   itemCount: snapshot.data.length,
                 ),
@@ -91,14 +107,18 @@ class _UpcomingPollState extends State<UpcomingPoll> with AutomaticKeepAliveClie
     );
   }
 
-  Widget buildPollCard(String pollTitle, DateTime endDate, Poll poll) {
+  Widget buildPollCard(
+      String pollTitle, DateTime endDate, String pollType, Poll poll) {
     return PollCard(
         pollTitle: pollTitle,
         endDate: endDate,
+        pollType: pollType,
         onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => PollDetail(poll: poll, fromClass: "upcoming")));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      PollDetail(poll: poll, fromClass: "upcoming")));
         });
   }
-
 }

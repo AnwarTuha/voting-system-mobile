@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:voting_system_mobile/classes/request_service.dart';
+import 'package:voting_system_mobile/classes/validator.dart';
+import 'package:voting_system_mobile/model/login_model.dart';
 import 'package:voting_system_mobile/model/user_model.dart';
+import 'package:voting_system_mobile/providers/user_provider.dart';
 import 'package:voting_system_mobile/screens/dashboard_screen.dart';
 import 'package:voting_system_mobile/screens/forgot_password_screen.dart';
 import 'package:voting_system_mobile/screens/register_screen.dart';
@@ -14,9 +17,6 @@ import 'package:voting_system_mobile/widgets/custom_divider_painter.dart';
 import 'package:voting_system_mobile/widgets/header_container.dart';
 import 'package:voting_system_mobile/widgets/progress_hud_modal.dart';
 import 'package:voting_system_mobile/widgets/text_input_container.dart';
-import 'package:voting_system_mobile/classes/validator.dart';
-import 'package:voting_system_mobile/model/login_model.dart';
-import 'package:voting_system_mobile/providers/user_provider.dart';
 
 import '../utils/color_palette_util.dart';
 
@@ -44,13 +44,12 @@ class _LoginState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return ProgressHUD(
-        child: _uiSetup(context),
-        inAsynchCall: isApiCallProcess,
+      child: _uiSetup(context),
+      inAsynchCall: isApiCallProcess,
     );
   }
 
   Widget _uiSetup(BuildContext context) {
-
     void stopProgressIndicator() {
       setState(() {
         isApiCallProcess = false;
@@ -58,16 +57,15 @@ class _LoginState extends State<LoginPage> {
     }
 
     void doLogin(LoginRequestModel requestModel) {
-      RequestService()
-          .login(requestModel)
-          .then((response) {
+      RequestService().login(requestModel).then((response) {
         stopProgressIndicator();
         handleRoutes(response);
-      }).timeout(Duration(seconds: 60), onTimeout: (){
+      }).timeout(Duration(seconds: 60), onTimeout: () {
         setState(() {
           isApiCallProcess = false;
         });
-        final snackBar = SnackBar(content: Text('Request Timed out, Check your connection'));
+        final snackBar =
+            SnackBar(content: Text('Request Timed out, Check your connection'));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       });
     }
@@ -136,7 +134,6 @@ class _LoginState extends State<LoginPage> {
                               }
                               // authenticate user
                               doLogin(requestModel);
-
                             },
                           ),
                         ),

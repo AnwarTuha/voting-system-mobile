@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:voting_system_mobile/model/response_error_model.dart';
 
 Polls pollsFromJson(String str) => Polls.fromJson(jsonDecode(str));
@@ -41,6 +42,10 @@ class Poll {
       this.userChoice,
       this.option,
       this.type});
+
+  void setUserHasVoted(bool userHasVoted) {
+    this.hasVoted = userHasVoted;
+  }
 
   factory Poll.fromJson(Map<String, dynamic> json) => Poll(
       pollId: json["id"] != null ? json["id"] : "",

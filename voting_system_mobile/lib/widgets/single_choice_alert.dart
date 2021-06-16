@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:voting_system_mobile/model/poll_model.dart';
 import 'package:flutter/material.dart';
 
 class ChoiceModal extends StatefulWidget {
-  final List<Option> options;
+  final List<String> options;
   final String pollTitle;
 
   ChoiceModal({this.options, this.pollTitle});
@@ -18,34 +17,31 @@ class _ChoiceModalState extends State<ChoiceModal> {
   @override
   void initState() {
     super.initState();
-    selectedValue = widget.options.first.title;
+    selectedValue = widget.options.first;
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(widget.pollTitle),
-      actions: <Widget>[TextButton(child: Text("Vote"), onPressed: (){Navigator.pop(context, selectedValue);},)],
-      content: Container(
-          width: double.infinity,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: widget.options
-                .map(
-                  (e) => RadioListTile(
-                title: Text(e.title),
-                value: e.title,
-                groupValue: selectedValue,
-                selected: selectedValue == e.title,
-                onChanged: (newValue){
-                  setState(() {
-                    selectedValue = newValue;
-                  });
-                },
-              ),
-            ).toList(),
+        title: Text(widget.pollTitle),
+        actions: <Widget>[
+          TextButton(
+            child: Text("Vote"),
+            onPressed: () {
+              Navigator.pop(context, selectedValue);
+            },
           )
-      ),
-    );
+        ],
+        content: Center(
+          child: Container(
+            padding: EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text("${widget.pollTitle}"),
+              ],
+            ),
+          ),
+        ));
   }
 }

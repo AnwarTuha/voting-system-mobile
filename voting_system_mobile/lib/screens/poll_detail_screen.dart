@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:voting_system_mobile/classes/request_service.dart';
+import 'package:voting_system_mobile/model/candidate_poll_model.dart';
 import 'package:voting_system_mobile/model/has_voted_model.dart';
 import 'package:voting_system_mobile/model/poll_model.dart';
-import 'package:voting_system_mobile/model/user_model.dart';
 import 'package:voting_system_mobile/model/vote_model.dart';
 import 'package:voting_system_mobile/providers/poll_provider.dart';
 import 'package:voting_system_mobile/providers/user_provider.dart';
+import 'package:voting_system_mobile/utils/color_palette_util.dart';
 import 'package:voting_system_mobile/widgets/custom_button.dart';
-import 'package:voting_system_mobile/widgets/progress_hud_modal.dart';
 import 'package:voting_system_mobile/widgets/single_choice_alert.dart';
 
 class PollDetail extends StatefulWidget {
@@ -24,8 +25,11 @@ class PollDetail extends StatefulWidget {
 }
 
 class _PollDetailState extends State<PollDetail> {
-  bool isApiCallProcess = false;
-  bool userHasVoted = false;
+  bool userHasVoted;
+  Future futureUserHasVoted;
+  Future candidateDetails;
+
+  List<Candidate> candidates = [];
 
   @override
   void initState() {
@@ -35,72 +39,122 @@ class _PollDetailState extends State<PollDetail> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    this._checkUserHasVoted();
+    if (widget.fromClass != "upcoming") {
+      futureUserHasVoted = this._checkIfUserVoted();
+    }
+    if (widget.poll.type == "Candidate") {
+      candidateDetails = _getCandidatesDetails();
+    }
   }
 
-  Future _checkUserHasVoted() async{
-    setState(() {
-      isApiCallProcess = true;
-    });
+  Future _getCandidatesDetails() async {
+    var userProvider = Provider.of<UserProvider>(context).user;
 
-    var userProvider = Provider.of<UserProvider>(context);
+    CandidateRequestModel candidateRequestModel = CandidateRequestModel(
+      voterId: userProvider.userId,
+      authenticationToken: userProvider.token,
+      pollId: widget.poll.pollId,
+    );
 
-    UserHasVotedRequestModel requestModel = UserHasVotedRequestModel(userId: userProvider.user.userId, pollId: widget.poll.pollId, authenticationToken: userProvider.user.token);
-
-    await RequestService().checkHasUserVoted(requestModel).then((response){
-
+    await RequestService()
+        .getCandidateDetail(candidateRequestModel)
+        .then((response) {
       setState(() {
-        isApiCallProcess = false;
+        candidates = response.response.candidates;
       });
-
-      userHasVoted = response.hasVoted;
     });
+
+    return candidates;
   }
 
-  Future<String> showChooseDialog(BuildContext context) async {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return ChoiceModal(options: widget.poll.option, pollTitle: widget.poll.pollTitle);
-        });
+  Future _checkIfUserVoted() async {
+    var userProvider = Provider.of<UserProvider>(context).user;
+
+    UserHasVotedRequestModel requestModel = UserHasVotedRequestModel(
+      authenticationToken: userProvider.token,
+      userId: userProvider.userId,
+      pollId: widget.poll.pollId,
+    );
+
+    await RequestService().checkHasUserVoted(requestModel).then((response) {
+      setState(() {
+        userHasVoted = response.hasVoted;
+      });
+      //Provider.of<PollProvider>(context, listen: false).setUserHasVoted(widget.poll.pollId);
+    });
+
+    return userHasVoted;
   }
 
   @override
   Widget build(BuildContext context) {
-    return ProgressHUD(
-        child: _uiSetup(context), inAsynchCall: isApiCallProcess);
-  }
-
-  Widget _uiSetup(BuildContext context) {
+    var pollProvider = Provider.of<PollProvider>(context);
     var userProvider = Provider.of<UserProvider>(context);
-    bool isButtonEnabled;
-    String _selectedOption;
 
+    _showCandidateDetail(Candidate candidate) async {
+      return showModalBottomSheet(
+          context: context,
+          builder: (BuildContext context) {
+            return Container(
+              child: Center(
+                child: Text(
+                  "${candidate.role}",
+                  style: TextStyle(fontSize: 22.0),
+                ),
+              ),
+            );
+          });
+    }
 
-    switch(widget.fromClass){
-      case "live":
-        isButtonEnabled = false;
-        break;
-      case "pending":
-        isButtonEnabled = true;
-        break;
-      case "upcoming":
-        isButtonEnabled = false;
-        break;
+    _voteOnPoll(var choiceList) async {
+      String _choice;
+
+      // show options to pick from
+      await showDialog(
+        context: context,
+        builder: (context) {
+          return ChoiceModal(
+            pollTitle: widget.poll.pollTitle,
+            options: choiceList,
+          );
+        },
+      ).then((userChoice) {
+        _choice = userChoice;
+      });
+
+      // setup request model
+      VoteRequestModel voteRequestModel = VoteRequestModel(
+        authenticationToken: userProvider.user.token,
+        pollId: widget.poll.pollId,
+        voterId: userProvider.user.userId,
+        option: _choice,
+      );
+
+      // send vote on poll request
+      await RequestService().voteOnPoll(voteRequestModel).then((response) {
+        if (response.response != null) {
+          setState(() {
+            userHasVoted = true;
+            pollProvider.setUserHasVoted(widget.poll.pollId);
+          });
+        } else {
+          final snackBar = SnackBar(
+            content: Text('Something went wrong, try again'),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+      });
     }
 
     return Scaffold(
       appBar: AppBar(
         title: Text("Poll Details"),
         centerTitle: true,
-        elevation: 0.0,
       ),
       body: SingleChildScrollView(
         child: Container(
-          margin: EdgeInsets.all(15.0),
+          margin: EdgeInsets.symmetric(horizontal: 5.0, vertical: 10.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Card(
                 shape: RoundedRectangleBorder(
@@ -108,153 +162,221 @@ class _PollDetailState extends State<PollDetail> {
                 elevation: 8.0,
                 color: Colors.white,
                 child: Padding(
-                  padding: EdgeInsets.all(12.0),
+                  padding: const EdgeInsets.all(10.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        "${widget.poll.pollTitle.toUpperCase()}",
+                        "${widget.poll.pollTitle}",
+                        style: TextStyle(
+                          fontSize: 22.0,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 7.0),
+                      Text(
+                        "${widget.poll.pollDescription}",
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(height: 7.0),
+                      Divider(color: Colors.grey.shade800),
+                      const SizedBox(height: 15.0),
+                      Text(
+                        "Here are the choices",
+                        style: TextStyle(
+                          fontSize: 22.0,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 7.0),
+                      widget.poll.type == "Candidate"
+                          ? FutureBuilder(
+                              future: candidateDetails,
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                        ConnectionState.done &&
+                                    snapshot.hasData) {
+                                  return ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: candidates.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return Container(
+                                        width: double.infinity,
+                                        child: OutlinedButton(
+                                          onPressed: () {
+                                            _showCandidateDetail(
+                                                candidates[index]);
+                                          },
+                                          child: Text(
+                                            "${candidates[index].candidateFirstName} ${candidates[index].candidateLastName}",
+                                            style: TextStyle(
+                                              fontSize: 18.0,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                } else {
+                                  return Container(
+                                    child: Center(
+                                      child: SpinKitWave(
+                                          size: 25.0, color: tealLightColor),
+                                    ),
+                                  );
+                                }
+                              },
+                            )
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: widget.poll.option.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Container(
+                                  width: double.infinity,
+                                  child: OutlinedButton(
+                                    onPressed: () {},
+                                    child: Text(
+                                      "${widget.poll.option[index].title}",
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                      const SizedBox(height: 7.0),
+                      Divider(color: Colors.grey.shade800),
+                      const SizedBox(height: 15.0),
+                      Text(
+                        "Important things to note",
                         style: TextStyle(
                             fontSize: 22,
                             color: Colors.black,
                             letterSpacing: 2.0,
                             fontWeight: FontWeight.w600),
                       ),
-                      const SizedBox(height: 12.0),
-                      Text(
-                        "${widget.poll.pollDescription}",
-                        style: TextStyle(fontSize: 18.0, color: Colors.black),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 5.0),
-              Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0)),
-                elevation: 8.0,
-                color: Colors.white,
-                child: Padding(
-                  padding: EdgeInsets.all(12.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        "Available Choices",
-                        style: TextStyle(
-                            fontSize: 22.0,
-                            color: Colors.black,
-                            letterSpacing: 2.0,
-                            fontWeight: FontWeight.w600),
-                      ),
-                      const SizedBox(height: 12.0),
-                      for (var option in widget.poll.option)
-                        Text(
-                          "${option.title}",
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            color: Colors.black,
+                      const SizedBox(height: 7.0),
+                      Container(
+                        width: double.infinity,
+                        child: OutlinedButton(
+                          onPressed: () {},
+                          child: Text(
+                            "This poll is of type ${widget.poll.type}",
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 18.0),
                           ),
                         ),
+                      ),
+                      const SizedBox(height: 7.0),
+                      widget.poll.canRetract
+                          ? Container(
+                              width: double.infinity,
+                              child: OutlinedButton(
+                                onPressed: () {},
+                                child: Text(
+                                  "You can retract your vote for this poll",
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 18.0),
+                                ),
+                              ),
+                            )
+                          : Container(
+                              width: double.infinity,
+                              child: OutlinedButton(
+                                onPressed: () {},
+                                child: Text(
+                                  "You CANNOT retract your vote for this poll",
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 18.0),
+                                ),
+                              ),
+                            ),
+                      const SizedBox(height: 7.0),
                     ],
                   ),
                 ),
               ),
-              const SizedBox(height: 15.0),
               Card(
-                color: Colors.white,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0)),
                 elevation: 8.0,
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text("Poll Type",
-                          style: TextStyle(
-                              fontSize: 22,
-                              color: Colors.black,
-                              letterSpacing: 2.0,
-                              fontWeight: FontWeight.w600)),
-                      const SizedBox(height: 12.0),
-                      _buildChip("general"),
-                      _buildChip("non-retractable"),
-                      _buildChip("single-choice")
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 5.0),
-              showWidget(isButtonEnabled, _selectedOption, )
+                color: Colors.white,
+                child: widget.fromClass == "upcoming"
+                    ? Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: double.infinity,
+                          child: OutlinedButton(
+                            onPressed: () {},
+                            child: Text(
+                              "This poll hasn't begun yet",
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: 18.0),
+                            ),
+                          ),
+                        ),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: FutureBuilder(
+                          future: futureUserHasVoted,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                    ConnectionState.done &&
+                                snapshot.hasData) {
+                              if (snapshot.data == true ||
+                                  userHasVoted == true) {
+                                pollProvider
+                                    .setUserHasVoted(widget.poll.pollId);
+                                return Container(
+                                  width: double.infinity,
+                                  child: OutlinedButton(
+                                    onPressed: () {},
+                                    child: Text(
+                                      "You've already voted on this poll",
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 18.0),
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return CustomButton(
+                                  onPressed: () {
+                                    var choiceList =
+                                        widget.poll.type == "Candidate"
+                                            ? candidates
+                                            : widget.poll.option;
+                                    _voteOnPoll(choiceList);
+                                  },
+                                  title: "Click here to vote",
+                                  enabled: true,
+                                );
+                              }
+                            } else {
+                              return Container(
+                                child: Center(
+                                  child: SpinKitWave(
+                                      size: 25.0, color: tealLightColor),
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      ),
+              )
             ],
           ),
         ),
       ),
-    );
-  }
-
-  Widget showWidget(bool isButtonEnabled, String _selectedOption){
-    var userProvider = Provider.of<UserProvider>(context);
-    var pollProvider = Provider.of<PollProvider>(context);
-    String _authenticationToken = userProvider.user.token;
-
-    if (widget.fromClass == "live"){
-      if (userHasVoted){
-        return Text("You've already voted on this poll, check the pending tab");
-      }
-      return  CustomButton(
-        title: "Click here to vote",
-        enabled: !isButtonEnabled,
-        onPressed: () async{
-          await showChooseDialog(context).then((value) => _selectedOption = value);
-          VoteRequestModel voteRequestModel = VoteRequestModel(voterId: userProvider.user.userId, pollId: widget.poll.pollId, authenticationToken: _authenticationToken, option: _selectedOption);
-
-          setState(() {
-            isApiCallProcess = true;
-          });
-
-          RequestService().voteOnPoll(voteRequestModel).then((response){
-            setState(() {
-              isApiCallProcess = false;
-            });
-
-            pollProvider.setUserOptionForPoll(_selectedOption, widget.poll.pollId);
-            pollProvider.setUserHasVoted(true, widget.poll.pollId);
-
-            if (response != null){
-              final snackBar = SnackBar(content: Text('${response.response}'));
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            } else {
-              final snackBar = SnackBar(content: Text('${response.error.message}'));
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-            }
-          });
-        },
-      );
-    } else if (widget.fromClass == "upcoming"){
-      return Text("This poll hasn't started yet");
-    }
-  }
-
-  Widget _buildChip(String title) {
-    return Chip(
-      avatar: CircleAvatar(
-        child: Text(title[0].toUpperCase()),
-        backgroundColor: Colors.white,
-      ),
-      label: Text(
-        "$title",
-        style: TextStyle(
-          fontSize: 15.0,
-          color: Colors.black,
-        ),
-      ),
-      backgroundColor: Colors.white,
-      elevation: 6.0,
-      shadowColor: Colors.grey[60],
-      padding: EdgeInsets.all(8.0),
     );
   }
 }

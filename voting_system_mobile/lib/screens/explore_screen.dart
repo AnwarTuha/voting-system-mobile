@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:voting_system_mobile/classes/request_service.dart';
-import 'package:voting_system_mobile/model/poll_model.dart';
 import 'package:voting_system_mobile/model/public_poll_model.dart';
-import 'package:voting_system_mobile/screens/poll_detail_screen.dart';
+import 'package:voting_system_mobile/screens/public_poll_detail.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
 import 'package:voting_system_mobile/widgets/no_result_page.dart';
-import 'package:voting_system_mobile/widgets/poll_card.dart';
+import 'package:voting_system_mobile/widgets/public_poll_card.dart';
 
 class ExploreScreen extends StatefulWidget {
   @override
@@ -58,7 +57,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
               },
               child: ListView.builder(
                 itemBuilder: (context, i) {
-                  return buildPollCard(snapshot.data[i].pollTitle, snapshot.data[i].endDate, snapshot.data[i]);
+                  return buildPollCard(snapshot.data[i].pollTitle,
+                      snapshot.data[i].endDate, snapshot.data[i]);
                 },
                 itemCount: snapshot.data.length,
               ),
@@ -75,13 +75,16 @@ class _ExploreScreenState extends State<ExploreScreen> {
     );
   }
 
-  Widget buildPollCard(String pollTitle, DateTime endDate, Poll poll) {
-    return PollCard(
+  Widget buildPollCard(
+      String pollTitle, DateTime endDate, PublicPollResponseModel poll) {
+    return PublicPollCard(
         pollTitle: pollTitle,
         endDate: endDate,
         onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => PollDetail(poll: poll)));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PublicPollDetail(poll: poll)));
         });
   }
 }

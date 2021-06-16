@@ -15,7 +15,8 @@ class LivePolls extends StatefulWidget {
   _LivePollsState createState() => _LivePollsState();
 }
 
-class _LivePollsState extends State<LivePolls> with AutomaticKeepAliveClientMixin<LivePolls> {
+class _LivePollsState extends State<LivePolls>
+    with AutomaticKeepAliveClientMixin<LivePolls> {
   @override
   bool get wantKeepAlive => true;
 
@@ -37,10 +38,14 @@ class _LivePollsState extends State<LivePolls> with AutomaticKeepAliveClientMixi
     pollRequestModel.authenticationToken = userProvider.user.token;
 
     await RequestService().fetchPolls(pollRequestModel).then((response) {
-       pollProvider.setAllPoll(response.polls);
-       pollProvider.setLivePolls();
-       polls = pollProvider.livePolls;
-       print(pollProvider.livePolls);
+      if (response.polls.length == polls.length) {
+        final snackBar = SnackBar(content: Text('No new Polls'));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      } else {
+        pollProvider.setAllPoll(response.polls);
+        pollProvider.setLivePolls();
+        polls = pollProvider.livePolls;
+      }
     });
     return polls.toList();
   }
@@ -56,13 +61,17 @@ class _LivePollsState extends State<LivePolls> with AutomaticKeepAliveClientMixi
       child: FutureBuilder(
           future: futurePolls,
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+            if (snapshot.connectionState == ConnectionState.done &&
+                snapshot.hasData) {
               if (snapshot.data.length == 0) {
                 return Container(
                   child: Center(
                     child: NoResultPage(
                       onPressed: () {
-                        return _getPolls();
+                        setState(() {
+                          futurePolls = _getPolls();
+                        });
+                        return futurePolls;
                       },
                     ),
                   ),
@@ -70,12 +79,23 @@ class _LivePollsState extends State<LivePolls> with AutomaticKeepAliveClientMixi
               }
               return RefreshIndicator(
                 key: _refreshKey,
-                onRefresh: (){
-                  return futurePolls = _getPolls();
+                onRefresh: () {
+                  setState(() {
+                    futurePolls = _getPolls();
+                  });
+                  return futurePolls;
                 },
-                child: ListView.builder(
+                child: ListView.separated(
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const Divider(
+                    color: Colors.grey,
+                  ),
                   itemBuilder: (context, i) {
-                    return buildPollCard(snapshot.data[i].pollTitle, snapshot.data[i].endDate, snapshot.data[i]);
+                    return buildPollCard(
+                        snapshot.data[i].pollTitle,
+                        snapshot.data[i].endDate,
+                        snapshot.data[i].type,
+                        snapshot.data[i]);
                   },
                   itemCount: snapshot.data.length,
                 ),
@@ -91,14 +111,18 @@ class _LivePollsState extends State<LivePolls> with AutomaticKeepAliveClientMixi
     );
   }
 
-  Widget buildPollCard(String pollTitle, DateTime endDate, Poll poll) {
+  Widget buildPollCard(
+      String pollTitle, DateTime endDate, String pollType, Poll poll) {
     return PollCard(
         pollTitle: pollTitle,
         endDate: endDate,
+        pollType: pollType,
         onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => PollDetail(poll: poll, fromClass: "live")));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      PollDetail(poll: poll, fromClass: "live")));
         });
   }
-
 }

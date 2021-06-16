@@ -54,12 +54,12 @@ class DataSearch extends SearchDelegate<String> {
   Widget buildSuggestions(BuildContext context) {
     // show suggestions while typing search
     final suggestionList = query.isEmpty
-        ? recentPolls
+        ? recentPolls.toSet().toList()
         : polls
-        .where((element) =>
-        element.pollTitle.toUpperCase().startsWith(query.toUpperCase()))
-        .toSet()
-        .toList();
+            .where((element) =>
+                element.pollTitle.toUpperCase().startsWith(query.toUpperCase()))
+            .toSet()
+            .toList();
 
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
@@ -75,7 +75,7 @@ class DataSearch extends SearchDelegate<String> {
           text: TextSpan(
               text: suggestionList[index].pollTitle.substring(0, query.length),
               style:
-              TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               children: [
                 TextSpan(
                   text: suggestionList[index].pollTitle.substring(query.length),

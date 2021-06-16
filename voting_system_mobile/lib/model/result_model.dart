@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final resultModel = resultModelFromJson(jsonString);
-
 import 'dart:convert';
 
 import 'package:voting_system_mobile/model/response_error_model.dart';

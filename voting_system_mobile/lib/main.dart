@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:voting_system_mobile/classes/connectivity_service.dart';
+import 'package:voting_system_mobile/providers/connection_provider.dart';
 import 'package:voting_system_mobile/providers/poll_provider.dart';
 import 'package:voting_system_mobile/providers/user_provider.dart';
 import 'package:voting_system_mobile/screens/dashboard_screen.dart';
@@ -37,33 +39,36 @@ class VotingSystem extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UserProvider()),
-        ChangeNotifierProvider(
-          create: (_) => PollProvider(),
-        )
+        ChangeNotifierProvider(create: (_) => PollProvider())
       ],
-      child: MaterialApp(
-        title: "Votion",
-        theme: ThemeData(
-          primaryColor: tealColors,
-          accentColor: tealLightColor,
+      child: StreamProvider<ConnectionStatus>(
+        initialData: ConnectionStatus.Offline,
+        create: (context) =>
+            ConnectivityService().connectionStatusController.stream,
+        child: MaterialApp(
+          title: "Votion",
+          theme: ThemeData(
+            primaryColor: tealColors,
+            accentColor: tealLightColor,
+          ),
+          debugShowCheckedModeBanner: false,
+          initialRoute: SplashPage.id,
+          routes: {
+            SplashPage.id: (context) => SplashPage(),
+            LoginPage.id: (context) => LoginPage(),
+            RegistrationPage.id: (context) => RegistrationPage(),
+            ProfilePage.id: (context) => ProfilePage(),
+            ForgotPassword.id: (context) => ForgotPassword(),
+            SelectOrganization.id: (context) =>
+                SelectOrganization(userId: userId),
+            SelectRole.id: (context) => SelectRole(),
+            DashBoard.id: (context) => DashBoard(),
+            HomeScreen.id: (context) => HomeScreen(),
+            MyAccount.id: (context) => MyAccount(),
+            PollDetail.id: (context) => PollDetail(),
+            NoResultPage.id: (context) => NoResultPage()
+          },
         ),
-        debugShowCheckedModeBanner: false,
-        initialRoute: SplashPage.id,
-        routes: {
-          SplashPage.id: (context) => SplashPage(),
-          LoginPage.id: (context) => LoginPage(),
-          RegistrationPage.id: (context) => RegistrationPage(),
-          ProfilePage.id: (context) => ProfilePage(),
-          ForgotPassword.id: (context) => ForgotPassword(),
-          SelectOrganization.id: (context) =>
-              SelectOrganization(userId: userId),
-          SelectRole.id: (context) => SelectRole(),
-          DashBoard.id: (context) => DashBoard(),
-          HomeScreen.id: (context) => HomeScreen(),
-          MyAccount.id: (context) => MyAccount(),
-          PollDetail.id: (context) => PollDetail(),
-          NoResultPage.id: (context) => NoResultPage()
-        },
       ),
     );
   }

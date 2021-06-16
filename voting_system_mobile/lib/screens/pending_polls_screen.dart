@@ -51,54 +51,71 @@ class _PendingPollsState extends State<PendingPolls>
     super.build(context);
     GlobalKey _refreshKey = GlobalKey();
     return Container(
-        margin: EdgeInsets.all(10.0),
-        child: FutureBuilder(
-            future: futurePolls,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done &&
-                  snapshot.hasData) {
-                if (snapshot.data.length == 0) {
-                  return Container(
-                    child: Center(
-                      child: NoResultPage(
-                        onPressed: () {
-                          return futurePolls = _getPolls();
-                        },
-                      ),
-                    ),
-                  );
-                }
-                return RefreshIndicator(
-                  key: _refreshKey,
-                  onRefresh: () {
-                    return futurePolls = _getPolls();
-                  },
-                  child: ListView.builder(
-                    itemBuilder: (context, i) {
-                      print(snapshot.data);
-                      return buildPollCard(snapshot.data[i].pollTitle,
-                          snapshot.data[i].endDate, snapshot.data[i]);
+      margin: EdgeInsets.all(10.0),
+      child: FutureBuilder(
+        future: futurePolls,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done &&
+              snapshot.hasData) {
+            if (snapshot.data.length == 0) {
+              return Container(
+                child: Center(
+                  child: NoResultPage(
+                    onPressed: () {
+                      return futurePolls = _getPolls();
                     },
-                    itemCount: snapshot.data.length,
                   ),
-                );
-              } else {
-                return Container(
-                  child: Center(
-                    child: SpinKitWave(size: 25.0, color: tealLightColor),
-                  ),
-                );
-              }
-            }));
+                ),
+              );
+            }
+            return RefreshIndicator(
+              key: _refreshKey,
+              onRefresh: () {
+                return futurePolls = _getPolls();
+              },
+              child: ListView.separated(
+                separatorBuilder: (BuildContext context, int index) =>
+                    const Divider(
+                  color: Colors.grey,
+                ),
+                itemBuilder: (context, i) {
+                  print(snapshot.data);
+                  return buildPollCard(
+                    snapshot.data[i].pollTitle,
+                    snapshot.data[i].endDate,
+                    snapshot.data[i].type,
+                    snapshot.data[i],
+                  );
+                },
+                itemCount: snapshot.data.length,
+              ),
+            );
+          } else {
+            return Container(
+              child: Center(
+                child: SpinKitWave(size: 25.0, color: tealLightColor),
+              ),
+            );
+          }
+        },
+      ),
+    );
   }
 
-  Widget buildPollCard(String pollTitle, DateTime endDate, Poll poll) {
+  Widget buildPollCard(
+      String pollTitle, DateTime endDate, String pollType, Poll poll) {
     return PollCard(
         pollTitle: pollTitle,
         endDate: endDate,
+        pollType: pollType,
         onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => PollDetail(poll: poll, fromClass: "pending")));
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  PollDetail(poll: poll, fromClass: "pending"),
+            ),
+          );
         });
   }
 }
