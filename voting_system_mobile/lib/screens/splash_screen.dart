@@ -31,13 +31,13 @@ class _SplashPageState extends State<SplashPage> {
     if (user != null) {
       if (user.orgId == null || user.orgId == "") {
         UserPreferences.removeUser();
-        Timer(const Duration(milliseconds: 4000), () {
+        Timer(const Duration(milliseconds: 2000), () {
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => LoginPage()));
         });
       } else {
         Provider.of<UserProvider>(context, listen: false).setUser(user);
-        Timer(const Duration(milliseconds: 4000), () {
+        Timer(const Duration(milliseconds: 2000), () {
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => DashBoard()));
         });

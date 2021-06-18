@@ -85,6 +85,37 @@ class PollProvider extends ChangeNotifier {
 
   void sortPollsByAlphabet() {
     _allPolls.sort((a, b) => a.pollTitle.compareTo(b.pollTitle));
+    _livePolls.sort((a, b) => a.pollTitle.compareTo(b.pollTitle));
+    _completedPolls.sort((a, b) => a.pollTitle.compareTo(b.pollTitle));
+    _upcomingPolls.sort((a, b) => a.pollTitle.compareTo(b.pollTitle));
+    _pendingPolls.sort((a, b) => a.pollTitle.compareTo(b.pollTitle));
+    notifyListeners();
+  }
+
+  void sortPollsByEndDate() {
+    _allPolls.sort((a, b) => a.endDate.compareTo(b.endDate));
+    _livePolls.sort((a, b) => a.endDate.compareTo(b.endDate));
+    _completedPolls.sort((a, b) => a.endDate.compareTo(b.endDate));
+    _pendingPolls.sort((a, b) => a.endDate.compareTo(b.endDate));
+    _upcomingPolls.sort((a, b) => a.endDate.compareTo(b.endDate));
+    notifyListeners();
+  }
+
+  void sortPollsByStartDate() {
+    _allPolls.sort((a, b) => a.startDate.compareTo(b.startDate));
+    _livePolls.sort((a, b) => a.startDate.compareTo(b.startDate));
+    _completedPolls.sort((a, b) => a.startDate.compareTo(b.startDate));
+    _pendingPolls.sort((a, b) => a.startDate.compareTo(b.startDate));
+    _upcomingPolls.sort((a, b) => a.startDate.compareTo(b.startDate));
+    notifyListeners();
+  }
+
+  void sortPollsByType() {
+    _allPolls.sort((a, b) => a.type.compareTo(b.type));
+    _livePolls.sort((a, b) => a.type.compareTo(b.type));
+    _completedPolls.sort((a, b) => a.type.compareTo(b.type));
+    _upcomingPolls.sort((a, b) => a.type.compareTo(b.type));
+    _pendingPolls.sort((a, b) => a.type.compareTo(b.type));
     notifyListeners();
   }
 

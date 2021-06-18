@@ -38,15 +38,10 @@ class _UpcomingPollState extends State<UpcomingPoll>
         authenticationToken: userProvider.user.token);
 
     await RequestService().fetchPolls(pollRequestModel).then((response) {
-      if (response.polls.length == pollProvider.allPolls.length) {
-        final snackBar = SnackBar(content: Text('No new Polls'));
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      } else {
-        pollProvider.setAllPoll(response.polls);
-        pollProvider.setUpcomingPolls();
-        polls = pollProvider.upComingPolls;
-        print(pollProvider.upComingPolls);
-      }
+      pollProvider.setAllPoll(response.polls);
+      pollProvider.setUpcomingPolls();
+      polls = pollProvider.upComingPolls;
+      print(pollProvider.upComingPolls);
     });
     return polls.toList();
   }
@@ -69,7 +64,10 @@ class _UpcomingPollState extends State<UpcomingPoll>
                   child: Center(
                     child: NoResultPage(
                       onPressed: () {
-                        return _getPolls();
+                        setState(() {
+                          futurePolls = _getPolls();
+                        });
+                        return futurePolls;
                       },
                     ),
                   ),
@@ -81,19 +79,24 @@ class _UpcomingPollState extends State<UpcomingPoll>
                   futurePolls = null;
                   return futurePolls = _getPolls();
                 },
-                child: ListView.separated(
-                  separatorBuilder: (BuildContext context, int index) =>
-                      const Divider(
-                    color: Colors.grey,
-                  ),
-                  itemBuilder: (context, i) {
-                    return buildPollCard(
-                        snapshot.data[i].pollTitle,
-                        snapshot.data[i].endDate,
-                        snapshot.data[i].type,
-                        snapshot.data[i]);
+                child: Consumer<PollProvider>(
+                  builder: (context, pollProvider, _) {
+                    return ListView.separated(
+                      separatorBuilder: (BuildContext context, int index) =>
+                          const Divider(
+                        color: Colors.grey,
+                      ),
+                      itemBuilder: (context, i) {
+                        return buildPollCard(
+                          pollProvider.upComingPolls[i].pollTitle,
+                          pollProvider.upComingPolls[i].endDate,
+                          pollProvider.upComingPolls[i].type,
+                          pollProvider.upComingPolls[i],
+                        );
+                      },
+                      itemCount: snapshot.data.length,
+                    );
                   },
-                  itemCount: snapshot.data.length,
                 ),
               );
             } else {

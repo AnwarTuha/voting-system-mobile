@@ -75,19 +75,24 @@ class _CompletedPollState extends State<CompletedPoll>
                 onRefresh: () {
                   return futurePolls = _getPolls();
                 },
-                child: ListView.separated(
-                  separatorBuilder: (BuildContext context, int index) =>
-                      const Divider(
-                    color: Colors.grey,
-                  ),
-                  itemBuilder: (context, i) {
-                    return buildPollCard(
-                        snapshot.data[i].pollTitle,
-                        snapshot.data[i].endDate,
-                        snapshot.data[i].type,
-                        snapshot.data[i]);
+                child: Consumer<PollProvider>(
+                  builder: (context, pollProvider, _) {
+                    return ListView.separated(
+                      separatorBuilder: (BuildContext context, int index) =>
+                          const Divider(
+                        color: Colors.grey,
+                      ),
+                      itemBuilder: (context, i) {
+                        return buildPollCard(
+                          pollProvider.completedPolls[i].pollTitle,
+                          pollProvider.completedPolls[i].endDate,
+                          pollProvider.completedPolls[i].type,
+                          pollProvider.completedPolls[i],
+                        );
+                      },
+                      itemCount: snapshot.data.length,
+                    );
                   },
-                  itemCount: snapshot.data.length,
                 ),
               );
             } else {

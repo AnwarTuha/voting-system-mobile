@@ -1,4 +1,8 @@
+import 'package:custom_radio_grouped_button/custom_radio_grouped_button.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:voting_system_mobile/providers/poll_provider.dart';
 import 'package:voting_system_mobile/screens/completed_polls_screen.dart';
 import 'package:voting_system_mobile/screens/explore_screen.dart';
 import 'package:voting_system_mobile/screens/live_polls_screen.dart';
@@ -77,6 +81,68 @@ class _DashBoardState extends State<DashBoard>
 
   @override
   Widget build(BuildContext context) {
+    var pollProvider = Provider.of<PollProvider>(context);
+    _showSortDialog() async {
+      return await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              content: StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "Sort",
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Container(
+                        height: 300.0,
+                        width: 300.0,
+                        child: CustomRadioButton(
+                          padding: 5.0,
+                          elevation: 0,
+                          absoluteZeroSpacing: false,
+                          unSelectedColor: Theme.of(context).canvasColor,
+                          buttonLables: [
+                            "By Poll Title",
+                            "By Type",
+                            "By End Date",
+                            "By Start Date"
+                          ],
+                          buttonValues: [
+                            "By Poll Title",
+                            "By Type",
+                            "By End Date",
+                            "By Start Date"
+                          ],
+                          buttonTextStyle: ButtonTextStyle(
+                              selectedColor: Colors.white,
+                              unSelectedColor: Colors.black,
+                              textStyle: TextStyle(fontSize: 18)),
+                          radioButtonValue: (value) {
+                            Navigator.pop(context, value);
+                          },
+                          horizontal: true,
+                          height: 50.0,
+                          autoWidth: false,
+                          selectedColor: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            );
+          });
+    }
+
     return Scaffold(
       drawer: NavigationDrawer(),
       appBar: AppBar(
@@ -95,16 +161,25 @@ class _DashBoardState extends State<DashBoard>
           IconButton(
               icon: Icon(Icons.filter_list),
               onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Container(
-                      child: Center(
-                        child: Text("sort"),
-                      ),
-                    );
-                  },
-                );
+                _showSortDialog().then((value) {
+                  print(value);
+                  switch (value) {
+                    case "By Poll Title":
+                      pollProvider.sortPollsByAlphabet();
+                      break;
+                    case "By Type":
+                      pollProvider.sortPollsByType();
+                      break;
+                    case "By End Date":
+                      pollProvider.sortPollsByEndDate();
+                      break;
+                    case "By Start Date":
+                      pollProvider.sortPollsByStartDate();
+                      break;
+                    default:
+                      break;
+                  }
+                });
               })
         ],
       ),

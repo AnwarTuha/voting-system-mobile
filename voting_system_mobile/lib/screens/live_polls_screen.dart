@@ -11,6 +11,10 @@ import 'package:voting_system_mobile/widgets/no_result_page.dart';
 import 'package:voting_system_mobile/widgets/poll_card.dart';
 
 class LivePolls extends StatefulWidget {
+  final String filter;
+
+  LivePolls({this.filter});
+
   @override
   _LivePollsState createState() => _LivePollsState();
 }
@@ -38,14 +42,9 @@ class _LivePollsState extends State<LivePolls>
     pollRequestModel.authenticationToken = userProvider.user.token;
 
     await RequestService().fetchPolls(pollRequestModel).then((response) {
-      if (response.polls.length == polls.length) {
-        final snackBar = SnackBar(content: Text('No new Polls'));
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      } else {
-        pollProvider.setAllPoll(response.polls);
-        pollProvider.setLivePolls();
-        polls = pollProvider.livePolls;
-      }
+      pollProvider.setAllPoll(response.polls);
+      pollProvider.setLivePolls();
+      polls = pollProvider.livePolls;
     });
     return polls.toList();
   }
@@ -85,19 +84,25 @@ class _LivePollsState extends State<LivePolls>
                   });
                   return futurePolls;
                 },
-                child: ListView.separated(
-                  separatorBuilder: (BuildContext context, int index) =>
-                      const Divider(
-                    color: Colors.grey,
-                  ),
-                  itemBuilder: (context, i) {
-                    return buildPollCard(
-                        snapshot.data[i].pollTitle,
-                        snapshot.data[i].endDate,
-                        snapshot.data[i].type,
-                        snapshot.data[i]);
+                child: Consumer<PollProvider>(
+                  builder: (context, pollProvider, _) {
+                    return ListView.separated(
+                      shrinkWrap: true,
+                      separatorBuilder: (BuildContext context, int index) =>
+                          const Divider(
+                        color: Colors.grey,
+                      ),
+                      itemBuilder: (context, i) {
+                        return buildPollCard(
+                          pollProvider.livePolls[i].pollTitle,
+                          pollProvider.livePolls[i].endDate,
+                          pollProvider.livePolls[i].type,
+                          pollProvider.livePolls[i],
+                        );
+                      },
+                      itemCount: snapshot.data.length,
+                    );
                   },
-                  itemCount: snapshot.data.length,
                 ),
               );
             } else {

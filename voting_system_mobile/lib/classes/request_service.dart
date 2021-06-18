@@ -129,7 +129,6 @@ class RequestService {
         'Authorization': '${pollRequestModel.authenticationToken}'
       });
       if (response != null) {
-        print("From request: ${response.body}");
         return Polls.fromJson(
             new Map<String, dynamic>.from(jsonDecode(response.body)));
       } else {
@@ -298,7 +297,6 @@ class RequestService {
 
     response = await http.get(Uri.parse(url));
     if (response != null) {
-      print("Success(Fetch public votes): ${jsonDecode(response.body)})}}");
       return publicPollResponseModelFromJson(response.body);
     }
 

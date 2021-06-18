@@ -1,3 +1,4 @@
+import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:voting_system_mobile/classes/request_service.dart';
@@ -24,9 +25,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   _getPublicVotes() async {
     await RequestService().requestPublicPoll().then((response) {
-      polls.addAll(response.toSet().toList());
+      polls.addAll(response.toList());
     });
-    return polls;
+    return polls.distinct((element) => element.pollId).toList();
   }
 
   @override
@@ -53,7 +54,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
             return RefreshIndicator(
               key: _refreshKey,
               onRefresh: () {
-                return futurePolls = _getPublicVotes();
+                setState(() {
+                  futurePolls = _getPublicVotes();
+                });
+                return futurePolls;
               },
               child: ListView.builder(
                 itemBuilder: (context, i) {
@@ -82,9 +86,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
         endDate: endDate,
         onPressed: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => PublicPollDetail(poll: poll)));
+            context,
+            MaterialPageRoute(
+              builder: (context) => PublicPollDetail(poll: poll),
+            ),
+          );
         });
   }
 }

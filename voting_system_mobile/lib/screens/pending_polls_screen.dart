@@ -73,21 +73,24 @@ class _PendingPollsState extends State<PendingPolls>
               onRefresh: () {
                 return futurePolls = _getPolls();
               },
-              child: ListView.separated(
-                separatorBuilder: (BuildContext context, int index) =>
-                    const Divider(
-                  color: Colors.grey,
-                ),
-                itemBuilder: (context, i) {
-                  print(snapshot.data);
-                  return buildPollCard(
-                    snapshot.data[i].pollTitle,
-                    snapshot.data[i].endDate,
-                    snapshot.data[i].type,
-                    snapshot.data[i],
+              child: Consumer<PollProvider>(
+                builder: (context, pollProvider, _) {
+                  return ListView.separated(
+                    separatorBuilder: (BuildContext context, int index) =>
+                        const Divider(
+                      color: Colors.grey,
+                    ),
+                    itemBuilder: (context, i) {
+                      return buildPollCard(
+                        pollProvider.pendingPolls[i].pollTitle,
+                        pollProvider.pendingPolls[i].endDate,
+                        pollProvider.pendingPolls[i].type,
+                        pollProvider.pendingPolls[i],
+                      );
+                    },
+                    itemCount: snapshot.data.length,
                   );
                 },
-                itemCount: snapshot.data.length,
               ),
             );
           } else {

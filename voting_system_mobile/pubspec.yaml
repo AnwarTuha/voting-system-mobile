@@ -47,6 +47,9 @@ dependencies:
   # custom radio
   custom_radio_grouped_button: ^1.0.6+1
 
+  # socket io
+  socket_io_client: ^1.0.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

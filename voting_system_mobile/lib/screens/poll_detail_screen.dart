@@ -1,3 +1,4 @@
+import 'package:custom_radio_grouped_button/custom_radio_grouped_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
@@ -5,12 +6,10 @@ import 'package:voting_system_mobile/classes/request_service.dart';
 import 'package:voting_system_mobile/model/candidate_poll_model.dart';
 import 'package:voting_system_mobile/model/has_voted_model.dart';
 import 'package:voting_system_mobile/model/poll_model.dart';
-import 'package:voting_system_mobile/model/vote_model.dart';
 import 'package:voting_system_mobile/providers/poll_provider.dart';
 import 'package:voting_system_mobile/providers/user_provider.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
 import 'package:voting_system_mobile/widgets/custom_button.dart';
-import 'package:voting_system_mobile/widgets/single_choice_alert.dart';
 
 class PollDetail extends StatefulWidget {
   static const String id = "poll_detail";
@@ -89,7 +88,7 @@ class _PollDetailState extends State<PollDetail> {
   @override
   Widget build(BuildContext context) {
     var pollProvider = Provider.of<PollProvider>(context);
-    var userProvider = Provider.of<UserProvider>(context);
+    bool _voteEnabled = false;
 
     _showCandidateDetail(Candidate candidate) async {
       return showModalBottomSheet(
@@ -110,40 +109,83 @@ class _PollDetailState extends State<PollDetail> {
       String _choice;
 
       // show options to pick from
-      await showDialog(
+      await showModalBottomSheet<String>(
         context: context,
-        builder: (context) {
-          return ChoiceModal(
-            pollTitle: widget.poll.pollTitle,
-            options: choiceList,
+        builder: (BuildContext context) {
+          bool _submitEnabled = false;
+
+          return Container(
+            padding: EdgeInsets.all(15.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  "${widget.poll.pollTitle}",
+                  style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 10.0),
+                CustomRadioButton(
+                  padding: 5.0,
+                  elevation: 0,
+                  absoluteZeroSpacing: false,
+                  unSelectedColor: Theme.of(context).canvasColor,
+                  buttonLables: ["sdjykkas sdfiiglels", "Eyob Yifru"],
+                  buttonValues: ["sdjykkas sdfiiglels", "Eyob Yifru"],
+                  buttonTextStyle: ButtonTextStyle(
+                      selectedColor: Colors.white,
+                      unSelectedColor: Colors.black,
+                      textStyle: TextStyle(fontSize: 18)),
+                  radioButtonValue: (value) {
+                    _choice = value;
+                    setState(() {
+                      _submitEnabled = true;
+                    });
+                    print("Choice is now $_choice");
+                  },
+                  horizontal: true,
+                  height: 50.0,
+                  autoWidth: true,
+                  selectedColor: Theme.of(context).primaryColor,
+                ),
+                SizedBox(
+                  height: 15.0,
+                ),
+                CustomButton(
+                  title: "Submit Vote",
+                  enabled: _submitEnabled,
+                  onPressed: () {
+                    Navigator.pop(context, _choice);
+                  },
+                )
+              ],
+            ),
           );
         },
-      ).then((userChoice) {
-        _choice = userChoice;
+      ).then((choice) {
+        _choice = choice;
       });
-
-      // setup request model
-      VoteRequestModel voteRequestModel = VoteRequestModel(
-        authenticationToken: userProvider.user.token,
-        pollId: widget.poll.pollId,
-        voterId: userProvider.user.userId,
-        option: _choice,
-      );
-
-      // send vote on poll request
-      await RequestService().voteOnPoll(voteRequestModel).then((response) {
-        if (response.response != null) {
-          setState(() {
-            userHasVoted = true;
-            pollProvider.setUserHasVoted(widget.poll.pollId);
-          });
-        } else {
-          final snackBar = SnackBar(
-            content: Text('Something went wrong, try again'),
-          );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        }
-      });
+      // // setup request model
+      // VoteRequestModel voteRequestModel = VoteRequestModel(
+      //   authenticationToken: userProvider.user.token,
+      //   pollId: widget.poll.pollId,
+      //   voterId: userProvider.user.userId,
+      //   option: _choice,
+      // );
+      //
+      // // send vote on poll request
+      // await RequestService().voteOnPoll(voteRequestModel).then((response) {
+      //   if (response.response != null) {
+      //     setState(() {
+      //       userHasVoted = true;
+      //       pollProvider.setUserHasVoted(widget.poll.pollId);
+      //     });
+      //   } else {
+      //     final snackBar = SnackBar(
+      //       content: Text('Something went wrong, try again'),
+      //     );
+      //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      //   }
+      // });
     }
 
     return Scaffold(
@@ -177,9 +219,11 @@ class _PollDetailState extends State<PollDetail> {
                       const SizedBox(height: 7.0),
                       Text(
                         "${widget.poll.pollDescription}",
+                        textAlign: TextAlign.left,
                         style: TextStyle(
                           fontSize: 18.0,
                           color: Colors.black,
+                          height: 2.0,
                         ),
                       ),
                       const SizedBox(height: 7.0),
@@ -201,6 +245,7 @@ class _PollDetailState extends State<PollDetail> {
                                 if (snapshot.connectionState ==
                                         ConnectionState.done &&
                                     snapshot.hasData) {
+                                  _voteEnabled = true;
                                   return ListView.builder(
                                     shrinkWrap: true,
                                     itemCount: candidates.length,
@@ -358,7 +403,7 @@ class _PollDetailState extends State<PollDetail> {
                                     _voteOnPoll(choiceList);
                                   },
                                   title: "Click here to vote",
-                                  enabled: true,
+                                  enabled: _voteEnabled,
                                 );
                               }
                             } else {
