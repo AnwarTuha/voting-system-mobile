@@ -99,6 +99,11 @@ class _PollDetailState extends State<PollDetail> {
         .map((e) => "${e.candidateFirstName} ${e.candidateLastName}")
         .toList();
 
+    if (widget.poll.canAbstain) {
+      optionLabels.add("Abstain");
+      candidateLabels.add("Abstain");
+    }
+
     // show option description
     _showOptionDescription(Candidate candidate) async {
       return showModalBottomSheet(
@@ -301,24 +306,44 @@ class _PollDetailState extends State<PollDetail> {
                                 }
                               },
                             )
-                          : ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: widget.poll.option.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return Container(
-                                  width: double.infinity,
-                                  child: OutlinedButton(
-                                    onPressed: () {},
-                                    child: Text(
-                                      "${widget.poll.option[index].title}",
-                                      style: TextStyle(
-                                        fontSize: 18.0,
-                                        color: Colors.black,
+                          : Column(
+                              children: [
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: widget.poll.option.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return Container(
+                                      width: double.infinity,
+                                      child: OutlinedButton(
+                                        onPressed: () {},
+                                        child: Text(
+                                          "${widget.poll.option[index].title}",
+                                          style: TextStyle(
+                                            fontSize: 18.0,
+                                            color: Colors.black,
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                );
-                              },
+                                    );
+                                  },
+                                ),
+                                widget.poll.canAbstain
+                                    ? Container(
+                                        width: double.infinity,
+                                        child: OutlinedButton(
+                                          onPressed: () {},
+                                          child: Text(
+                                            "Abstain",
+                                            style: TextStyle(
+                                              fontSize: 18.0,
+                                              color: Colors.teal,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : Container(),
+                              ],
                             ),
                       const SizedBox(height: 7.0),
                       Divider(color: Colors.grey.shade800),
@@ -360,10 +385,14 @@ class _PollDetailState extends State<PollDetail> {
                               width: double.infinity,
                               child: OutlinedButton(
                                 onPressed: () {},
-                                child: Text(
-                                  "You CANNOT retract your vote for this poll",
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 18.0),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "You CANNOT retract your vote for this poll",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 18.0),
+                                  ),
                                 ),
                               ),
                             ),

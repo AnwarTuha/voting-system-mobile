@@ -27,6 +27,7 @@ class Poll {
   DateTime endDate;
   List<Option> option;
   bool isPublic;
+  bool canAbstain;
   bool canRetract;
   String userChoice;
   bool hasVoted = false;
@@ -41,6 +42,7 @@ class Poll {
       this.canRetract,
       this.userChoice,
       this.option,
+      this.canAbstain,
       this.type});
 
   void setUserHasVoted(bool userHasVoted) {
@@ -57,6 +59,7 @@ class Poll {
           json["startDate"] != null ? DateTime.parse(json["startDate"]) : "",
       isPublic: json["isPublic"],
       canRetract: json["canRetract"],
+      canAbstain: json["canAbstain"],
       option:
           List<Option>.from(json["options"].map((x) => Option.fromJson(x))));
 }

@@ -125,8 +125,8 @@ class _NotificationsState extends State<Notifications> {
               child: Text(
                 "Notifications",
                 style: TextStyle(
-                  fontSize: 35.0,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 30.0,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
@@ -142,6 +142,10 @@ class _NotificationsState extends State<Notifications> {
                 ),
               ),
             ),
+            SizedBox(
+              height: 7.0,
+            ),
+            Divider(),
             SizedBox(
               height: 15.0,
             ),
