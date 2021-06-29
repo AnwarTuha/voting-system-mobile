@@ -96,3 +96,48 @@ class Option {
         "voteCount": voteCount,
       };
 }
+
+PublicVoteResponseModel publicVoteResponseModelFromJson(String str) =>
+    PublicVoteResponseModel.fromJson(json.decode(str));
+
+String publicVoteResponseModelToJson(PublicVoteResponseModel data) =>
+    json.encode(data);
+
+class PublicVoteResponseModel {
+  HttpError error;
+  String message;
+
+  PublicVoteResponseModel({this.message, this.error});
+
+  factory PublicVoteResponseModel.fromJson(Map<String, dynamic> json) =>
+      PublicVoteResponseModel(
+        message: json["Response"] != null ? json["Response"] : null,
+        error: json["error"] != null ? json["error"] : null,
+      );
+}
+
+class PublicPollVoteModel {
+  List<Choice> choices;
+  String pollId;
+  String userId;
+  String authenticationToken;
+
+  PublicPollVoteModel(
+      {this.choices, this.userId, this.pollId, this.authenticationToken});
+
+  Map<String, dynamic> toJson() => {
+        "choice": List<dynamic>.from(choices.map((x) => x.toJson())),
+      };
+}
+
+class Choice {
+  int questionIndex;
+  int choiceIndex;
+
+  Choice({this.questionIndex, this.choiceIndex});
+
+  Map<String, dynamic> toJson() => {
+        "questionIndex": questionIndex,
+        "choiceIndex": choiceIndex,
+      };
+}

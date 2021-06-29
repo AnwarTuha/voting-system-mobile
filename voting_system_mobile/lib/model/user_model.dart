@@ -23,16 +23,17 @@ class User {
       this.isComplete});
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-      token: json["token"] != null ? json["token"] : "",
-      firstName: json["firstname"] != null ? json["firstname"] : "",
-      lastName: json["lastname"] != null ? json["lastname"] : "",
-      phoneNumber: json["phone"] != null ? json["phone"] : "",
-      userName: json["username"] != null ? json["username"] : "",
-      email: json["email"] != null ? json["email"] : "",
-      userId: json["userid"] != null ? json["userid"] : "",
-      orgId: json["orgid"] != null ? json["orgid"] : "",
-      role: json["role"] != null ? json["role"] : "",
-      isComplete: json["isComplete"]);
+        token: json["token"] != null ? json["token"] : null,
+        firstName: json["firstname"] != null ? json["firstname"] : "",
+        lastName: json["lastname"] != null ? json["lastname"] : "",
+        phoneNumber: json["phone"] != null ? json["phone"] : "",
+        userName: json["username"] != null ? json["username"] : "",
+        email: json["email"] != null ? json["email"] : "",
+        userId: json["userid"] != null ? json["userid"] : "",
+        orgId: json["orgid"] != null ? json["orgid"] : "",
+        role: json["role"] != null ? json["role"] : "",
+        isComplete: json["isComplete"],
+      );
 
   Map<String, dynamic> toJson() => {
         "token": token,

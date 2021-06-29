@@ -70,7 +70,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
           } else {
             return Container(
               child: Center(
-                child: SpinKitWave(size: 25.0, color: tealLightColor),
+                child: SpinKitFoldingCube(size: 30.0, color: tealLightColor),
               ),
             );
           }

@@ -16,6 +16,7 @@ abstract class AppUrl {
       "$kBaseUrl/publicVotes?filter[where][isVerified]=true";
   static const String getCandidateDetailsUrl =
       "$kBaseUrl//Polls/candidatePollDetails";
-  static const String socketIo =
-      "https://voting-system2.herokuapp.com/socket.io";
+  static const String socketIo = "https://voting-system2.herokuapp.com";
+  static const String updateProfileUrl = "$kBaseUrl/Voters/editCredentials/";
+  static const String voteOnPublicPollUrl = "$kBaseUrl/Voters/publicVote";
 }

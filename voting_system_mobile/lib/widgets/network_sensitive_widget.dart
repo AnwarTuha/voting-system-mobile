@@ -17,10 +17,6 @@ class NetworkSensitive extends StatelessWidget {
       return child;
     }
 
-    final snackBar =
-        SnackBar(content: Text('Request Timed out, Check your connection'));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
     return Container(
       child: Center(
         child: Text("No connection could be established"),

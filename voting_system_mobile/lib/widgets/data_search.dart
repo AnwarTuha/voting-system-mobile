@@ -52,6 +52,8 @@ class DataSearch extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
+    GlobalKey listView = GlobalKey();
+
     // show suggestions while typing search
     final suggestionList = query.isEmpty
         ? recentPolls.toSet().toList()
@@ -62,13 +64,18 @@ class DataSearch extends SearchDelegate<String> {
             .toList();
 
     return ListView.builder(
+      key: listView,
       itemBuilder: (context, index) => ListTile(
         onTap: () {
-          recentPolls.add(polls[index]);
+          print("Title is ${suggestionList[index].pollTitle}");
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => PollDetail(poll: polls[index])));
+            context,
+            MaterialPageRoute(
+              builder: (context) => PollDetail(
+                poll: suggestionList[index],
+              ),
+            ),
+          );
         },
         leading: Icon(Icons.poll),
         title: RichText(

@@ -12,6 +12,7 @@ import 'package:voting_system_mobile/model/register_model.dart';
 import 'package:voting_system_mobile/model/result_model.dart';
 import 'package:voting_system_mobile/model/role_detail.dart';
 import 'package:voting_system_mobile/model/roles_model.dart';
+import 'package:voting_system_mobile/model/update_profile_model.dart';
 import 'package:voting_system_mobile/model/verification_request_model.dart';
 import 'package:voting_system_mobile/model/vote_model.dart';
 import 'package:voting_system_mobile/utils/app_url.dart';
@@ -346,6 +347,66 @@ class RequestService {
         return candidatePollResponseModelFromJson(response.body);
       } else {
         print("response is null $e");
+      }
+    }
+
+    return null;
+  }
+
+  Future<UpdateProfileResponseModel> updateProfile(
+      UpdateProfileRequestModel requestModel) async {
+    String url = "${AppUrl.updateProfileUrl}${requestModel.id}";
+
+    var response;
+
+    try {
+      response = await http.patch(Uri.parse(url),
+          body: requestModel.toJson(),
+          headers: {'Authorization': requestModel.authenticationToken});
+      if (response != null) {
+        print("Success (Update Profile): ${response.body}");
+        return updateProfileResponseModelFromJson(response.body);
+      } else {
+        print("response is null");
+      }
+    } catch (e) {
+      if (response != null) {
+        print("Error (Update Profile): ${response.body}");
+        return updateProfileResponseModelFromJson(response.body);
+      } else {
+        print("response is null $e");
+      }
+    }
+
+    return null;
+  }
+
+  Future<PublicVoteResponseModel> publicPollVote(
+      PublicPollVoteModel voteModel) async {
+    String url =
+        "${AppUrl.voteOnPublicPollUrl}/${voteModel.pollId}/voter/${voteModel.userId}";
+
+    var response;
+
+    try {
+      response = await http.patch(
+        Uri.parse(url),
+        body: voteModel.toJson(),
+        headers: {'Authorization': voteModel.authenticationToken},
+      );
+      print("request is sent");
+      if (response != null) {
+        print("Success (Vote on Public Poll): ${response.body}");
+        return publicVoteResponseModelFromJson(response);
+      } else {
+        print("Response is null");
+      }
+    } catch (e) {
+      if (response != null) {
+        print("Error (Vote on public poll): ${response.body}");
+        return publicVoteResponseModelFromJson(response);
+      } else {
+        print("Something went wrong");
       }
     }
 

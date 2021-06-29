@@ -15,6 +15,7 @@ import 'package:voting_system_mobile/utils/color_palette_util.dart';
 import 'package:voting_system_mobile/widgets/custom_button.dart';
 import 'package:voting_system_mobile/widgets/custom_divider_painter.dart';
 import 'package:voting_system_mobile/widgets/header_container.dart';
+import 'package:voting_system_mobile/widgets/network_sensitive_widget.dart';
 import 'package:voting_system_mobile/widgets/progress_hud_modal.dart';
 import 'package:voting_system_mobile/widgets/text_input_container.dart';
 
@@ -71,145 +72,148 @@ class _LoginState extends State<LoginPage> {
     }
 
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.only(bottom: 30.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              HeaderContainer(queryHeight: 0.3, title: 'Login'),
-              Container(
-                margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
-                child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        TextInput(
-                          hintText: "Email",
-                          icon: Icons.email,
-                          textInputType: TextInputType.emailAddress,
-                          validate: validator.validateEmail,
-                          onSaved: (input) {
-                            //user.email = email;
-                            requestModel.email = input;
-                          },
-                        ),
-                        TextInput(
-                          hintText: "Password",
-                          icon: Icons.vpn_key,
-                          obscureText: true,
-                          onSaved: (input) {
-                            //user.password = password;
-                            requestModel.password = input;
-                          },
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 25.0),
-                          alignment: Alignment.centerRight,
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ForgotPassword()),
-                              );
+      body: NetworkSensitive(
+        child: Container(
+          padding: EdgeInsets.only(bottom: 30.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                HeaderContainer(queryHeight: 0.3, title: 'Login'),
+                Container(
+                  margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
+                  child: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          TextInput(
+                            hintText: "Email",
+                            icon: Icons.email,
+                            textInputType: TextInputType.emailAddress,
+                            validate: validator.validateEmail,
+                            onSaved: (input) {
+                              //user.email = email;
+                              requestModel.email = input;
                             },
-                            child: Text(
-                              'Forgot your Password?',
-                              style:
-                                  TextStyle(color: tealColors, fontSize: 15.0),
+                          ),
+                          TextInput(
+                            hintText: "Password",
+                            icon: Icons.vpn_key,
+                            obscureText: true,
+                            onSaved: (input) {
+                              //user.password = password;
+                              requestModel.password = input;
+                            },
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 25.0),
+                            alignment: Alignment.centerRight,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ForgotPassword()),
+                                );
+                              },
+                              child: Text(
+                                'Forgot your Password?',
+                                style: TextStyle(
+                                    color: tealColors, fontSize: 15.0),
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: 40.0),
-                        Center(
-                          child: CustomButton(
-                            enabled: true,
-                            title: 'Login',
-                            onPressed: () {
-                              if (validateAndSave()) {
-                                setState(() {
-                                  isApiCallProcess = true;
-                                });
-                              }
-                              // authenticate user
-                              doLogin(requestModel);
-                            },
+                          SizedBox(height: 40.0),
+                          Center(
+                            child: CustomButton(
+                              enabled: true,
+                              title: 'Login',
+                              onPressed: () {
+                                if (validateAndSave()) {
+                                  setState(() {
+                                    isApiCallProcess = true;
+                                  });
+                                }
+                                // authenticate user
+                                doLogin(requestModel);
+                              },
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 25.0,
-                        ),
-                        SizedBox(height: 15.0),
-                        getSeparateDivider(),
-                        SizedBox(height: 10.0),
-                        Container(
-                          margin: EdgeInsets.all(10.0),
-                          child: Row(
-                            children: <Widget>[
-                              Expanded(
-                                flex: 1,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      primary: tealColors),
-                                  onPressed: () {
-                                    // Todo: implement sign in with linkedin
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: <Widget>[
-                                      FaIcon(FontAwesomeIcons.linkedin),
-                                      Text('Linked In')
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 4.0),
-                              Expanded(
-                                flex: 1,
-                                child: ElevatedButton(
+                          SizedBox(
+                            height: 25.0,
+                          ),
+                          SizedBox(height: 15.0),
+                          getSeparateDivider(),
+                          SizedBox(height: 10.0),
+                          Container(
+                            margin: EdgeInsets.all(10.0),
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  flex: 1,
+                                  child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
                                         primary: tealColors),
                                     onPressed: () {
-                                      // Todo: implement sign in with google
+                                      // Todo: implement sign in with linkedin
                                     },
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceAround,
                                       children: <Widget>[
-                                        FaIcon(FontAwesomeIcons.google),
-                                        Text('Google')
+                                        FaIcon(FontAwesomeIcons.linkedin),
+                                        Text('Linked In')
                                       ],
-                                    )),
-                              )
-                            ],
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 4.0),
+                                Expanded(
+                                  flex: 1,
+                                  child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          primary: tealColors),
+                                      onPressed: () {
+                                        // Todo: implement sign in with google
+                                      },
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: <Widget>[
+                                          FaIcon(FontAwesomeIcons.google),
+                                          Text('Google')
+                                        ],
+                                      )),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 25.0),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => RegistrationPage()));
-                          },
-                          child: RichText(
-                              text: TextSpan(children: [
-                            TextSpan(
-                                text: "Don't have an account?",
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 15.0)),
-                            TextSpan(
-                                text: " Sign Up",
-                                style: TextStyle(
-                                    color: tealColors, fontSize: 15.0))
-                          ])),
-                        )
-                      ],
-                    )),
-              )
-            ],
+                          SizedBox(height: 25.0),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          RegistrationPage()));
+                            },
+                            child: RichText(
+                                text: TextSpan(children: [
+                              TextSpan(
+                                  text: "Don't have an account?",
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 15.0)),
+                              TextSpan(
+                                  text: " Sign Up",
+                                  style: TextStyle(
+                                      color: tealColors, fontSize: 15.0))
+                            ])),
+                          )
+                        ],
+                      )),
+                )
+              ],
+            ),
           ),
         ),
       ),

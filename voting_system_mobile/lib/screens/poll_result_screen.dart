@@ -101,8 +101,8 @@ class _PollResultsDetail extends State<PollResultsDetail> {
                             } else {
                               return Container(
                                 child: Center(
-                                  child: SpinKitWave(
-                                      size: 25.0, color: tealLightColor),
+                                  child: SpinKitFoldingCube(
+                                      size: 30.0, color: tealLightColor),
                                 ),
                               );
                             }
@@ -138,6 +138,7 @@ class _PollResultsDetail extends State<PollResultsDetail> {
                         style: TextStyle(
                           fontSize: 18.0,
                           color: Colors.black,
+                          height: 2.0,
                         ),
                       ),
                       const SizedBox(height: 7.0),

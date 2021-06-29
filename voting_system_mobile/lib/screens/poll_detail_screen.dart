@@ -6,6 +6,7 @@ import 'package:voting_system_mobile/classes/request_service.dart';
 import 'package:voting_system_mobile/model/candidate_poll_model.dart';
 import 'package:voting_system_mobile/model/has_voted_model.dart';
 import 'package:voting_system_mobile/model/poll_model.dart';
+import 'package:voting_system_mobile/model/vote_model.dart';
 import 'package:voting_system_mobile/providers/poll_provider.dart';
 import 'package:voting_system_mobile/providers/user_provider.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
@@ -88,9 +89,18 @@ class _PollDetailState extends State<PollDetail> {
   @override
   Widget build(BuildContext context) {
     var pollProvider = Provider.of<PollProvider>(context);
-    bool _voteEnabled = false;
+    var userProvider = Provider.of<UserProvider>(context).user;
 
-    _showCandidateDetail(Candidate candidate) async {
+    bool _voteEnabled = false;
+    bool _submitEnabled = false;
+
+    List<String> optionLabels = widget.poll.option.map((e) => e.title).toList();
+    List<String> candidateLabels = candidates
+        .map((e) => "${e.candidateFirstName} ${e.candidateLastName}")
+        .toList();
+
+    // show option description
+    _showOptionDescription(Candidate candidate) async {
       return showModalBottomSheet(
           context: context,
           builder: (BuildContext context) {
@@ -112,80 +122,91 @@ class _PollDetailState extends State<PollDetail> {
       await showModalBottomSheet<String>(
         context: context,
         builder: (BuildContext context) {
-          bool _submitEnabled = false;
-
-          return Container(
-            padding: EdgeInsets.all(15.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Text(
-                  "${widget.poll.pollTitle}",
-                  style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
+          return StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Container(
+                padding: EdgeInsets.all(15.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      "${widget.poll.pollTitle}",
+                      style: TextStyle(
+                          fontSize: 22.0, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 10.0),
+                    CustomRadioButton(
+                      padding: 5.0,
+                      elevation: 0,
+                      absoluteZeroSpacing: false,
+                      unSelectedColor: Theme.of(context).canvasColor,
+                      buttonLables: widget.poll.type == "Candidate"
+                          ? candidateLabels
+                          : optionLabels,
+                      buttonValues: widget.poll.type == "Candidate"
+                          ? candidates.map((e) => e.id).toList()
+                          : optionLabels,
+                      buttonTextStyle: ButtonTextStyle(
+                        selectedColor: Colors.white,
+                        unSelectedColor: Colors.black,
+                        textStyle: TextStyle(fontSize: 18),
+                      ),
+                      radioButtonValue: (value) {
+                        _choice = value;
+                        setState(() {
+                          _submitEnabled = true;
+                        });
+                        print(
+                            "Choice is now $_choice and submit is $_submitEnabled");
+                      },
+                      horizontal: true,
+                      height: 50.0,
+                      autoWidth: true,
+                      selectedColor: Theme.of(context).primaryColor,
+                    ),
+                    SizedBox(
+                      height: 15.0,
+                    ),
+                    CustomButton(
+                      title: "Submit Vote",
+                      enabled: _submitEnabled,
+                      onPressed: () {
+                        Navigator.pop(context, _choice);
+                      },
+                    )
+                  ],
                 ),
-                SizedBox(height: 10.0),
-                CustomRadioButton(
-                  padding: 5.0,
-                  elevation: 0,
-                  absoluteZeroSpacing: false,
-                  unSelectedColor: Theme.of(context).canvasColor,
-                  buttonLables: ["sdjykkas sdfiiglels", "Eyob Yifru"],
-                  buttonValues: ["sdjykkas sdfiiglels", "Eyob Yifru"],
-                  buttonTextStyle: ButtonTextStyle(
-                      selectedColor: Colors.white,
-                      unSelectedColor: Colors.black,
-                      textStyle: TextStyle(fontSize: 18)),
-                  radioButtonValue: (value) {
-                    _choice = value;
-                    setState(() {
-                      _submitEnabled = true;
-                    });
-                    print("Choice is now $_choice");
-                  },
-                  horizontal: true,
-                  height: 50.0,
-                  autoWidth: true,
-                  selectedColor: Theme.of(context).primaryColor,
-                ),
-                SizedBox(
-                  height: 15.0,
-                ),
-                CustomButton(
-                  title: "Submit Vote",
-                  enabled: _submitEnabled,
-                  onPressed: () {
-                    Navigator.pop(context, _choice);
-                  },
-                )
-              ],
-            ),
+              );
+            },
           );
         },
-      ).then((choice) {
-        _choice = choice;
+      ).whenComplete(() {
+        _choice = null;
+        _submitEnabled = false;
+      }).then((selectedChoice) => _choice = selectedChoice);
+
+      // setup request model
+      VoteRequestModel voteRequestModel = VoteRequestModel(
+        authenticationToken: userProvider.token,
+        pollId: widget.poll.pollId,
+        voterId: userProvider.userId,
+        option: _choice,
+      );
+
+      // send vote on poll request
+      await RequestService().voteOnPoll(voteRequestModel).then((response) {
+        if (response.response != null) {
+          setState(() {
+            userHasVoted = true;
+            pollProvider.setUserHasVoted(widget.poll.pollId);
+          });
+        } else {
+          final snackBar = SnackBar(
+            content: Text('Something went wrong, try again'),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
       });
-      // // setup request model
-      // VoteRequestModel voteRequestModel = VoteRequestModel(
-      //   authenticationToken: userProvider.user.token,
-      //   pollId: widget.poll.pollId,
-      //   voterId: userProvider.user.userId,
-      //   option: _choice,
-      // );
-      //
-      // // send vote on poll request
-      // await RequestService().voteOnPoll(voteRequestModel).then((response) {
-      //   if (response.response != null) {
-      //     setState(() {
-      //       userHasVoted = true;
-      //       pollProvider.setUserHasVoted(widget.poll.pollId);
-      //     });
-      //   } else {
-      //     final snackBar = SnackBar(
-      //       content: Text('Something went wrong, try again'),
-      //     );
-      //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      //   }
-      // });
     }
 
     return Scaffold(
@@ -255,8 +276,9 @@ class _PollDetailState extends State<PollDetail> {
                                         width: double.infinity,
                                         child: OutlinedButton(
                                           onPressed: () {
-                                            _showCandidateDetail(
-                                                candidates[index]);
+                                            _showOptionDescription(
+                                              candidates[index],
+                                            );
                                           },
                                           child: Text(
                                             "${candidates[index].candidateFirstName} ${candidates[index].candidateLastName}",
@@ -272,7 +294,7 @@ class _PollDetailState extends State<PollDetail> {
                                 } else {
                                   return Container(
                                     child: Center(
-                                      child: SpinKitWave(
+                                      child: SpinKitFoldingCube(
                                           size: 25.0, color: tealLightColor),
                                     ),
                                   );
@@ -371,7 +393,7 @@ class _PollDetailState extends State<PollDetail> {
                         ),
                       )
                     : Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(10.0),
                         child: FutureBuilder(
                           future: futureUserHasVoted,
                           builder: (context, snapshot) {
@@ -409,8 +431,8 @@ class _PollDetailState extends State<PollDetail> {
                             } else {
                               return Container(
                                 child: Center(
-                                  child: SpinKitWave(
-                                      size: 25.0, color: tealLightColor),
+                                  child: SpinKitFoldingCube(
+                                      size: 30.0, color: tealLightColor),
                                 ),
                               );
                             }
