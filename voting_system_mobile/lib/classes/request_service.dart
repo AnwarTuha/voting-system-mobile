@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:voting_system_mobile/model/candidate_poll_model.dart';
+import 'package:voting_system_mobile/model/check_notification_model.dart';
 import 'package:voting_system_mobile/model/has_voted_model.dart';
 import 'package:voting_system_mobile/model/login_model.dart';
 import 'package:voting_system_mobile/model/organization_model.dart';
@@ -291,14 +292,14 @@ class RequestService {
 
   // request public polls
 
-  Future<List<PublicPollResponseModel>> requestPublicPoll() async {
+  Future<PublicPollResponseModel> requestPublicPoll() async {
     String url = "${AppUrl.getPublicPollsUrl}";
 
     var response;
 
     response = await http.get(Uri.parse(url));
     if (response != null) {
-      return publicPollResponseModelFromJson(response.body);
+      return publicPollResponseModelFromJson(response);
     }
 
     return null;
@@ -411,5 +412,20 @@ class RequestService {
     }
 
     return null;
+  }
+
+  checkNotificationAsSeen(CheckNotificationModel requestModel) async {
+    String url =
+        "${AppUrl.checkNotificationIsSeenUrl}/${requestModel.notificationId}/voter/${requestModel.userId}";
+
+    var response;
+
+    try {
+      response = await http.patch(Uri.parse(url),
+          headers: {'Authorization': requestModel.authenticationToken});
+      print(response.body);
+    } catch (e) {
+      print("Error(Check notificaiton): $e");
+    }
   }
 }

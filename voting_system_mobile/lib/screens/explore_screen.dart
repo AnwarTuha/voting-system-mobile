@@ -15,7 +15,7 @@ class ExploreScreen extends StatefulWidget {
 
 class _ExploreScreenState extends State<ExploreScreen> {
   Future futurePolls;
-  List<PublicPollResponseModel> polls = [];
+  List<PublicPoll> polls = [];
 
   @override
   void initState() {
@@ -25,7 +25,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   _getPublicVotes() async {
     await RequestService().requestPublicPoll().then((response) {
-      polls.addAll(response.toList());
+      polls.addAll(response.polls);
     });
     return polls.distinct((element) => element.pollId).toList();
   }
@@ -79,8 +79,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
     );
   }
 
-  Widget buildPollCard(
-      String pollTitle, DateTime endDate, PublicPollResponseModel poll) {
+  Widget buildPollCard(String pollTitle, DateTime endDate, PublicPoll poll) {
     return PublicPollCard(
         pollTitle: pollTitle,
         endDate: endDate,

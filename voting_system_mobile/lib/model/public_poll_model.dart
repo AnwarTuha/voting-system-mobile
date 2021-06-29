@@ -2,15 +2,32 @@ import 'dart:convert';
 
 import 'package:voting_system_mobile/model/response_error_model.dart';
 
-List<PublicPollResponseModel> publicPollResponseModelFromJson(String str) =>
-    List<PublicPollResponseModel>.from(
-        json.decode(str).map((x) => PublicPollResponseModel.fromJson(x)));
+PublicPollResponseModel publicPollResponseModelFromJson(String str) =>
+    PublicPollResponseModel.fromJson(json.decode(str));
 
-String publicPollResponseModelToJson(List<PublicPollResponseModel> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String publicPollResponseModelToJson(PublicPollResponseModel data) =>
+    json.encode(data.toJson());
 
 class PublicPollResponseModel {
-  PublicPollResponseModel(
+  PublicPollResponseModel({
+    this.polls,
+  });
+
+  List<PublicPoll> polls;
+
+  factory PublicPollResponseModel.fromJson(Map<String, dynamic> json) =>
+      PublicPollResponseModel(
+        polls: List<PublicPoll>.from(
+            json["Polls"].map((x) => PublicPoll.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "Polls": List<dynamic>.from(polls.map((x) => x.toJson())),
+      };
+}
+
+class PublicPoll {
+  PublicPoll(
       {this.pollTitle,
       this.startDate,
       this.endDate,
@@ -27,8 +44,7 @@ class PublicPollResponseModel {
   String pollId;
   HttpError error;
 
-  factory PublicPollResponseModel.fromJson(Map<String, dynamic> json) =>
-      PublicPollResponseModel(
+  factory PublicPoll.fromJson(Map<String, dynamic> json) => PublicPoll(
         pollTitle: json["Title"] != null ? json["Title"] : null,
         startDate: json["startDate"] != null
             ? DateTime.parse(json["startDate"])

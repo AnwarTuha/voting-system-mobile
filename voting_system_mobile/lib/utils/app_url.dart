@@ -12,11 +12,12 @@ abstract class AppUrl {
   static const String getRolesOrg = "$kBaseUrl/roles/getRolesInOrg/";
   static const String getPendingPollsUrl =
       "$kBaseUrl/Polls/getUserPendingVotes";
-  static const String getPublicPollsUrl =
-      "$kBaseUrl/publicVotes?filter[where][isVerified]=true";
+  static const String getPublicPollsUrl = "$kBaseUrl/Voters/getPublicVotes";
   static const String getCandidateDetailsUrl =
       "$kBaseUrl//Polls/candidatePollDetails";
   static const String socketIo = "https://voting-system2.herokuapp.com";
   static const String updateProfileUrl = "$kBaseUrl/Voters/editCredentials/";
   static const String voteOnPublicPollUrl = "$kBaseUrl/Voters/publicVote";
+  static const String checkNotificationIsSeenUrl =
+      "$kBaseUrl/Voters/checkNotification";
 }

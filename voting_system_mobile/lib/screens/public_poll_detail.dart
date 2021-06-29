@@ -11,7 +11,7 @@ import 'package:voting_system_mobile/widgets/progress_hud_modal.dart';
 class PublicPollDetail extends StatefulWidget {
   static const String id = "poll_detail";
 
-  final PublicPollResponseModel poll;
+  final PublicPoll poll;
   final String fromClass;
 
   PublicPollDetail({this.poll, this.fromClass});
@@ -111,14 +111,10 @@ class _PublicPollDetailState extends State<PublicPollDetail> {
                 shrinkWrap: true,
                 itemCount: widget.poll.questions.length,
                 itemBuilder: (BuildContext context, int index) {
-                  question = widget.poll.questions[index];
-                  question.options.forEach((element) {
-                    print(element.optionTitle);
-                  });
                   return Column(
                     children: <Widget>[
                       Text(
-                        "${question.questionTitle}",
+                        "${widget.poll.questions[index].questionTitle}",
                         textAlign: TextAlign.left,
                         style: TextStyle(
                           fontSize: 18.0,
@@ -133,17 +129,19 @@ class _PublicPollDetailState extends State<PublicPollDetail> {
                         absoluteZeroSpacing: false,
                         unSelectedColor: Colors.white,
                         unSelectedBorderColor: Colors.black,
-                        buttonLables:
-                            question.options.map((e) => e.optionTitle).toList(),
-                        buttonValues:
-                            question.options.map((e) => e.optionTitle).toList(),
+                        buttonLables: widget.poll.questions[index].options
+                            .map((e) => e.optionTitle)
+                            .toList(),
+                        buttonValues: widget.poll.questions[index].options
+                            .map((e) => e.optionTitle)
+                            .toList(),
                         buttonTextStyle: ButtonTextStyle(
                           selectedColor: Colors.white,
                           unSelectedColor: Colors.black,
                           textStyle: TextStyle(fontSize: 18),
                         ),
                         radioButtonValue: (value) {
-                          print("Choice is $value");
+                          question = widget.poll.questions[index];
                           Choice choice = Choice(
                             questionIndex: index,
                             choiceIndex: question.options.indexWhere(

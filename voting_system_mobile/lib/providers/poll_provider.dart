@@ -123,4 +123,14 @@ class PollProvider extends ChangeNotifier {
   Poll getLivePollByIndex(int index) => _livePolls[index];
   Poll getPendingPollByIndex(int index) => _pendingPolls[index];
   Poll getCompletedPollByIndex(int index) => _completedPolls[index];
+
+  void removeFromAllPollsByPollId(String pollId) {
+    print("removing $pollId");
+    _allPolls.removeWhere((element) => element.pollId == pollId);
+    _livePolls.removeWhere((element) => element.pollId == pollId);
+    _pendingPolls.removeWhere((element) => element.pollId == pollId);
+    _upcomingPolls.removeWhere((element) => element.pollId == pollId);
+    _completedPolls.removeWhere((element) => element.pollId == pollId);
+    notifyListeners();
+  }
 }
