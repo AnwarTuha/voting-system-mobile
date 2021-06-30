@@ -56,9 +56,7 @@ class _PollDetailState extends State<PollDetail> {
       pollId: widget.poll.pollId,
     );
 
-    await RequestService()
-        .getCandidateDetail(candidateRequestModel)
-        .then((response) {
+    await RequestService().getCandidateDetail(candidateRequestModel).then((response) {
       setState(() {
         candidates = response.response.candidates;
       });
@@ -95,9 +93,7 @@ class _PollDetailState extends State<PollDetail> {
     bool _submitEnabled = false;
 
     List<String> optionLabels = widget.poll.option.map((e) => e.title).toList();
-    List<String> candidateLabels = candidates
-        .map((e) => "${e.candidateFirstName} ${e.candidateLastName}")
-        .toList();
+    List<String> candidateLabels = candidates.map((e) => "${e.candidateFirstName} ${e.candidateLastName}").toList();
 
     if (widget.poll.canAbstain) {
       optionLabels.add("Abstain");
@@ -136,8 +132,7 @@ class _PollDetailState extends State<PollDetail> {
                   children: <Widget>[
                     Text(
                       "${widget.poll.pollTitle}",
-                      style: TextStyle(
-                          fontSize: 22.0, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 10.0),
                     CustomRadioButton(
@@ -145,12 +140,8 @@ class _PollDetailState extends State<PollDetail> {
                       elevation: 0,
                       absoluteZeroSpacing: false,
                       unSelectedColor: Theme.of(context).canvasColor,
-                      buttonLables: widget.poll.type == "Candidate"
-                          ? candidateLabels
-                          : optionLabels,
-                      buttonValues: widget.poll.type == "Candidate"
-                          ? candidates.map((e) => e.id).toList()
-                          : optionLabels,
+                      buttonLables: widget.poll.type == "Candidate" ? candidateLabels : optionLabels,
+                      buttonValues: widget.poll.type == "Candidate" ? candidates.map((e) => e.id).toList() : optionLabels,
                       buttonTextStyle: ButtonTextStyle(
                         selectedColor: Colors.white,
                         unSelectedColor: Colors.black,
@@ -161,8 +152,7 @@ class _PollDetailState extends State<PollDetail> {
                         setState(() {
                           _submitEnabled = true;
                         });
-                        print(
-                            "Choice is now $_choice and submit is $_submitEnabled");
+                        print("Choice is now $_choice and submit is $_submitEnabled");
                       },
                       horizontal: true,
                       height: 50.0,
@@ -225,8 +215,7 @@ class _PollDetailState extends State<PollDetail> {
           child: Column(
             children: <Widget>[
               Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
                 elevation: 8.0,
                 color: Colors.white,
                 child: Padding(
@@ -268,15 +257,12 @@ class _PollDetailState extends State<PollDetail> {
                           ? FutureBuilder(
                               future: candidateDetails,
                               builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                        ConnectionState.done &&
-                                    snapshot.hasData) {
+                                if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
                                   _voteEnabled = true;
                                   return ListView.builder(
                                     shrinkWrap: true,
                                     itemCount: candidates.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
+                                    itemBuilder: (BuildContext context, int index) {
                                       return Container(
                                         width: double.infinity,
                                         child: OutlinedButton(
@@ -299,8 +285,7 @@ class _PollDetailState extends State<PollDetail> {
                                 } else {
                                   return Container(
                                     child: Center(
-                                      child: SpinKitFoldingCube(
-                                          size: 25.0, color: tealLightColor),
+                                      child: SpinKitFoldingCube(size: 25.0, color: tealLightColor),
                                     ),
                                   );
                                 }
@@ -311,8 +296,7 @@ class _PollDetailState extends State<PollDetail> {
                                 ListView.builder(
                                   shrinkWrap: true,
                                   itemCount: widget.poll.option.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
+                                  itemBuilder: (BuildContext context, int index) {
                                     return Container(
                                       width: double.infinity,
                                       child: OutlinedButton(
@@ -350,11 +334,7 @@ class _PollDetailState extends State<PollDetail> {
                       const SizedBox(height: 15.0),
                       Text(
                         "Important things to note",
-                        style: TextStyle(
-                            fontSize: 22,
-                            color: Colors.black,
-                            letterSpacing: 2.0,
-                            fontWeight: FontWeight.w600),
+                        style: TextStyle(fontSize: 22, color: Colors.black, letterSpacing: 2.0, fontWeight: FontWeight.w600),
                       ),
                       const SizedBox(height: 7.0),
                       Container(
@@ -363,8 +343,7 @@ class _PollDetailState extends State<PollDetail> {
                           onPressed: () {},
                           child: Text(
                             "This poll is of type ${widget.poll.type}",
-                            style:
-                                TextStyle(color: Colors.black, fontSize: 18.0),
+                            style: TextStyle(color: Colors.black, fontSize: 18.0),
                           ),
                         ),
                       ),
@@ -376,8 +355,7 @@ class _PollDetailState extends State<PollDetail> {
                                 onPressed: () {},
                                 child: Text(
                                   "You can retract your vote for this poll",
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 18.0),
+                                  style: TextStyle(color: Colors.black, fontSize: 18.0),
                                 ),
                               ),
                             )
@@ -390,8 +368,7 @@ class _PollDetailState extends State<PollDetail> {
                                   child: Text(
                                     "You CANNOT retract your vote for this poll",
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.black, fontSize: 18.0),
+                                    style: TextStyle(color: Colors.black, fontSize: 18.0),
                                   ),
                                 ),
                               ),
@@ -402,8 +379,7 @@ class _PollDetailState extends State<PollDetail> {
                 ),
               ),
               Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
                 elevation: 8.0,
                 color: Colors.white,
                 child: widget.fromClass == "upcoming"
@@ -416,7 +392,9 @@ class _PollDetailState extends State<PollDetail> {
                             child: Text(
                               "This poll hasn't begun yet",
                               style: TextStyle(
-                                  color: Colors.black, fontSize: 18.0),
+                                color: Colors.black,
+                                fontSize: 18.0,
+                              ),
                             ),
                           ),
                         ),
@@ -426,31 +404,23 @@ class _PollDetailState extends State<PollDetail> {
                         child: FutureBuilder(
                           future: futureUserHasVoted,
                           builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                    ConnectionState.done &&
-                                snapshot.hasData) {
-                              if (snapshot.data == true ||
-                                  userHasVoted == true) {
-                                pollProvider
-                                    .setUserHasVoted(widget.poll.pollId);
+                            if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                              if (snapshot.data == true || userHasVoted == true) {
+                                pollProvider.setUserHasVoted(widget.poll.pollId);
                                 return Container(
                                   width: double.infinity,
                                   child: OutlinedButton(
                                     onPressed: () {},
                                     child: Text(
                                       "You've already voted on this poll",
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 18.0),
+                                      style: TextStyle(color: Colors.black, fontSize: 18.0),
                                     ),
                                   ),
                                 );
                               } else {
                                 return CustomButton(
                                   onPressed: () {
-                                    var choiceList =
-                                        widget.poll.type == "Candidate"
-                                            ? candidates
-                                            : widget.poll.option;
+                                    var choiceList = widget.poll.type == "Candidate" ? candidates : widget.poll.option;
                                     _voteOnPoll(choiceList);
                                   },
                                   title: "Click here to vote",
@@ -460,8 +430,7 @@ class _PollDetailState extends State<PollDetail> {
                             } else {
                               return Container(
                                 child: Center(
-                                  child: SpinKitFoldingCube(
-                                      size: 30.0, color: tealLightColor),
+                                  child: SpinKitFoldingCube(size: 30.0, color: tealLightColor),
                                 ),
                               );
                             }
