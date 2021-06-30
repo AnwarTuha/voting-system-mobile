@@ -40,7 +40,7 @@ class _PublicPollDetailState extends State<PublicPollDetail> {
     var userProvider = Provider.of<UserProvider>(context).user;
 
     Question question;
-    bool _submitEnabled = true;
+    bool _submitEnabled = false;
     List<Choice> _choices = [];
 
     _voteOnPoll(List<Choice> _choices) async {
@@ -129,12 +129,8 @@ class _PublicPollDetailState extends State<PublicPollDetail> {
                         absoluteZeroSpacing: false,
                         unSelectedColor: Colors.white,
                         unSelectedBorderColor: Colors.black,
-                        buttonLables: widget.poll.questions[index].options
-                            .map((e) => e.optionTitle)
-                            .toList(),
-                        buttonValues: widget.poll.questions[index].options
-                            .map((e) => e.optionTitle)
-                            .toList(),
+                        buttonLables: widget.poll.questions[index].options.map((e) => e.optionTitle).toList(),
+                        buttonValues: widget.poll.questions[index].options.map((e) => e.optionTitle).toList(),
                         buttonTextStyle: ButtonTextStyle(
                           selectedColor: Colors.white,
                           unSelectedColor: Colors.black,
@@ -144,9 +140,8 @@ class _PublicPollDetailState extends State<PublicPollDetail> {
                           question = widget.poll.questions[index];
                           Choice choice = Choice(
                             questionIndex: index,
-                            choiceIndex: question.options.indexWhere(
-                                (element) =>
-                                    element.optionTitle == value.toString()),
+                            choiceIndex:
+                                question.options.indexWhere((element) => element.optionTitle == value.toString()),
                           );
                           print(choice.questionIndex);
                           print(choice.choiceIndex);

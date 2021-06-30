@@ -5,20 +5,24 @@ import 'package:voting_system_mobile/model/response_error_model.dart';
 PublicPollResponseModel publicPollResponseModelFromJson(String str) =>
     PublicPollResponseModel.fromJson(json.decode(str));
 
-String publicPollResponseModelToJson(PublicPollResponseModel data) =>
-    json.encode(data.toJson());
+String publicPollResponseModelToJson(PublicPollResponseModel data) => json.encode(data.toJson());
 
 class PublicPollResponseModel {
   PublicPollResponseModel({
     this.polls,
+    this.error,
   });
 
   List<PublicPoll> polls;
+  HttpError error;
 
-  factory PublicPollResponseModel.fromJson(Map<String, dynamic> json) =>
-      PublicPollResponseModel(
+  factory PublicPollResponseModel.fromJson(Map<String, dynamic> json) => PublicPollResponseModel(
         polls: List<PublicPoll>.from(
-            json["Polls"].map((x) => PublicPoll.fromJson(x))),
+          json["Polls"].map(
+            (x) => PublicPoll.fromJson(x),
+          ),
+        ),
+        error: json["error"] != null ? HttpError.fromJson(json["error"]) : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -27,14 +31,15 @@ class PublicPollResponseModel {
 }
 
 class PublicPoll {
-  PublicPoll(
-      {this.pollTitle,
-      this.startDate,
-      this.endDate,
-      this.pollDescription,
-      this.questions,
-      this.pollId,
-      this.error});
+  PublicPoll({
+    this.pollTitle,
+    this.startDate,
+    this.endDate,
+    this.pollDescription,
+    this.questions,
+    this.pollId,
+    this.error,
+  });
 
   String pollTitle;
   DateTime startDate;
@@ -46,17 +51,11 @@ class PublicPoll {
 
   factory PublicPoll.fromJson(Map<String, dynamic> json) => PublicPoll(
         pollTitle: json["Title"] != null ? json["Title"] : null,
-        startDate: json["startDate"] != null
-            ? DateTime.parse(json["startDate"])
-            : null,
-        endDate:
-            json["endDate"] != null ? DateTime.parse(json["endDate"]) : null,
-        pollDescription:
-            json["description"] != null ? json["description"] : null,
-        questions: json["questions"] != null
-            ? List<Question>.from(
-                json["questions"].map((x) => Question.fromJson(x)))
-            : [],
+        startDate: json["startDate"] != null ? DateTime.parse(json["startDate"]) : null,
+        endDate: json["endDate"] != null ? DateTime.parse(json["endDate"]) : null,
+        pollDescription: json["description"] != null ? json["description"] : null,
+        questions:
+            json["questions"] != null ? List<Question>.from(json["questions"].map((x) => Question.fromJson(x))) : [],
         pollId: json["id"] != null ? json["id"] : null,
         error: json["error"] != null ? HttpError.fromJson(json["error"]) : null,
       );
@@ -82,9 +81,7 @@ class Question {
 
   factory Question.fromJson(Map<String, dynamic> json) => Question(
         questionTitle: json["title"] != null ? json["title"] : null,
-        options: json["options"] != null
-            ? List<Option>.from(json["options"].map((x) => Option.fromJson(x)))
-            : null,
+        options: json["options"] != null ? List<Option>.from(json["options"].map((x) => Option.fromJson(x))) : null,
       );
 
   Map<String, dynamic> toJson() => {
@@ -116,17 +113,17 @@ class Option {
 PublicVoteResponseModel publicVoteResponseModelFromJson(String str) =>
     PublicVoteResponseModel.fromJson(json.decode(str));
 
-String publicVoteResponseModelToJson(PublicVoteResponseModel data) =>
-    json.encode(data);
+String publicVoteResponseModelToJson(PublicVoteResponseModel data) => json.encode(data);
 
 class PublicVoteResponseModel {
   HttpError error;
   String message;
 
+  printMessage() => print("Response is here");
+
   PublicVoteResponseModel({this.message, this.error});
 
-  factory PublicVoteResponseModel.fromJson(Map<String, dynamic> json) =>
-      PublicVoteResponseModel(
+  factory PublicVoteResponseModel.fromJson(Map<String, dynamic> json) => PublicVoteResponseModel(
         message: json["Response"] != null ? json["Response"] : null,
         error: json["error"] != null ? json["error"] : null,
       );
@@ -138,8 +135,7 @@ class PublicPollVoteModel {
   String userId;
   String authenticationToken;
 
-  PublicPollVoteModel(
-      {this.choices, this.userId, this.pollId, this.authenticationToken});
+  PublicPollVoteModel({this.choices, this.userId, this.pollId, this.authenticationToken});
 
   Map<String, dynamic> toJson() => {
         "choice": List<dynamic>.from(choices.map((x) => x.toJson())),
@@ -156,4 +152,10 @@ class Choice {
         "questionIndex": questionIndex,
         "choiceIndex": choiceIndex,
       };
+}
+
+class PublicPollRequestModel {
+  String authenticationToken;
+
+  PublicPollRequestModel({this.authenticationToken});
 }
