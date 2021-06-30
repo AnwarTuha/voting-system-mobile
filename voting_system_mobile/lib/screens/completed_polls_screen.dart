@@ -15,8 +15,7 @@ class CompletedPoll extends StatefulWidget {
   _CompletedPollState createState() => _CompletedPollState();
 }
 
-class _CompletedPollState extends State<CompletedPoll>
-    with AutomaticKeepAliveClientMixin<CompletedPoll> {
+class _CompletedPollState extends State<CompletedPoll> with AutomaticKeepAliveClientMixin<CompletedPoll> {
   @override
   bool get wantKeepAlive => true;
 
@@ -57,8 +56,7 @@ class _CompletedPollState extends State<CompletedPoll>
       child: FutureBuilder(
           future: futurePolls,
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done &&
-                snapshot.hasData) {
+            if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
               if (snapshot.data.length == 0) {
                 return Container(
                   child: Center(
@@ -73,13 +71,15 @@ class _CompletedPollState extends State<CompletedPoll>
               return RefreshIndicator(
                 key: _refreshKey,
                 onRefresh: () {
-                  return futurePolls = _getPolls();
+                  setState(() {
+                    futurePolls = _getPolls();
+                  });
+                  return futurePolls;
                 },
                 child: Consumer<PollProvider>(
                   builder: (context, pollProvider, _) {
                     return ListView.separated(
-                      separatorBuilder: (BuildContext context, int index) =>
-                          const Divider(
+                      separatorBuilder: (BuildContext context, int index) => const Divider(
                         color: Colors.grey,
                       ),
                       itemBuilder: (context, i) {
@@ -106,17 +106,13 @@ class _CompletedPollState extends State<CompletedPoll>
     );
   }
 
-  Widget buildPollCard(
-      String pollTitle, DateTime endDate, String pollType, Poll poll) {
+  Widget buildPollCard(String pollTitle, DateTime endDate, String pollType, Poll poll) {
     return PollCard(
         pollTitle: pollTitle,
         endDate: endDate,
         pollType: pollType,
         onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => PollResultsDetail(poll: poll)));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => PollResultsDetail(poll: poll)));
         });
   }
 }

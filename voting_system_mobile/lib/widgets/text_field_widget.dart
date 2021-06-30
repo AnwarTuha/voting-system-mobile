@@ -6,9 +6,15 @@ class InputTextField extends StatelessWidget {
   final String fieldText;
   final bool inputEnabled;
   final Function onChanged;
+  final Function validator;
 
-  InputTextField(
-      {this.labelText, this.fieldText, this.inputEnabled, this.onChanged});
+  InputTextField({
+    this.labelText,
+    this.fieldText,
+    this.inputEnabled,
+    this.onChanged,
+    this.validator,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,15 +22,17 @@ class InputTextField extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 10.0),
       child: TextFormField(
         key: Key(fieldText),
-        initialValue: "$fieldText",
+        initialValue: fieldText != null ? "$fieldText" : "",
         enabled: inputEnabled,
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderSide: BorderSide(color: tealColors),
           ),
           labelText: "$labelText",
+          labelStyle: TextStyle(color: tealColors),
         ),
         onChanged: onChanged,
+        validator: validator,
       ),
     );
   }

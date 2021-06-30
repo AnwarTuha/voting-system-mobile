@@ -76,10 +76,36 @@ class _MyAccountState extends State<MyAccount> {
     String _lastName = widget.user.lastName;
     String _phone = widget.user.phoneNumber;
 
+    _updateProfile() async {
+      // setup request model
+      UpdateProfileRequestModel requestModel = UpdateProfileRequestModel(
+        id: widget.user.userId,
+        authenticationToken: widget.user.token,
+        firstName: _firstName,
+        lastName: _lastName,
+        phone: _phone,
+      );
+
+      // send request
+      setState(() {
+        isAsyncCall = true;
+      });
+
+      await RequestService().updateProfile(requestModel).then((response) {
+        setState(() {
+          inputEnabled = false;
+          buttonEnabled = false;
+          isAsyncCall = false;
+        });
+        UserPreferences.setUser(response.response.user);
+        Provider.of<UserProvider>(context, listen: false).setUser(response.response.user);
+        print(Provider.of<UserProvider>(context, listen: false).user.token);
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("${userProvider.firstName} ${userProvider.lastName}",
-            style: TextStyle(color: Colors.black)),
+        title: Text("${userProvider.firstName} ${userProvider.lastName}", style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.transparent,
         actions: [
           Padding(
@@ -138,10 +164,7 @@ class _MyAccountState extends State<MyAccount> {
                   _phone = newValue;
                 },
               ),
-              InputTextField(
-                  labelText: "Email",
-                  fieldText: "${widget.user.email}",
-                  inputEnabled: false),
+              InputTextField(labelText: "Email", fieldText: "${widget.user.email}", inputEnabled: false),
               SizedBox(height: 10.0),
               Text(
                 "Company",
@@ -150,49 +173,22 @@ class _MyAccountState extends State<MyAccount> {
                 ),
               ),
               InputTextField(
-                  labelText: "Organization/company",
-                  fieldText: "${roleDetail.orgName}",
-                  inputEnabled: false),
-              InputTextField(
-                  labelText: "Role",
-                  fieldText: "${roleDetail.roleName}",
-                  inputEnabled: false),
+                  labelText: "Organization/company", fieldText: "${roleDetail.orgName}", inputEnabled: false),
+              InputTextField(labelText: "Role", fieldText: "${roleDetail.roleName}", inputEnabled: false),
               SizedBox(height: 10.0),
               CustomButton(
                   enabled: buttonEnabled,
                   title: "Update",
                   onPressed: () async {
-                    // setup request model
-                    UpdateProfileRequestModel requestModel =
-                        UpdateProfileRequestModel(
-                      id: widget.user.userId,
-                      authenticationToken: widget.user.token,
-                      firstName: _firstName,
-                      lastName: _lastName,
-                      phone: _phone,
-                    );
-
-                    // send request
-                    setState(() {
-                      isAsyncCall = true;
-                    });
-
-                    await RequestService()
-                        .updateProfile(requestModel)
-                        .then((response) {
-                      setState(() {
-                        inputEnabled = false;
-                        buttonEnabled = false;
-                        isAsyncCall = false;
-                      });
-                      UserPreferences.setUser(response.response.user);
-                      Provider.of<UserProvider>(context, listen: false)
-                          .setUser(response.response.user);
-                      print(Provider.of<UserProvider>(context, listen: false)
-                          .user
-                          .token);
-                    });
-                  })
+                    _updateProfile();
+                  }),
+              SizedBox(
+                height: 10.0,
+              ),
+              TextButton(
+                onPressed: () {},
+                child: Text("Change Password"),
+              ),
             ],
           ),
         ),

@@ -58,10 +58,7 @@ class _NotificationsState extends State<Notifications> {
       _socket.onConnect((_) {
         print('connect');
         // emit authentication event
-        var authenticationJson = {
-          "userId": userProvider.userId,
-          "accesstoken": userProvider.token
-        };
+        var authenticationJson = {"userId": userProvider.userId, "accesstoken": userProvider.token};
 
         _socket.emit(
           "authentication",
@@ -76,25 +73,19 @@ class _NotificationsState extends State<Notifications> {
             case "Addition":
               setState(() {
                 additionNotifications.add(mappedNotifications.notificationData);
-                additionNotifications = additionNotifications
-                    .distinct((element) => element.pollId)
-                    .toList();
+                additionNotifications = additionNotifications.distinct((element) => element.pollId).toList();
               });
               break;
             case "Removal":
               setState(() {
                 removalNotifications.add(mappedNotifications.notificationData);
-                removalNotifications = removalNotifications
-                    .distinct((element) => element.pollId)
-                    .toList();
+                removalNotifications = removalNotifications.distinct((element) => element.pollId).toList();
               });
               break;
             case "Editing":
               setState(() {
                 updatingNotifications.add(mappedNotifications.notificationData);
-                updatingNotifications = updatingNotifications
-                    .distinct((element) => element.pollId)
-                    .toList();
+                updatingNotifications = updatingNotifications.distinct((element) => element.pollId).toList();
               });
               break;
             default:
@@ -169,13 +160,11 @@ class _NotificationsState extends State<Notifications> {
                           itemCount: additionNotifications.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Card(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0)),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
                               child: Container(
                                   padding: EdgeInsets.all(25.0),
                                   child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       Icon(Icons.notifications),
                                       SizedBox(width: 15.0),
@@ -183,10 +172,8 @@ class _NotificationsState extends State<Notifications> {
                                         child: Expanded(
                                           flex: 1,
                                           child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: <Widget>[
                                               Text(
                                                 "${additionNotifications[index].message}",
@@ -240,13 +227,11 @@ class _NotificationsState extends State<Notifications> {
                           itemCount: updatingNotifications.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Card(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0)),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
                               child: Container(
                                   padding: EdgeInsets.all(25.0),
                                   child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       Icon(Icons.notifications),
                                       SizedBox(width: 15.0),
@@ -254,10 +239,8 @@ class _NotificationsState extends State<Notifications> {
                                         child: Expanded(
                                           flex: 1,
                                           child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: <Widget>[
                                               Text(
                                                 "${updatingNotifications[index].message}",
@@ -313,34 +296,28 @@ class _NotificationsState extends State<Notifications> {
                           shrinkWrap: true,
                           itemCount: removalNotifications.length,
                           itemBuilder: (BuildContext context, int index) {
-                            pollProvider.removeFromAllPollsByPollId(
-                                removalNotifications[index].pollId);
+                            pollProvider.removeFromAllPollsByPollId(removalNotifications[index].pollId);
 
                             return Dismissible(
                               key: UniqueKey(),
                               onDismissed: (DismissDirection direction) {
-                                CheckNotificationModel requestModel =
-                                    CheckNotificationModel(
-                                  notificationId: removalNotifications[index]
-                                      .notificationId,
+                                CheckNotificationModel requestModel = CheckNotificationModel(
+                                  notificationId: removalNotifications[index].notificationId,
                                   userId: userProvider.userId,
                                   authenticationToken: userProvider.token,
                                 );
-                                RequestService()
-                                    .checkNotificationAsSeen(requestModel);
+                                RequestService().checkNotificationAsSeen(requestModel);
                                 setState(() {
                                   removalNotifications.removeAt(index);
                                 });
                               },
                               direction: DismissDirection.endToStart,
                               child: Card(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0)),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
                                 child: Container(
                                     padding: EdgeInsets.all(25.0),
                                     child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
                                         Icon(Icons.notifications),
                                         SizedBox(width: 15.0),
@@ -348,11 +325,8 @@ class _NotificationsState extends State<Notifications> {
                                           child: Expanded(
                                             flex: 1,
                                             child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: <Widget>[
                                                 Text(
                                                   "${removalNotifications[index].message}",
@@ -380,13 +354,12 @@ class _NotificationsState extends State<Notifications> {
                     ),
                   )
                 : Container(),
-            removalNotifications.length == 0 &&
-                    updatingNotifications.length == 0 &&
-                    additionNotifications.length == 0
-                ? Container(
-                    child: Center(
+            removalNotifications.length == 0 && updatingNotifications.length == 0 && additionNotifications.length == 0
+                ? Center(
+                    child: Container(
                       child: Text(
                         "No new Notifications",
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 22.0,
                           fontWeight: FontWeight.bold,

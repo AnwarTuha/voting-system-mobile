@@ -50,6 +50,10 @@ dependencies:
   # socket io
   socket_io_client: ^1.0.1
 
+  # native splash screen
+  flutter_native_splash: ^1.2.0
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

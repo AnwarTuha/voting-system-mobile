@@ -24,10 +24,12 @@ class _PollResultsDetail extends State<PollResultsDetail> {
   List<ResultData> results = [];
   Future _futureWinner;
   String _winner;
+  bool isDraw = false;
 
   @override
   void initState() {
     super.initState();
+    //_futureWinner = _getWinner();
   }
 
   @override
@@ -40,13 +42,22 @@ class _PollResultsDetail extends State<PollResultsDetail> {
     var userProvider = Provider.of<UserProvider>(context);
 
     ResultRequestModel requestModel = ResultRequestModel(
-        userId: userProvider.user.userId,
-        pollId: widget.poll.pollId,
-        authenticationToken: userProvider.user.token);
+      userId: userProvider.user.userId,
+      pollId: widget.poll.pollId,
+      authenticationToken: userProvider.user.token,
+    );
 
     await RequestService().requestResult(requestModel).then((response) {
+      results = response.result;
       response.result.sort((a, b) => a.voteCount.compareTo(b.voteCount));
-      _winner = response.result.last.title;
+      if (response.result.last.voteCount == 0) {
+        _winner = "Its a Draw!!";
+        setState(() {
+          isDraw = true;
+        });
+      } else {
+        _winner = response.result.last.title;
+      }
     });
     return _winner;
   }
@@ -74,35 +85,57 @@ class _PollResultsDetail extends State<PollResultsDetail> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Text(
-                        "and the Winner is...",
-                        style: TextStyle(fontSize: 15.0),
+                      Visibility(
+                        visible: !isDraw,
+                        child: Text(
+                          "and the Winner is...",
+                          style: TextStyle(fontSize: 15.0),
+                        ),
                       ),
                       SizedBox(height: 10.0),
                       Container(
                         width: double.infinity,
-                        padding: EdgeInsets.all(8.0),
                         child: FutureBuilder(
                           future: _futureWinner,
                           builder: (context, snapshot) {
                             print("Winner is: ${snapshot.data}");
-                            if (snapshot.connectionState ==
-                                    ConnectionState.done &&
-                                snapshot.hasData) {
+                            if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
                               print(snapshot.data);
-                              return Center(
-                                child: Text(
-                                  "🎉${snapshot.data}🎉",
-                                  style: TextStyle(
-                                      fontSize: 24.0,
-                                      fontWeight: FontWeight.bold),
-                                ),
+                              return Column(
+                                children: [
+                                  Center(
+                                    child: Text(
+                                      snapshot.data == "Its a Draw!!" ? "Its A Draw!!" : "🎉 ${snapshot.data} 🎉",
+                                      style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 15.0,
+                                  ),
+                                  Divider(
+                                    color: Colors.black,
+                                  ),
+                                  SizedBox(
+                                    height: 7.0,
+                                  ),
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: results.length,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      return Center(
+                                        child: Text(
+                                          "${results[index].title} has got ${results[index].voteCount} votes",
+                                          style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w400, height: 2.0),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
                               );
                             } else {
                               return Container(
                                 child: Center(
-                                  child: SpinKitFoldingCube(
-                                      size: 30.0, color: tealLightColor),
+                                  child: SpinKitFoldingCube(size: 30.0, color: tealLightColor),
                                 ),
                               );
                             }
@@ -115,12 +148,11 @@ class _PollResultsDetail extends State<PollResultsDetail> {
               ),
               SizedBox(height: 15.0),
               Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
                 elevation: 8.0,
                 color: Colors.white,
                 child: Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(15.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -173,10 +205,7 @@ class _PollResultsDetail extends State<PollResultsDetail> {
                       Text(
                         "Important things to note",
                         style: TextStyle(
-                            fontSize: 22,
-                            color: Colors.black,
-                            letterSpacing: 2.0,
-                            fontWeight: FontWeight.w600),
+                            fontSize: 22, color: Colors.black, letterSpacing: 2.0, fontWeight: FontWeight.w600),
                       ),
                       const SizedBox(height: 7.0),
                       Container(
@@ -185,8 +214,7 @@ class _PollResultsDetail extends State<PollResultsDetail> {
                           onPressed: () {},
                           child: Text(
                             "This poll is of type ${widget.poll.type}",
-                            style:
-                                TextStyle(color: Colors.black, fontSize: 18.0),
+                            style: TextStyle(color: Colors.black, fontSize: 18.0),
                           ),
                         ),
                       ),
@@ -198,8 +226,7 @@ class _PollResultsDetail extends State<PollResultsDetail> {
                                 onPressed: () {},
                                 child: Text(
                                   "You can retract your vote for this poll",
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 18.0),
+                                  style: TextStyle(color: Colors.black, fontSize: 18.0),
                                 ),
                               ),
                             )
@@ -207,10 +234,13 @@ class _PollResultsDetail extends State<PollResultsDetail> {
                               width: double.infinity,
                               child: OutlinedButton(
                                 onPressed: () {},
-                                child: Text(
-                                  "You CANNOT retract your vote for this poll",
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 18.0),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "You CANNOT retract your vote for this poll",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(color: Colors.black, fontSize: 18.0),
+                                  ),
                                 ),
                               ),
                             ),

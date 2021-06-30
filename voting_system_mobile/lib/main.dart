@@ -43,13 +43,57 @@ class VotingSystem extends StatelessWidget {
       ],
       child: StreamProvider<ConnectionStatus>(
         initialData: ConnectionStatus.Offline,
-        create: (context) =>
-            ConnectivityService().connectionStatusController.stream,
+        create: (context) => ConnectivityService().connectionStatusController.stream,
         child: MaterialApp(
           title: "Votion",
           theme: ThemeData(
             primaryColor: tealColors,
             accentColor: tealLightColor,
+            inputDecorationTheme: InputDecorationTheme(
+              filled: true,
+              fillColor: Color(0xFFF2F2F2),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(4),
+                ),
+                borderSide: BorderSide(width: 1, color: tealColors),
+              ),
+              disabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(4)),
+                borderSide: BorderSide(width: 1, color: Colors.grey),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(4),
+                ),
+                borderSide: BorderSide(width: 1, color: Colors.grey),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(4),
+                ),
+                borderSide: BorderSide(
+                  width: 1,
+                ),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(4),
+                ),
+                borderSide: BorderSide(width: 1, color: Colors.black),
+              ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(4),
+                ),
+                borderSide: BorderSide(width: 1, color: Colors.teal),
+              ),
+            ),
+            outlinedButtonTheme: OutlinedButtonThemeData(
+              style: OutlinedButton.styleFrom(
+                primary: Colors.teal,
+              ),
+            ),
           ),
           debugShowCheckedModeBanner: false,
           initialRoute: SplashPage.id,
@@ -59,8 +103,7 @@ class VotingSystem extends StatelessWidget {
             RegistrationPage.id: (context) => RegistrationPage(),
             ProfilePage.id: (context) => ProfilePage(),
             ForgotPassword.id: (context) => ForgotPassword(),
-            SelectOrganization.id: (context) =>
-                SelectOrganization(userId: userId),
+            SelectOrganization.id: (context) => SelectOrganization(userId: userId),
             SelectRole.id: (context) => SelectRole(),
             DashBoard.id: (context) => DashBoard(),
             HomeScreen.id: (context) => HomeScreen(),
