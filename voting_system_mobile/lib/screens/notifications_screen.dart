@@ -1,5 +1,6 @@
 import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -19,7 +20,6 @@ class Notifications extends StatefulWidget {
 
 class _NotificationsState extends State<Notifications> {
   IO.Socket _socket;
-  var message;
   NotificationModel mappedNotifications;
 
   List<NotificationData> additionNotifications = [];
@@ -354,20 +354,28 @@ class _NotificationsState extends State<Notifications> {
                     ),
                   )
                 : Container(),
-            removalNotifications.length == 0 && updatingNotifications.length == 0 && additionNotifications.length == 0
-                ? Center(
-                    child: Container(
-                      child: Text(
-                        "No new Notifications",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 22.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+            !_socket.connected
+                ? Container(
+                    child: Center(
+                      child: SpinKitFoldingCube(size: 25.0, color: tealLightColor),
                     ),
                   )
-                : Container(),
+                : removalNotifications.length == 0 &&
+                        updatingNotifications.length == 0 &&
+                        additionNotifications.length == 0
+                    ? Center(
+                        child: Container(
+                          child: Text(
+                            "No New Notifications",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 22.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(),
           ],
         ),
       ),

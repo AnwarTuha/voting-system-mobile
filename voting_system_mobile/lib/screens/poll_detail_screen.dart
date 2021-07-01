@@ -141,7 +141,8 @@ class _PollDetailState extends State<PollDetail> {
                       absoluteZeroSpacing: false,
                       unSelectedColor: Theme.of(context).canvasColor,
                       buttonLables: widget.poll.type == "Candidate" ? candidateLabels : optionLabels,
-                      buttonValues: widget.poll.type == "Candidate" ? candidates.map((e) => e.id).toList() : optionLabels,
+                      buttonValues:
+                          widget.poll.type == "Candidate" ? candidates.map((e) => e.id).toList() : optionLabels,
                       buttonTextStyle: ButtonTextStyle(
                         selectedColor: Colors.white,
                         unSelectedColor: Colors.black,
@@ -219,7 +220,7 @@ class _PollDetailState extends State<PollDetail> {
                 elevation: 8.0,
                 color: Colors.white,
                 child: Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(15.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -334,7 +335,8 @@ class _PollDetailState extends State<PollDetail> {
                       const SizedBox(height: 15.0),
                       Text(
                         "Important things to note",
-                        style: TextStyle(fontSize: 22, color: Colors.black, letterSpacing: 2.0, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                            fontSize: 22, color: Colors.black, letterSpacing: 2.0, fontWeight: FontWeight.w600),
                       ),
                       const SizedBox(height: 7.0),
                       Container(
