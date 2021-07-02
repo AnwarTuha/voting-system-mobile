@@ -294,7 +294,7 @@ class RequestService {
           ),
         );
       } else {
-        print("Something went wrong");
+        print("(From Public Polls): Something went wrong");
       }
     }
 

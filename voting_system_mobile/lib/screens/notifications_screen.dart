@@ -21,6 +21,7 @@ class Notifications extends StatefulWidget {
 class _NotificationsState extends State<Notifications> {
   IO.Socket _socket;
   NotificationModel mappedNotifications;
+  bool isConnected = false;
 
   List<NotificationData> additionNotifications = [];
   List<NotificationData> updatingNotifications = [];
@@ -57,6 +58,7 @@ class _NotificationsState extends State<Notifications> {
 
       _socket.onConnect((_) {
         print('connect');
+        isConnected = true;
         // emit authentication event
         var authenticationJson = {"userId": userProvider.userId, "accesstoken": userProvider.token};
 
@@ -159,9 +161,13 @@ class _NotificationsState extends State<Notifications> {
                           shrinkWrap: true,
                           itemCount: additionNotifications.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return Card(
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-                              child: Container(
+                            return GestureDetector(
+                              onTap: () {
+                                print(index);
+                              },
+                              child: Card(
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+                                child: Container(
                                   padding: EdgeInsets.all(25.0),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -192,7 +198,9 @@ class _NotificationsState extends State<Notifications> {
                                         color: tealColors,
                                       )
                                     ],
-                                  )),
+                                  ),
+                                ),
+                              ),
                             );
                           },
                         ),
@@ -315,37 +323,38 @@ class _NotificationsState extends State<Notifications> {
                               child: Card(
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
                                 child: Container(
-                                    padding: EdgeInsets.all(25.0),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        Icon(Icons.notifications),
-                                        SizedBox(width: 15.0),
-                                        Container(
-                                          child: Expanded(
-                                            flex: 1,
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                Text(
-                                                  "${removalNotifications[index].message}",
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.w400,
-                                                    fontSize: 18.0,
-                                                    letterSpacing: 1.5,
-                                                  ),
+                                  padding: EdgeInsets.all(25.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Icon(Icons.notifications),
+                                      SizedBox(width: 15.0),
+                                      Container(
+                                        child: Expanded(
+                                          flex: 1,
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                "${removalNotifications[index].message}",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 18.0,
+                                                  letterSpacing: 1.5,
                                                 ),
-                                              ],
-                                            ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        Icon(
-                                          Icons.delete,
-                                          color: Colors.red,
-                                        )
-                                      ],
-                                    )),
+                                      ),
+                                      Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                      )
+                                    ],
+                                  ),
+                                ),
                               ),
                             );
                           },
@@ -354,7 +363,7 @@ class _NotificationsState extends State<Notifications> {
                     ),
                   )
                 : Container(),
-            !_socket.connected
+            !isConnected
                 ? Container(
                     child: Center(
                       child: SpinKitFoldingCube(size: 25.0, color: tealLightColor),
