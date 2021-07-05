@@ -17,4 +17,5 @@ abstract class AppUrl {
   static const String updateProfileUrl = "$kBaseUrl/Voters/editCredentials/";
   static const String voteOnPublicPollUrl = "$kBaseUrl/Voters/publicVote";
   static const String checkNotificationIsSeenUrl = "$kBaseUrl/Voters/checkNotification";
+  static const String getSinglePollUrl = "$kBaseUrl/Polls";
 }

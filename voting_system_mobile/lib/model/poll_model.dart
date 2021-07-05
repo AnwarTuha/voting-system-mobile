@@ -80,3 +80,13 @@ class PollRequestModel {
     this.authenticationToken,
   });
 }
+
+class SinglePollRequestModel {
+  String accessToken;
+  String pollId;
+
+  SinglePollRequestModel({
+    this.pollId,
+    this.accessToken,
+  });
+}

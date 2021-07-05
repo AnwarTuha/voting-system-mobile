@@ -8,6 +8,7 @@ import 'package:socket_io_client/socket_io_client.dart';
 import 'package:voting_system_mobile/classes/request_service.dart';
 import 'package:voting_system_mobile/model/check_notification_model.dart';
 import 'package:voting_system_mobile/model/notification_model.dart';
+import 'package:voting_system_mobile/model/poll_model.dart';
 import 'package:voting_system_mobile/providers/poll_provider.dart';
 import 'package:voting_system_mobile/providers/user_provider.dart';
 import 'package:voting_system_mobile/utils/app_url.dart';
@@ -43,6 +44,17 @@ class _NotificationsState extends State<Notifications> {
     super.dispose();
   }
 
+  Future getNewPoll(NotificationData notificationData, String accessToken) async {
+    SinglePollRequestModel requestModel = SinglePollRequestModel(
+      pollId: notificationData.pollId,
+      accessToken: accessToken,
+    );
+
+    await RequestService().fetchSinglePoll(requestModel).then((response) {
+      print(response);
+    });
+  }
+
   void initSocketIo() {
     var userProvider = Provider.of<UserProvider>(context, listen: false).user;
     try {
@@ -68,11 +80,12 @@ class _NotificationsState extends State<Notifications> {
         );
 
         // listen incoming notification
-        _socket.on("Notification", (notificationData) {
+        _socket.on("Notification", (notificationData) async {
           mappedNotifications = NotificationModel.fromJson(notificationData);
 
           switch (mappedNotifications.notificationData.notificationType) {
             case "Addition":
+              await getNewPoll(mappedNotifications.notificationData, userProvider.token);
               setState(() {
                 additionNotifications.add(mappedNotifications.notificationData);
                 additionNotifications = additionNotifications.distinct((element) => element.pollId).toList();

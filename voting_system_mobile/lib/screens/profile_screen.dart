@@ -18,8 +18,7 @@ class ProfilePage extends StatefulWidget {
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClientMixin<ProfilePage>{
-
+class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClientMixin<ProfilePage> {
   @override
   bool get wantKeepAlive => true;
 
@@ -30,27 +29,35 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
     User user = Provider.of<UserProvider>(context).user;
 
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          SizedBox(height: 15.0),
-          ProfilePic(),
-          SizedBox(height: 20.0),
-          ProfileMenu(title: "My Account", icon: Icons.person_outline, onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => MyAccount(
-                user: user
-            )));
-          }),
-          ProfileMenu(title: "Notification", icon: Icons.notifications_none, onPressed: (){}),
-          ProfileMenu(title: "Settings", icon: Icons.settings, onPressed: (){}),
-          ProfileMenu(title: "Help Center", icon: Icons.help_outline, onPressed: (){}),
-          ProfileMenu(title: "Log Out", icon: Icons.logout, onPressed: (){
-            UserPreferences.removeUser();
-            RolePreferences.removeRoleDetail();
-            Provider.of<PollProvider>(context, listen: false).setAllPollsToEmpty();
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
-          })
-        ],
-      )
-    );
+        body: Column(
+      children: <Widget>[
+        SizedBox(height: 15.0),
+        ProfilePic(),
+        SizedBox(height: 20.0),
+        ProfileMenu(
+            title: "My Account",
+            icon: Icons.person_outline,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MyAccount(user: user),
+                ),
+              );
+            }),
+        ProfileMenu(title: "Notification", icon: Icons.notifications_none, onPressed: () {}),
+        ProfileMenu(title: "Settings", icon: Icons.settings, onPressed: () {}),
+        ProfileMenu(title: "Help Center", icon: Icons.help_outline, onPressed: () {}),
+        ProfileMenu(
+            title: "Log Out",
+            icon: Icons.logout,
+            onPressed: () {
+              UserPreferences.removeUser();
+              RolePreferences.removeRoleDetail();
+              Provider.of<PollProvider>(context, listen: false).setAllPollsToEmpty();
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
+            })
+      ],
+    ));
   }
 }
