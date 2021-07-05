@@ -15,8 +15,7 @@ class UpcomingPoll extends StatefulWidget {
   _UpcomingPollState createState() => _UpcomingPollState();
 }
 
-class _UpcomingPollState extends State<UpcomingPoll>
-    with AutomaticKeepAliveClientMixin<UpcomingPoll> {
+class _UpcomingPollState extends State<UpcomingPoll> with AutomaticKeepAliveClientMixin<UpcomingPoll> {
   @override
   bool get wantKeepAlive => true;
 
@@ -33,9 +32,8 @@ class _UpcomingPollState extends State<UpcomingPoll>
     var userProvider = Provider.of<UserProvider>(context, listen: false);
     var pollProvider = Provider.of<PollProvider>(context, listen: false);
 
-    PollRequestModel pollRequestModel = PollRequestModel(
-        userId: userProvider.user.userId,
-        authenticationToken: userProvider.user.token);
+    PollRequestModel pollRequestModel =
+        PollRequestModel(userId: userProvider.user.userId, authenticationToken: userProvider.user.token);
 
     await RequestService().fetchPolls(pollRequestModel).then((response) {
       pollProvider.setAllPoll(response.polls);
@@ -57,8 +55,7 @@ class _UpcomingPollState extends State<UpcomingPoll>
       child: FutureBuilder(
           future: futurePolls,
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done &&
-                snapshot.hasData) {
+            if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
               if (snapshot.data.length == 0) {
                 return Container(
                   child: Center(
@@ -76,14 +73,15 @@ class _UpcomingPollState extends State<UpcomingPoll>
               return RefreshIndicator(
                 key: _refreshKey,
                 onRefresh: () {
-                  futurePolls = null;
-                  return futurePolls = _getPolls();
+                  setState(() {
+                    futurePolls = _getPolls();
+                  });
+                  return futurePolls;
                 },
                 child: Consumer<PollProvider>(
                   builder: (context, pollProvider, _) {
                     return ListView.separated(
-                      separatorBuilder: (BuildContext context, int index) =>
-                          const Divider(
+                      separatorBuilder: (BuildContext context, int index) => const Divider(
                         color: Colors.grey,
                       ),
                       itemBuilder: (context, i) {
@@ -110,18 +108,13 @@ class _UpcomingPollState extends State<UpcomingPoll>
     );
   }
 
-  Widget buildPollCard(
-      String pollTitle, DateTime endDate, String pollType, Poll poll) {
+  Widget buildPollCard(String pollTitle, DateTime endDate, String pollType, Poll poll) {
     return PollCard(
         pollTitle: pollTitle,
         endDate: endDate,
         pollType: pollType,
         onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      PollDetail(poll: poll, fromClass: "upcoming")));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => PollDetail(poll: poll, fromClass: "upcoming")));
         });
   }
 }

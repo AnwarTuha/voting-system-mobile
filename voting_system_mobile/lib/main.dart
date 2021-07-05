@@ -4,14 +4,15 @@ import 'package:voting_system_mobile/classes/connectivity_service.dart';
 import 'package:voting_system_mobile/providers/connection_provider.dart';
 import 'package:voting_system_mobile/providers/poll_provider.dart';
 import 'package:voting_system_mobile/providers/user_provider.dart';
+import 'package:voting_system_mobile/screens/change_password_screen.dart';
 import 'package:voting_system_mobile/screens/dashboard_screen.dart';
-import 'package:voting_system_mobile/screens/forgot_password_screen.dart';
 import 'package:voting_system_mobile/screens/home_screen.dart';
 import 'package:voting_system_mobile/screens/login_screen.dart';
 import 'package:voting_system_mobile/screens/my_account_screen.dart';
 import 'package:voting_system_mobile/screens/poll_detail_screen.dart';
 import 'package:voting_system_mobile/screens/profile_screen.dart';
 import 'package:voting_system_mobile/screens/register_screen.dart';
+import 'package:voting_system_mobile/screens/reset_password_screen.dart';
 import 'package:voting_system_mobile/screens/select_organization_screen.dart';
 import 'package:voting_system_mobile/screens/select_role_screen.dart';
 import 'package:voting_system_mobile/screens/splash_screen.dart';
@@ -109,7 +110,8 @@ class VotingSystem extends StatelessWidget {
             HomeScreen.id: (context) => HomeScreen(),
             MyAccount.id: (context) => MyAccount(),
             PollDetail.id: (context) => PollDetail(),
-            NoResultPage.id: (context) => NoResultPage()
+            NoResultPage.id: (context) => NoResultPage(),
+            ChangePassword.id: (context) => ChangePassword(),
           },
         ),
       ),

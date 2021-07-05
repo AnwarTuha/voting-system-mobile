@@ -5,6 +5,7 @@ import 'package:voting_system_mobile/model/role_detail.dart';
 import 'package:voting_system_mobile/model/update_profile_model.dart';
 import 'package:voting_system_mobile/model/user_model.dart';
 import 'package:voting_system_mobile/providers/user_provider.dart';
+import 'package:voting_system_mobile/screens/change_password_screen.dart';
 import 'package:voting_system_mobile/shared%20preferences/role_shared_preference.dart';
 import 'package:voting_system_mobile/shared%20preferences/user_shared_preferences.dart';
 import 'package:voting_system_mobile/widgets/custom_button.dart';
@@ -172,8 +173,7 @@ class _MyAccountState extends State<MyAccount> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              InputTextField(
-                  labelText: "Organization/company", fieldText: "${roleDetail.orgName}", inputEnabled: false),
+              InputTextField(labelText: "Organization/company", fieldText: "${roleDetail.orgName}", inputEnabled: false),
               InputTextField(labelText: "Role", fieldText: "${roleDetail.roleName}", inputEnabled: false),
               SizedBox(height: 10.0),
               CustomButton(
@@ -186,7 +186,12 @@ class _MyAccountState extends State<MyAccount> {
                 height: 10.0,
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ChangePassword()),
+                  );
+                },
                 child: Text("Change Password"),
               ),
             ],
