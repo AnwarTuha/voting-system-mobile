@@ -1,7 +1,12 @@
 import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
+import 'package:voting_system_mobile/providers/user_provider.dart';
+import 'package:voting_system_mobile/utils/app_url.dart';
 
 class ProfilePic extends StatefulWidget {
   ProfilePic({
@@ -13,70 +18,35 @@ class ProfilePic extends StatefulWidget {
 }
 
 class _ProfilePicState extends State<ProfilePic> {
-  @override
-  Widget build(BuildContext context) {
-    File _imageFile;
-    final _picker = ImagePicker();
+  pickImageAndUpload(BuildContext context) async {
+    var userProvider = Provider.of<UserProvider>(context).user;
+    final FirebaseStorage _storage = FirebaseStorage.instance;
+    final ImagePicker _imagePicker = ImagePicker();
+    PickedFile _image;
 
-    _imgFromCamera() async {
-      PickedFile image = await _picker.getImage(
-        source: ImageSource.camera,
+    // await permission from user to get photo from gallery
+    await Permission.photos.request();
+    var permissionStatus = await Permission.photos.status;
+
+    if (permissionStatus.isGranted) {
+      // select image
+      _image = await _imagePicker.getImage(
+        source: ImageSource.gallery,
       );
-      return File(image.path);
-    }
+      File _imageFile = File(_image.path);
 
-    _imgFromGallery() async {
-      PickedFile image = await _picker.getImage(
-        source: ImageSource.camera,
-      );
-      return File(image.path);
-    }
-
-    void _showPicker(context) {
-      showModalBottomSheet(
-        context: context,
-        builder: (BuildContext context) {
-          return SafeArea(
-            child: Container(
-              child: Wrap(
-                children: <Widget>[
-                  ListTile(
-                    leading: new Icon(Icons.photo_library),
-                    title: Text("Gallery"),
-                    onTap: () {
-                      var img = _imgFromGallery();
-                      Navigator.of(context).pop(img);
-                    },
-                  ),
-                  ListTile(
-                    leading: new Icon(Icons.photo_camera),
-                    title: Text("Camera"),
-                    onTap: () {
-                      var img = _imgFromCamera();
-                      Navigator.of(context).pop(img);
-                    },
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ).then((value) => _imageFile = value);
-    }
-
-    Future _uploadImageToFirebase(){
-      String fileName = _imageFile.path;
-      StorageReference
+      if (_image != null) {
+        var snapShot = await _storage
+            .ref("${AppUrl.firebaseReferenceUrl}")
+            .child("Voter${userProvider.userId}")
+            .putFile(_imageFile);
+      }
     }
   }
 
-    Future pickImageAndUpload() async {
-      // show image picker
-      _showPicker(context);
-
-      // upload image to firebase
-      await _uploadImageToFirebase(context);
-    }
+  @override
+  Widget build(BuildContext context) {
+    String _imageUrl;
 
     return SizedBox(
       height: 115.0,
@@ -101,7 +71,7 @@ class _ProfilePicState extends State<ProfilePic> {
                     padding: EdgeInsets.zero,
                     side: BorderSide(color: Colors.white)),
                 onPressed: () {
-                  pickImageAndUpload();
+                  pickImageAndUpload(context);
                 },
                 child: Icon(Icons.camera_alt_outlined, size: 20.0, color: Colors.grey),
               ),
