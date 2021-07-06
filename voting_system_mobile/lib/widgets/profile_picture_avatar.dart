@@ -3,41 +3,79 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ProfilePic extends StatelessWidget {
-
+class ProfilePic extends StatefulWidget {
   ProfilePic({
     Key key,
   }) : super(key: key);
 
   @override
+  _ProfilePicState createState() => _ProfilePicState();
+}
+
+class _ProfilePicState extends State<ProfilePic> {
+  @override
   Widget build(BuildContext context) {
-
     File _imageFile;
-    final picker = ImagePicker();
+    final _picker = ImagePicker();
 
-    Future pickImageAndUpload() async{
-      //final pickedFile = await picker.getImage(source: ImageSource.camera)
-      _showPicker();
+    _imgFromCamera() async {
+      PickedFile image = await _picker.getImage(
+        source: ImageSource.camera,
+      );
+      return File(image.path);
     }
 
-    File _showPicker(context){
+    _imgFromGallery() async {
+      PickedFile image = await _picker.getImage(
+        source: ImageSource.camera,
+      );
+      return File(image.path);
+    }
+
+    void _showPicker(context) {
       showModalBottomSheet(
         context: context,
-        builder: (BuildContext context){
+        builder: (BuildContext context) {
           return SafeArea(
-              child: Container(
-                child: Wrap(
-                  children: <Widget>[
-                    ListTile(
-                      leading: new Icon(Icons.photo_library),
-                      tit
-                    ),
-                  ],
-                ),
+            child: Container(
+              child: Wrap(
+                children: <Widget>[
+                  ListTile(
+                    leading: new Icon(Icons.photo_library),
+                    title: Text("Gallery"),
+                    onTap: () {
+                      var img = _imgFromGallery();
+                      Navigator.of(context).pop(img);
+                    },
+                  ),
+                  ListTile(
+                    leading: new Icon(Icons.photo_camera),
+                    title: Text("Camera"),
+                    onTap: () {
+                      var img = _imgFromCamera();
+                      Navigator.of(context).pop(img);
+                    },
+                  ),
+                ],
               ),
+            ),
           );
         },
-      );
+      ).then((value) => _imageFile = value);
+    }
+
+    Future _uploadImageToFirebase(){
+      String fileName = _imageFile.path;
+      StorageReference
+    }
+  }
+
+    Future pickImageAndUpload() async {
+      // show image picker
+      _showPicker(context);
+
+      // upload image to firebase
+      await _uploadImageToFirebase(context);
     }
 
     return SizedBox(
@@ -62,7 +100,7 @@ class ProfilePic extends StatelessWidget {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
                     padding: EdgeInsets.zero,
                     side: BorderSide(color: Colors.white)),
-                onPressed: (){
+                onPressed: () {
                   pickImageAndUpload();
                 },
                 child: Icon(Icons.camera_alt_outlined, size: 20.0, color: Colors.grey),
