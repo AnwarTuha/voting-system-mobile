@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:voting_system_mobile/classes/connectivity_service.dart';
 import 'package:voting_system_mobile/providers/connection_provider.dart';
+import 'package:voting_system_mobile/providers/notification_counter_provider.dart';
 import 'package:voting_system_mobile/providers/poll_provider.dart';
 import 'package:voting_system_mobile/providers/user_provider.dart';
 import 'package:voting_system_mobile/screens/change_password_screen.dart';
@@ -40,7 +41,8 @@ class VotingSystem extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UserProvider()),
-        ChangeNotifierProvider(create: (_) => PollProvider())
+        ChangeNotifierProvider(create: (_) => PollProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationCounterProvider()),
       ],
       child: StreamProvider<ConnectionStatus>(
         initialData: ConnectionStatus.Offline,

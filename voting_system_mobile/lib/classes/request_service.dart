@@ -166,8 +166,7 @@ class RequestService {
 
   // Send account for verification
 
-  Future<VerificationResponseModel> submitAccountForVerification(
-      VerificationRequestModel verificationRequestModel) async {
+  Future<VerificationResponseModel> submitAccountForVerification(VerificationRequestModel verificationRequestModel) async {
     String url = "${AppUrl.kBaseUrl}/Verifications";
     var response;
 
@@ -204,8 +203,7 @@ class RequestService {
     var response;
 
     try {
-      response =
-          await http.get(Uri.parse(url), headers: {'Authorization': '${roleDetailRequestModel.authenticationToken}'});
+      response = await http.get(Uri.parse(url), headers: {'Authorization': '${roleDetailRequestModel.authenticationToken}'});
       if (response != null) {
         return RoleDetailResponseModel.fromJson(new Map<String, dynamic>.from(
           json.decode(response.body),
@@ -318,8 +316,7 @@ class RequestService {
   // get candidate details
 
   Future<CandidateResponseModel> getCandidateDetail(CandidateRequestModel candidateRequestModel) async {
-    String url =
-        "${AppUrl.getCandidateDetailsUrl}/${candidateRequestModel.pollId}/voter/${candidateRequestModel.voterId}";
+    String url = "${AppUrl.getCandidateDetailsUrl}/${candidateRequestModel.pollId}/voter/${candidateRequestModel.voterId}";
 
     var response;
 
@@ -349,8 +346,8 @@ class RequestService {
     var response;
 
     try {
-      response = await http.patch(Uri.parse(url),
-          body: requestModel.toJson(), headers: {'Authorization': requestModel.authenticationToken});
+      response = await http
+          .patch(Uri.parse(url), body: requestModel.toJson(), headers: {'Authorization': requestModel.authenticationToken});
       if (response != null) {
         print("Success (Update Profile): ${response.body}");
         return updateProfileResponseModelFromJson(response.body);
@@ -406,7 +403,7 @@ class RequestService {
 
     try {
       response = await http.patch(Uri.parse(url), headers: {'Authorization': requestModel.authenticationToken});
-      print(response.body);
+      print("Check is done ${response.body}");
     } catch (e) {
       print("Error(Check notificaiton): $e");
     }

@@ -21,13 +21,12 @@ class DashBoard extends StatefulWidget {
   _DashBoardState createState() => _DashBoardState();
 }
 
-class _DashBoardState extends State<DashBoard>
-    with SingleTickerProviderStateMixin<DashBoard> {
+class _DashBoardState extends State<DashBoard> with SingleTickerProviderStateMixin<DashBoard> {
   String title = "Votion";
 
   int _selectedIndex = 0;
 
-  bool inAsyncCall = true;
+  bool inAsyncCall = false;
 
   @override
   void initState() {
@@ -47,41 +46,41 @@ class _DashBoardState extends State<DashBoard>
 
   List<BottomNavigationBarItem> _tabs = [
     BottomNavigationBarItem(
-        icon: Icon(
-          Icons.home,
-          size: 25.0,
-        ),
-        label: 'Home'),
+      icon: Icon(
+        Icons.home,
+        size: 25.0,
+      ),
+      label: 'Home',
+    ),
     BottomNavigationBarItem(
-        icon: Icon(
-          Icons.explore,
-          size: 25.0,
-        ),
-        label: 'Explore'),
+      icon: Icon(
+        Icons.explore,
+        size: 25.0,
+      ),
+      label: 'Public Polls',
+    ),
     BottomNavigationBarItem(
-        icon: Icon(
-          Icons.notifications_active,
-          size: 25.0,
-        ),
-        label: 'Notifications'),
+      label: "Notifications",
+      icon: Icon(
+        Icons.notifications_active,
+        size: 25.0,
+      ),
+    ),
     BottomNavigationBarItem(
-        icon: Icon(
-          Icons.supervised_user_circle,
-          size: 25.0,
-        ),
-        label: 'Profile'),
+      icon: Icon(
+        Icons.supervised_user_circle,
+        size: 25.0,
+      ),
+      label: 'Profile',
+    ),
   ];
 
-  List<Widget> _pages = [
-    TopTabBar(),
-    ExploreScreen(),
-    Notifications(),
-    ProfilePage()
-  ];
+  List<Widget> _pages = [TopTabBar(), ExploreScreen(), Notifications(), ProfilePage()];
 
   @override
   Widget build(BuildContext context) {
     var pollProvider = Provider.of<PollProvider>(context);
+
     _showSortDialog() async {
       return await showDialog(
           context: context,
@@ -93,7 +92,7 @@ class _DashBoardState extends State<DashBoard>
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        "Sort",
+                        "Sort By",
                         style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
@@ -110,18 +109,8 @@ class _DashBoardState extends State<DashBoard>
                           elevation: 0,
                           absoluteZeroSpacing: false,
                           unSelectedColor: Theme.of(context).canvasColor,
-                          buttonLables: [
-                            "By Poll Title",
-                            "By Type",
-                            "By End Date",
-                            "By Start Date"
-                          ],
-                          buttonValues: [
-                            "By Poll Title",
-                            "By Type",
-                            "By End Date",
-                            "By Start Date"
-                          ],
+                          buttonLables: ["By Poll Title", "By Type", "By End Date", "By Start Date"],
+                          buttonValues: ["By Poll Title", "By Type", "By End Date", "By Start Date"],
                           buttonTextStyle: ButtonTextStyle(
                               selectedColor: Colors.white,
                               unSelectedColor: Colors.black,
@@ -205,8 +194,7 @@ class TopTabBar extends StatefulWidget {
   _TopTabBarState createState() => _TopTabBarState();
 }
 
-class _TopTabBarState extends State<TopTabBar>
-    with SingleTickerProviderStateMixin<TopTabBar> {
+class _TopTabBarState extends State<TopTabBar> with SingleTickerProviderStateMixin<TopTabBar> {
   TabController _tabController;
 
   @override
@@ -221,22 +209,19 @@ class _TopTabBarState extends State<TopTabBar>
     _tabController.dispose();
   }
 
-  List<Widget> _tabs = [
-    Tab(text: "Live"),
-    Tab(text: "Upcoming"),
-    Tab(text: "Pending"),
-    Tab(text: "Results"),
-  ];
-
-  List<Widget> _pages = [
-    LivePolls(),
-    UpcomingPoll(),
-    PendingPolls(),
-    CompletedPoll()
-  ];
+  List<Widget> _pages = [LivePolls(), UpcomingPoll(), PendingPolls(), CompletedPoll()];
 
   @override
   Widget build(BuildContext context) {
+    var pollProvider = Provider.of<PollProvider>(context);
+
+    List<Widget> _tabs = [
+      Tab(text: "Live (${pollProvider.livePolls.length})"),
+      Tab(text: "Upcoming (${pollProvider.upComingPolls.length})"),
+      Tab(text: "Pending (${pollProvider.pendingPolls.length})"),
+      Tab(text: "Results (${pollProvider.completedPolls.length})"),
+    ];
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
@@ -244,10 +229,10 @@ class _TopTabBarState extends State<TopTabBar>
           color: tealColors,
           child: TabBar(
             controller: _tabController,
-            indicator: UnderlineTabIndicator(
-                borderSide: BorderSide(width: 2.0, color: Colors.white)),
+            indicator: UnderlineTabIndicator(borderSide: BorderSide(width: 2.0, color: Colors.white)),
             indicatorColor: Colors.white,
             indicatorWeight: 5.0,
+            labelPadding: EdgeInsets.all(8.0),
             unselectedLabelColor: Colors.white38,
             labelColor: Colors.white,
             tabs: _tabs,

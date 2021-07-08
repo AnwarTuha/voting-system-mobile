@@ -18,5 +18,5 @@ abstract class AppUrl {
   static const String voteOnPublicPollUrl = "$kBaseUrl/Voters/publicVote";
   static const String checkNotificationIsSeenUrl = "$kBaseUrl/Voters/checkNotification";
   static const String getSinglePollUrl = "$kBaseUrl/Polls";
-  static const String firebaseReferenceUrl = "gs://votion-68dd9.appspot.com";
+  static const String imageUploadUrl = "$kBaseUrl/Voters/";
 }

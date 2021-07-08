@@ -8,6 +8,7 @@ import 'package:voting_system_mobile/providers/user_provider.dart';
 import 'package:voting_system_mobile/screens/change_password_screen.dart';
 import 'package:voting_system_mobile/shared%20preferences/role_shared_preference.dart';
 import 'package:voting_system_mobile/shared%20preferences/user_shared_preferences.dart';
+import 'package:voting_system_mobile/utils/color_palette_util.dart';
 import 'package:voting_system_mobile/widgets/custom_button.dart';
 import 'package:voting_system_mobile/widgets/profile_picture_avatar.dart';
 import 'package:voting_system_mobile/widgets/progress_hud_modal.dart';
@@ -185,14 +186,18 @@ class _MyAccountState extends State<MyAccount> {
               SizedBox(
                 height: 10.0,
               ),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ChangePassword()),
-                  );
-                },
-                child: Text("Change Password"),
+              Container(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ChangePassword()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(primary: tealColors),
+                  child: Text("Change Password"),
+                ),
               ),
             ],
           ),

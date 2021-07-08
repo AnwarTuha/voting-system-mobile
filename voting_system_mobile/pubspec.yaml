@@ -68,6 +68,9 @@ dependencies:
   # permission handler
   permission_handler: ^8.1.2
 
+  # http request and response handler for image upload and fetching
+  dio: ^4.0.0
+
 
 dev_dependencies:
   flutter_test:

@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "981721222019",
+    "project_id": "votion-68dd9",
+    "storage_bucket": "votion-68dd9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:981721222019:android:374513f11cacbafd2204b6",
+        "android_client_info": {
+          "package_name": "anwartuha.netlify.voting_system_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "981721222019-1nl8luf2qpn3bjpe94b9i13dnn45sanu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCw_EEltsafnX3T117Gx5PqQY9ekhF7xYY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "981721222019-1nl8luf2qpn3bjpe94b9i13dnn45sanu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "981721222019-9coov0eq9femqdrmaub6n9fpqlp2gqsq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "anwartuha.netlify.votingSystemMobile"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

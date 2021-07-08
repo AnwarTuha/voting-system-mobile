@@ -1,3 +1,5 @@
+import 'dart:io';
+
 class User {
   String token;
   String firstName;
@@ -8,7 +10,9 @@ class User {
   String userId;
   String orgId;
   String role;
+  String imageName;
   bool isComplete;
+  File image;
 
   User(
       {this.token,
@@ -20,6 +24,8 @@ class User {
       this.userId,
       this.orgId,
       this.role,
+      this.imageName,
+      this.image,
       this.isComplete});
 
   factory User.fromJson(Map<String, dynamic> json) => User(
@@ -32,6 +38,7 @@ class User {
         userId: json["userid"] != null ? json["userid"] : "",
         orgId: json["orgid"] != null ? json["orgid"] : "",
         role: json["role"] != null ? json["role"] : "",
+        imageName: json["image"] != null ? json["image"] : "",
         isComplete: json["isComplete"],
       );
 

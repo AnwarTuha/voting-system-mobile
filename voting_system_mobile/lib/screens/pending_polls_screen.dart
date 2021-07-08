@@ -17,8 +17,7 @@ class PendingPolls extends StatefulWidget {
   _PendingPollsState createState() => _PendingPollsState();
 }
 
-class _PendingPollsState extends State<PendingPolls>
-    with AutomaticKeepAliveClientMixin<PendingPolls> {
+class _PendingPollsState extends State<PendingPolls> with AutomaticKeepAliveClientMixin<PendingPolls> {
   @override
   bool get wantKeepAlive => true;
 
@@ -55,14 +54,16 @@ class _PendingPollsState extends State<PendingPolls>
       child: FutureBuilder(
         future: futurePolls,
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done &&
-              snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
             if (snapshot.data.length == 0) {
               return Container(
                 child: Center(
                   child: NoResultPage(
                     onPressed: () {
-                      return futurePolls = _getPolls();
+                      setState(() {
+                        futurePolls = _getPolls();
+                      });
+                      return futurePolls;
                     },
                   ),
                 ),
@@ -71,13 +72,15 @@ class _PendingPollsState extends State<PendingPolls>
             return RefreshIndicator(
               key: _refreshKey,
               onRefresh: () {
-                return futurePolls = _getPolls();
+                setState(() {
+                  futurePolls = _getPolls();
+                });
+                return futurePolls;
               },
               child: Consumer<PollProvider>(
                 builder: (context, pollProvider, _) {
                   return ListView.separated(
-                    separatorBuilder: (BuildContext context, int index) =>
-                        const Divider(
+                    separatorBuilder: (BuildContext context, int index) => const Divider(
                       color: Colors.grey,
                     ),
                     itemBuilder: (context, i) {
@@ -105,8 +108,7 @@ class _PendingPollsState extends State<PendingPolls>
     );
   }
 
-  Widget buildPollCard(
-      String pollTitle, DateTime endDate, String pollType, Poll poll) {
+  Widget buildPollCard(String pollTitle, DateTime endDate, String pollType, Poll poll) {
     return PollCard(
         pollTitle: pollTitle,
         endDate: endDate,
@@ -115,8 +117,7 @@ class _PendingPollsState extends State<PendingPolls>
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  PollDetail(poll: poll, fromClass: "pending"),
+              builder: (context) => PollDetail(poll: poll, fromClass: "pending"),
             ),
           );
         });

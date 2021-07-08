@@ -1,12 +1,8 @@
 import 'dart:io';
 
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:provider/provider.dart';
-import 'package:voting_system_mobile/providers/user_provider.dart';
-import 'package:voting_system_mobile/utils/app_url.dart';
 
 class ProfilePic extends StatefulWidget {
   ProfilePic({
@@ -18,31 +14,31 @@ class ProfilePic extends StatefulWidget {
 }
 
 class _ProfilePicState extends State<ProfilePic> {
-  pickImageAndUpload(BuildContext context) async {
-    var userProvider = Provider.of<UserProvider>(context).user;
-    final FirebaseStorage _storage = FirebaseStorage.instance;
-    final ImagePicker _imagePicker = ImagePicker();
-    PickedFile _image;
+  String _imageUrl;
+  FormData _imageData;
+  File imageFile;
 
-    // await permission from user to get photo from gallery
-    await Permission.photos.request();
-    var permissionStatus = await Permission.photos.status;
-
-    if (permissionStatus.isGranted) {
-      // select image
-      _image = await _imagePicker.getImage(
-        source: ImageSource.gallery,
-      );
-      File _imageFile = File(_image.path);
-
-      if (_image != null) {
-        var snapShot = await _storage
-            .ref("${AppUrl.firebaseReferenceUrl}")
-            .child("Voter${userProvider.userId}")
-            .putFile(_imageFile);
-      }
+  // get image from gallery
+  _getFromGallery() async {
+    PickedFile pickedFile = await ImagePicker().getImage(
+      source: ImageSource.gallery,
+    );
+    if (pickedFile != null) {
+      imageFile = File(pickedFile.path);
     }
   }
+
+  // Get from camera
+  _getFromCamera() async {
+    PickedFile pickedFile = await ImagePicker().getImage(
+      source: ImageSource.camera,
+    );
+    if (pickedFile != null) {
+      imageFile = File(pickedFile.path);
+    }
+  }
+
+  _pickImageAndUpload(BuildContext context) async {}
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +52,7 @@ class _ProfilePicState extends State<ProfilePic> {
         clipBehavior: Clip.none,
         children: <Widget>[
           CircleAvatar(
-            backgroundImage: AssetImage("assets/images/temp_profile.jpg"),
+            backgroundImage: _imageUrl != null ? NetworkImage("$_imageUrl") : AssetImage("assets/images/temp_profile.jpg"),
           ),
           Positioned(
             bottom: 0.0,
@@ -71,7 +67,7 @@ class _ProfilePicState extends State<ProfilePic> {
                     padding: EdgeInsets.zero,
                     side: BorderSide(color: Colors.white)),
                 onPressed: () {
-                  pickImageAndUpload(context);
+                  _pickImageAndUpload(context);
                 },
                 child: Icon(Icons.camera_alt_outlined, size: 20.0, color: Colors.grey),
               ),

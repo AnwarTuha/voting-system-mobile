@@ -29,26 +29,23 @@ class PollProvider extends ChangeNotifier {
   }
 
   void setUpcomingPolls() {
-    _upcomingPolls.addAll(_allPolls
-        .where((element) => element.startDate.isAfter(DateTime.now())));
-    _upcomingPolls =
-        _upcomingPolls.distinct((element) => element.pollId).toList();
+    _upcomingPolls.addAll(_allPolls.where((element) => element.startDate.isAfter(DateTime.now())));
+    _upcomingPolls = _upcomingPolls.distinct((element) => element.pollId).toList();
     notifyListeners();
   }
 
   void setLivePolls() {
     _livePolls.addAll(_allPolls.where((element) =>
-        element.endDate.isAfter(DateTime.now()) &&
-        element.startDate.isBefore(DateTime.now()) &&
-        element.hasVoted == false));
+        element.endDate.isAfter(DateTime.now()) && element.startDate.isBefore(DateTime.now()) && element.hasVoted == false));
     _livePolls = _livePolls.distinct((element) => element.pollId).toList();
     notifyListeners();
   }
 
   void setPendingPolls(List<Poll> pendingPolls) {
+    _allPolls.addAll(pendingPolls);
+    _allPolls = _allPolls.distinct((element) => element.pollId).toList();
     _pendingPolls = pendingPolls;
-    _pendingPolls =
-        _pendingPolls.distinct((element) => element.pollId).toList();
+    _pendingPolls = _pendingPolls.distinct((element) => element.pollId).toList();
     notifyListeners();
   }
 
@@ -60,8 +57,7 @@ class PollProvider extends ChangeNotifier {
         ),
       ),
     );
-    _completedPolls =
-        _completedPolls.distinct((element) => element.pollId).toList();
+    _completedPolls = _completedPolls.distinct((element) => element.pollId).toList();
     notifyListeners();
   }
 
@@ -125,7 +121,6 @@ class PollProvider extends ChangeNotifier {
   Poll getCompletedPollByIndex(int index) => _completedPolls[index];
 
   void removeFromAllPollsByPollId(String pollId) {
-    print("removing $pollId");
     _allPolls.removeWhere((element) => element.pollId == pollId);
     _livePolls.removeWhere((element) => element.pollId == pollId);
     _pendingPolls.removeWhere((element) => element.pollId == pollId);

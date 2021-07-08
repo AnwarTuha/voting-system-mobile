@@ -159,11 +159,14 @@ class _NotificationsState extends State<Notifications> {
                 ? Container(
                     child: Column(
                       children: <Widget>[
-                        Text(
-                          "You've been added to the following polls",
-                          style: TextStyle(
-                            fontSize: 22.0,
-                            fontWeight: FontWeight.bold,
+                        Center(
+                          child: Text(
+                            "You've been added to the following polls.",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                         SizedBox(
@@ -176,7 +179,15 @@ class _NotificationsState extends State<Notifications> {
                           itemBuilder: (BuildContext context, int index) {
                             return GestureDetector(
                               onTap: () {
-                                print(index);
+                                CheckNotificationModel requestModel = CheckNotificationModel(
+                                  notificationId: additionNotifications[index].notificationId,
+                                  userId: userProvider.userId,
+                                  authenticationToken: userProvider.token,
+                                );
+                                RequestService().checkNotificationAsSeen(requestModel);
+                                setState(() {
+                                  additionNotifications.removeAt(index);
+                                });
                               },
                               child: Card(
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
@@ -232,11 +243,14 @@ class _NotificationsState extends State<Notifications> {
                 ? Container(
                     child: Column(
                       children: <Widget>[
-                        Text(
-                          "The following polls have been updated",
-                          style: TextStyle(
-                            fontSize: 22.0,
-                            fontWeight: FontWeight.bold,
+                        Center(
+                          child: Text(
+                            "The Following polls have been updated.",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                         SizedBox(
@@ -304,8 +318,8 @@ class _NotificationsState extends State<Notifications> {
                             "You've been removed from the following polls",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 22.0,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 20.0,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
@@ -318,7 +332,6 @@ class _NotificationsState extends State<Notifications> {
                           itemCount: removalNotifications.length,
                           itemBuilder: (BuildContext context, int index) {
                             pollProvider.removeFromAllPollsByPollId(removalNotifications[index].pollId);
-
                             return Dismissible(
                               key: UniqueKey(),
                               onDismissed: (DismissDirection direction) {
@@ -382,9 +395,7 @@ class _NotificationsState extends State<Notifications> {
                       child: SpinKitFoldingCube(size: 25.0, color: tealLightColor),
                     ),
                   )
-                : removalNotifications.length == 0 &&
-                        updatingNotifications.length == 0 &&
-                        additionNotifications.length == 0
+                : removalNotifications.length == 0 && updatingNotifications.length == 0 && additionNotifications.length == 0
                     ? Center(
                         child: Container(
                           child: Text(

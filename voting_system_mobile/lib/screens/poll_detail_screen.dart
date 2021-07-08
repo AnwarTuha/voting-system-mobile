@@ -1,6 +1,7 @@
 import 'package:custom_radio_grouped_button/custom_radio_grouped_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:voting_system_mobile/classes/request_service.dart';
 import 'package:voting_system_mobile/model/candidate_poll_model.dart';
@@ -11,6 +12,7 @@ import 'package:voting_system_mobile/providers/poll_provider.dart';
 import 'package:voting_system_mobile/providers/user_provider.dart';
 import 'package:voting_system_mobile/utils/color_palette_util.dart';
 import 'package:voting_system_mobile/widgets/custom_button.dart';
+import 'package:voting_system_mobile/widgets/progress_hud_modal.dart';
 
 class PollDetail extends StatefulWidget {
   static const String id = "poll_detail";
@@ -92,8 +94,14 @@ class _PollDetailState extends State<PollDetail> {
     bool _voteEnabled = false;
     bool _submitEnabled = false;
 
+    bool inAsynchCall = false;
+
     List<String> optionLabels = widget.poll.option.map((e) => e.title).toList();
     List<String> candidateLabels = candidates.map((e) => "${e.candidateFirstName} ${e.candidateLastName}").toList();
+
+    final DateTime date = widget.poll.startDate;
+    final DateFormat formatter = DateFormat('EEE, MMM d, ' 'yyyy');
+    final String formattedDate = formatter.format(date);
 
     if (widget.poll.canAbstain) {
       optionLabels.add("Abstain");
@@ -141,8 +149,7 @@ class _PollDetailState extends State<PollDetail> {
                       absoluteZeroSpacing: false,
                       unSelectedColor: Theme.of(context).canvasColor,
                       buttonLables: widget.poll.type == "Candidate" ? candidateLabels : optionLabels,
-                      buttonValues:
-                          widget.poll.type == "Candidate" ? candidates.map((e) => e.id).toList() : optionLabels,
+                      buttonValues: widget.poll.type == "Candidate" ? candidates.map((e) => e.id).toList() : optionLabels,
                       buttonTextStyle: ButtonTextStyle(
                         selectedColor: Colors.white,
                         unSelectedColor: Colors.black,
@@ -181,6 +188,10 @@ class _PollDetailState extends State<PollDetail> {
         _submitEnabled = false;
       }).then((selectedChoice) => _choice = selectedChoice);
 
+      setState(() {
+        inAsynchCall = true;
+      });
+
       // setup request model
       VoteRequestModel voteRequestModel = VoteRequestModel(
         authenticationToken: userProvider.token,
@@ -191,6 +202,9 @@ class _PollDetailState extends State<PollDetail> {
 
       // send vote on poll request
       await RequestService().voteOnPoll(voteRequestModel).then((response) {
+        setState(() {
+          inAsynchCall = false;
+        });
         if (response.response != null) {
           setState(() {
             userHasVoted = true;
@@ -298,6 +312,7 @@ class _PollDetailState extends State<PollDetail> {
                                   shrinkWrap: true,
                                   itemCount: widget.poll.option.length,
                                   itemBuilder: (BuildContext context, int index) {
+                                    _voteEnabled = true;
                                     return Container(
                                       width: double.infinity,
                                       child: OutlinedButton(
@@ -335,8 +350,7 @@ class _PollDetailState extends State<PollDetail> {
                       const SizedBox(height: 15.0),
                       Text(
                         "Important things to note",
-                        style: TextStyle(
-                            fontSize: 22, color: Colors.black, letterSpacing: 2.0, fontWeight: FontWeight.w600),
+                        style: TextStyle(fontSize: 22, color: Colors.black, letterSpacing: 2.0, fontWeight: FontWeight.w600),
                       ),
                       const SizedBox(height: 7.0),
                       Container(
@@ -392,7 +406,7 @@ class _PollDetailState extends State<PollDetail> {
                           child: OutlinedButton(
                             onPressed: () {},
                             child: Text(
-                              "This poll hasn't begun yet",
+                              "This poll will start $formattedDate",
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 18.0,
@@ -420,13 +434,16 @@ class _PollDetailState extends State<PollDetail> {
                                   ),
                                 );
                               } else {
-                                return CustomButton(
-                                  onPressed: () {
-                                    var choiceList = widget.poll.type == "Candidate" ? candidates : widget.poll.option;
-                                    _voteOnPoll(choiceList);
-                                  },
-                                  title: "Click here to vote",
-                                  enabled: _voteEnabled,
+                                return ProgressHUD(
+                                  child: CustomButton(
+                                    onPressed: () {
+                                      var choiceList = widget.poll.type == "Candidate" ? candidates : widget.poll.option;
+                                      _voteOnPoll(choiceList);
+                                    },
+                                    title: "Touch here to vote",
+                                    enabled: _voteEnabled,
+                                  ),
+                                  inAsynchCall: inAsynchCall,
                                 );
                               }
                             } else {

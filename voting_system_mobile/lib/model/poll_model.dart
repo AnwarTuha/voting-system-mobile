@@ -41,7 +41,8 @@ class Poll {
       this.userChoice,
       this.option,
       this.canAbstain,
-      this.type});
+      this.type,
+      this.hasVoted});
 
   void setUserHasVoted(bool userHasVoted) {
     this.hasVoted = userHasVoted;

@@ -62,7 +62,10 @@ class _CompletedPollState extends State<CompletedPoll> with AutomaticKeepAliveCl
                   child: Center(
                     child: NoResultPage(
                       onPressed: () {
-                        return futurePolls = _getPolls();
+                        setState(() {
+                          futurePolls = _getPolls();
+                        });
+                        return futurePolls;
                       },
                     ),
                   ),
